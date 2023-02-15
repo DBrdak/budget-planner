@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Domain
+{
+    public class Budget
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public User User { get; set; }
+        public IEnumerable<Account> Accounts { get; set; }
+        public IEnumerable<Savings> Savings { get; set; }
+        public IEnumerable<Transaction> Transactions { get; set; }
+        public IEnumerable<FutureSavings> FutureSavings { get; set; }
+        public IEnumerable<FutureTransaction> FutureTransactions { get; set; }
+        public IEnumerable<Goal> Goals { get; set; }
+    }
+}
