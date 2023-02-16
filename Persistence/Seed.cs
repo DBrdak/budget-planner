@@ -37,13 +37,13 @@ namespace Persistence
                     },
                 };
                 var johnGoals = new List<Goal>();
-                var johnFutureSavings = new List<FutureSavings>
+                var johnFutureSavings = new List<FutureSaving>
                 {
                 };
                 var johnFutureTransactions = new List<FutureTransaction>
                 {
                 };
-                var johnSavings = new List<Savings>
+                var johnSavings = new List<Saving>
                 {
                 };
                 var johnTransaction = new List<Transaction>

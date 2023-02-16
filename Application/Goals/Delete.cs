@@ -28,22 +28,21 @@ namespace Application.Goals
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                var account = await _context.Goals
+                var goal = await _context.Goals
                     .FirstOrDefaultAsync(g => g.Id == request.GoalId);
 
-                if (account == null)
+                if (goal == null)
                     return null;
 
-                _context.Goals.Remove(account);
+                _context.Goals.Remove(goal);
 
                 var fail = await _context.SaveChangesAsync() < 0;
 
-                if(fail)
+                if (fail)
                     return Result<Unit>.Failure("Problem while saving changes on database");
 
                 return Result<Unit>.Success(Unit.Value);
             }
-
         }
     }
 }
