@@ -8,13 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Accounts
+namespace Application.Goals
 {
     public class Delete
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Guid AccountId { get; set; }
+            public Guid GoalId { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -28,21 +28,22 @@ namespace Application.Accounts
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                var account = await _context.Accounts
-                    .FirstOrDefaultAsync(a => a.Id == request.AccountId);
+                var account = await _context.Goals
+                    .FirstOrDefaultAsync(g => g.Id == request.GoalId);
 
                 if (account == null)
                     return null;
 
-                _context.Accounts.Remove(account);
+                _context.Goals.Remove(account);
 
                 var fail = await _context.SaveChangesAsync() < 0;
 
-                if (fail)
+                if(fail)
                     return Result<Unit>.Failure("Problem while saving changes on database");
 
                 return Result<Unit>.Success(Unit.Value);
             }
+
         }
     }
 }
