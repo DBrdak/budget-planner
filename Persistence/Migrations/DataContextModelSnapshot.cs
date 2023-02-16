@@ -56,7 +56,7 @@ namespace Persistence.Migrations
                     b.ToTable("Budgets");
                 });
 
-            modelBuilder.Entity("Domain.FutureSavings", b =>
+            modelBuilder.Entity("Domain.FutureSaving", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -160,7 +160,7 @@ namespace Persistence.Migrations
                     b.ToTable("Goals");
                 });
 
-            modelBuilder.Entity("Domain.Savings", b =>
+            modelBuilder.Entity("Domain.Saving", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -447,7 +447,7 @@ namespace Persistence.Migrations
                     b.Navigation("Budget");
                 });
 
-            modelBuilder.Entity("Domain.FutureSavings", b =>
+            modelBuilder.Entity("Domain.FutureSaving", b =>
                 {
                     b.HasOne("Domain.Budget", "Budget")
                         .WithMany("FutureSavings")
@@ -504,7 +504,7 @@ namespace Persistence.Migrations
                     b.Navigation("Budget");
                 });
 
-            modelBuilder.Entity("Domain.Savings", b =>
+            modelBuilder.Entity("Domain.Saving", b =>
                 {
                     b.HasOne("Domain.Account", null)
                         .WithMany("Transactions")

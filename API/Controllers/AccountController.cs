@@ -11,12 +11,6 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new List.Query()));
         }
 
-        [HttpGet("{accountId}")]
-        public async Task<IActionResult> GetAccount(Guid accountId)
-        {
-            return HandleResult(await Mediator.Send(new Details.Query() { AccountId = accountId }));
-        }
-
         [HttpDelete("{accountId}")]
         public async Task<IActionResult> DeleteAccount(Guid accountId)
         {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class FutureSavingController : BaseController
+    public class FutureSavingsController : BaseController
     {
         [HttpGet]
         public async Task<IActionResult> GetFutureSavings()
