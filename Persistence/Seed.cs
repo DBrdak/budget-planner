@@ -105,6 +105,30 @@ namespace Persistence
                 await context.Budgets.AddRangeAsync(budgets);
                 await context.SaveChangesAsync();
             }
+            if (!context.Goals.Any())
+            {
+                var date = DateTime.UtcNow.AddDays(300);
+                var goals = new List<Goal> {
+                    new Goal
+                    {
+                        Name = "chuj",
+                        EndDate = date,
+                        CurrentAmount = 234.21,
+                        RequiredAmount = 222222.12,
+                        BudgetId = Guid.Parse("58661662-D123-4249-8E82-184F8A4D1784")
+                    },
+                    new Goal
+                    {
+                        Name = "chujec",
+                        EndDate = date,
+                        CurrentAmount = 1234.21,
+                        RequiredAmount = 2112222.12,
+                        BudgetId = Guid.Parse("58661662-D123-4249-8E82-184F8A4D1784")
+                    }
+                };
+                await context.Goals.AddRangeAsync(goals);
+                await context.SaveChangesAsync();
+            }
         }
     }
 }
