@@ -34,10 +34,10 @@ namespace Persistence
 
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Budget> Budgets { get; set; }
-        public DbSet<FutureSavings> FutureSavings { get; set; }
+        public DbSet<FutureSaving> FutureSavings { get; set; }
         public DbSet<FutureTransaction> FutureTransactions { get; set; }
         public DbSet<Goal> Goals { get; set; }
-        public DbSet<Savings> Savings { get; set; }
+        public DbSet<Saving> Savings { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
     }
 }

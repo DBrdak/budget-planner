@@ -2,6 +2,7 @@
 using API.Auth.DTOs;
 using Application.Interfaces;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ using System.Security.Claims;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api")]
     public class UserController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
@@ -43,7 +44,8 @@ namespace API.Controllers
 
         // Register controller =>
 
-        [HttpGet]
+        [Authorize] // Autoryzacja jedynie właściciela konta
+        [HttpGet("profile")]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var user = await _userManager.Users
