@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class GoalController : BaseController
+    public class GoalsController : BaseController
     {
         [HttpGet]
         public async Task<IActionResult> GetGoals()
