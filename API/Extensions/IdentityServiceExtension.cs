@@ -1,6 +1,9 @@
-﻿using API.AuthDTO;
+﻿using API.Auth;
+using API.AuthDTO;
 using Domain;
+using Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
 using System;
@@ -52,6 +55,18 @@ namespace API.Extensions
                         }
                     };
                 });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("IsBudgetOwner", policy =>
+                {
+                    policy.Requirements.Add(new BudgetOwnerRequirement());
+                });
+            });
+
+            services.AddTransient<IAuthorizationHandler, BudgetOwnerRequirementHandler>();
+
+            services.AddScoped<TokenService>();
 
             return services;
         }
