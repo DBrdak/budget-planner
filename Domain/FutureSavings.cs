@@ -15,5 +15,8 @@ namespace Domain
         public Account FromAccount { get; set; }
         public Account ToAccount { get; set; }
         public Goal Goal { get; set; }
+
+        public Guid BudgetId { get; set; }
+        public Budget Budget { get; set; }
     }
 }

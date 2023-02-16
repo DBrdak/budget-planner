@@ -13,6 +13,11 @@ namespace Domain
         public string Title { get; set; }
         public DateTime Date { get; set; }
         public string Category { get; set; }
+
+        public Guid AccountId { get; set; }
         public Account Account { get; set; }
+
+        public Guid BudgetId { get; set; }
+        public Budget Budget { get; set; }
     }
 }

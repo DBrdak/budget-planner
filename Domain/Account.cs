@@ -12,5 +12,12 @@ namespace Domain
         public string Name { get; set; }
         public string AccountType { get; set; }
         public double Balance { get; set; }
+
+        public Guid BudgetId { get; set; }
+        public Budget Budget { get; set; }
+
+        public IEnumerable<Savings> SavingsOut { get; set; }
+        public IEnumerable<Savings> SavingsIn { get; set; }
+        public IEnumerable<Savings> Transactions { get; set; }
     }
 }

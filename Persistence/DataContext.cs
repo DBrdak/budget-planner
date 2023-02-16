@@ -9,16 +9,29 @@ using System.Threading.Tasks;
 
 namespace Persistence
 {
-    public class DataContext : IdentityDbContext <User>
+    public class DataContext : IdentityDbContext<User>
     {
         public DataContext(DbContextOptions options) : base(options)
         {
-                
         }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder); 
+            base.OnModelCreating(builder);
+
+            builder.Entity<Account>()
+                .HasMany(a => a.SavingsIn)
+                .WithOne(s => s.ToAccount)
+                .HasForeignKey(s => s.ToAccountId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Account>()
+                .HasMany(a => a.SavingsOut)
+                .WithOne(s => s.FromAccount)
+                .HasForeignKey(s => s.FromAccountId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
+
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Budget> Budgets { get; set; }
         public DbSet<FutureSavings> FutureSavings { get; set; }
@@ -26,7 +39,5 @@ namespace Persistence
         public DbSet<Goal> Goals { get; set; }
         public DbSet<Savings> Savings { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<User> Users { get; set; }
-
     }
 }

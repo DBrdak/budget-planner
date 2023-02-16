@@ -14,5 +14,8 @@ namespace Domain
         public Account Account { get; set; }
         public double Amount { get; set; }
         public DateTime Date { get; set; }
+
+        public Guid BudgetId { get; set; }
+        public Budget Budget { get; set; }
     }
 }
