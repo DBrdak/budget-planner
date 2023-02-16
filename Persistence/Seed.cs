@@ -15,33 +15,6 @@ namespace Persistence
         {
             if (!userManager.Users.Any() && !context.Budgets.Any())
             {
-                var users = new List<User>
-                {
-                    new User
-                    {
-                        DisplayName="John",
-                        UserName="john",
-                        Email="john@test.com"
-                    },
-                    new User
-                    {
-                        DisplayName="Bob",
-                        UserName="bob",
-                        Email="bob@test.com"
-                    },
-                    new User
-                    {
-                        DisplayName="Jane",
-                        UserName="jane",
-                        Email="jane@test.com"
-                    }
-                };
-
-                foreach (var user in users)
-                {
-                    await userManager.CreateAsync(user, "Pa$$w0rd");
-                }
-
                 var johnAccounts = new List<Account>
                 {
                     new Account
@@ -81,21 +54,52 @@ namespace Persistence
                 {
                     new Budget
                     {
-                        Name="John's budget",
-                        User=users[0],
+                        Name="JohnnyBudget",
                     },
                     new Budget
                     {
-                        Name="Bob's budget",
-                        User=users[1],
+                        Name="BobBudget"
                     },
                     new Budget
                     {
-                        Name="Jane's budget",
-                        User=users[2],
+                        Name="JaneBudget"
                     }
                 };
-                var accounts = new List<Account>();
+
+                var users = new List<User>
+                {
+                    new User
+                    {
+                        DisplayName="John",
+                        UserName="john",
+                        Email="john@test.com",
+                        Budget = budgets[0]
+                    },
+                    new User
+                    {
+                        DisplayName="Bob",
+                        UserName="bob",
+                        Email="bob@test.com",
+                        Budget = budgets[1]
+                    },
+                    new User
+                    {
+                        DisplayName="Jane",
+                        UserName="jane",
+                        Email="jane@test.com",
+                        Budget = budgets[2]
+                    }
+                };
+
+                foreach (var user in users)
+                {
+                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                }
+
+                budgets[0].Accounts = johnAccounts;
+                budgets[0].User = users[0];
+                budgets[1].User = users[1];
+                budgets[2].User = users[2];
 
                 await context.Accounts.AddRangeAsync(johnAccounts);
                 await context.Budgets.AddRangeAsync(budgets);

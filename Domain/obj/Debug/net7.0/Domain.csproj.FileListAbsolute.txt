@@ -10,3 +10,15 @@ D:\Programownie\Projekty\BudgetPlannerC\Domain\obj\Debug\net7.0\Domain.dll
 D:\Programownie\Projekty\BudgetPlannerC\Domain\obj\Debug\net7.0\refint\Domain.dll
 D:\Programownie\Projekty\BudgetPlannerC\Domain\obj\Debug\net7.0\Domain.pdb
 D:\Programownie\Projekty\BudgetPlannerC\Domain\obj\Debug\net7.0\ref\Domain.dll
+D:\Programownie\Projekty\BudgetPlanner\Domain\bin\Debug\net7.0\Domain.deps.json
+D:\Programownie\Projekty\BudgetPlanner\Domain\bin\Debug\net7.0\Domain.dll
+D:\Programownie\Projekty\BudgetPlanner\Domain\bin\Debug\net7.0\Domain.pdb
+D:\Programownie\Projekty\BudgetPlanner\Domain\obj\Debug\net7.0\Domain.csproj.AssemblyReference.cache
+D:\Programownie\Projekty\BudgetPlanner\Domain\obj\Debug\net7.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Programownie\Projekty\BudgetPlanner\Domain\obj\Debug\net7.0\Domain.AssemblyInfoInputs.cache
+D:\Programownie\Projekty\BudgetPlanner\Domain\obj\Debug\net7.0\Domain.AssemblyInfo.cs
+D:\Programownie\Projekty\BudgetPlanner\Domain\obj\Debug\net7.0\Domain.csproj.CoreCompileInputs.cache
+D:\Programownie\Projekty\BudgetPlanner\Domain\obj\Debug\net7.0\Domain.dll
+D:\Programownie\Projekty\BudgetPlanner\Domain\obj\Debug\net7.0\refint\Domain.dll
+D:\Programownie\Projekty\BudgetPlanner\Domain\obj\Debug\net7.0\Domain.pdb
+D:\Programownie\Projekty\BudgetPlanner\Domain\obj\Debug\net7.0\ref\Domain.dll

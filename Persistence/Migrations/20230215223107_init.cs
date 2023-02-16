@@ -183,7 +183,7 @@ namespace Persistence.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     AccountType = table.Column<string>(type: "TEXT", nullable: true),
                     Balance = table.Column<double>(type: "REAL", nullable: false),
-                    BudgetId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    BudgetId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -192,7 +192,8 @@ namespace Persistence.Migrations
                         name: "FK_Accounts_Budgets_BudgetId",
                         column: x => x.BudgetId,
                         principalTable: "Budgets",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -203,8 +204,9 @@ namespace Persistence.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     EndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CurrentAmount = table.Column<double>(type: "REAL", nullable: false),
                     RequiredAmount = table.Column<double>(type: "REAL", nullable: false),
-                    BudgetId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    BudgetId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -213,28 +215,8 @@ namespace Persistence.Migrations
                         name: "FK_Goals_Budgets_BudgetId",
                         column: x => x.BudgetId,
                         principalTable: "Budgets",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Transactions",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Amount = table.Column<double>(type: "REAL", nullable: false),
-                    Title = table.Column<string>(type: "TEXT", nullable: true),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Category = table.Column<string>(type: "TEXT", nullable: true),
-                    BudgetId = table.Column<Guid>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Transactions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Transactions_Budgets_BudgetId",
-                        column: x => x.BudgetId,
-                        principalTable: "Budgets",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -247,7 +229,7 @@ namespace Persistence.Migrations
                     AccountId = table.Column<Guid>(type: "TEXT", nullable: true),
                     Amount = table.Column<double>(type: "REAL", nullable: false),
                     Date = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    BudgetId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    BudgetId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -261,7 +243,37 @@ namespace Persistence.Migrations
                         name: "FK_FutureTransactions_Budgets_BudgetId",
                         column: x => x.BudgetId,
                         principalTable: "Budgets",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Transactions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Amount = table.Column<double>(type: "REAL", nullable: false),
+                    Title = table.Column<string>(type: "TEXT", nullable: true),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Category = table.Column<string>(type: "TEXT", nullable: true),
+                    AccountId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    BudgetId = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Budgets_BudgetId",
+                        column: x => x.BudgetId,
+                        principalTable: "Budgets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -275,7 +287,7 @@ namespace Persistence.Migrations
                     FromAccountId = table.Column<Guid>(type: "TEXT", nullable: true),
                     ToAccountId = table.Column<Guid>(type: "TEXT", nullable: true),
                     GoalId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    BudgetId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    BudgetId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -294,7 +306,8 @@ namespace Persistence.Migrations
                         name: "FK_FutureSavings_Budgets_BudgetId",
                         column: x => x.BudgetId,
                         principalTable: "Budgets",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_FutureSavings_Goals_GoalId",
                         column: x => x.GoalId,
@@ -309,34 +322,30 @@ namespace Persistence.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Amount = table.Column<double>(type: "REAL", nullable: false),
                     Date = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    FromAccountId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    ToAccountId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    GoalId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    BudgetId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    GoalId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    BudgetId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    AccountId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Savings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Savings_Accounts_FromAccountId",
-                        column: x => x.FromAccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Savings_Accounts_ToAccountId",
-                        column: x => x.ToAccountId,
+                        name: "FK_Savings_Accounts_AccountId",
+                        column: x => x.AccountId,
                         principalTable: "Accounts",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Savings_Budgets_BudgetId",
                         column: x => x.BudgetId,
                         principalTable: "Budgets",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Savings_Goals_GoalId",
                         column: x => x.GoalId,
                         principalTable: "Goals",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -422,14 +431,14 @@ namespace Persistence.Migrations
                 column: "BudgetId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Savings_AccountId",
+                table: "Savings",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Savings_BudgetId",
                 table: "Savings",
                 column: "BudgetId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Savings_FromAccountId",
-                table: "Savings",
-                column: "FromAccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Savings_GoalId",
@@ -437,9 +446,9 @@ namespace Persistence.Migrations
                 column: "GoalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Savings_ToAccountId",
-                table: "Savings",
-                column: "ToAccountId");
+                name: "IX_Transactions_AccountId",
+                table: "Transactions",
+                column: "AccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_BudgetId",
@@ -481,10 +490,10 @@ namespace Persistence.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Accounts");
+                name: "Goals");
 
             migrationBuilder.DropTable(
-                name: "Goals");
+                name: "Accounts");
 
             migrationBuilder.DropTable(
                 name: "Budgets");
