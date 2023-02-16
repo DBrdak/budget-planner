@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Programownie\\Projekty\\Budget-planner\\Domain\\Domain.csproj": {}
+    "C:\\Users\\PanSt\\Source\\Repos\\BudgetPlanner\\Domain\\Domain.csproj": {}
   },
   "projects": {
-    "D:\\Programownie\\Projekty\\Budget-planner\\Domain\\Domain.csproj": {
+    "C:\\Users\\PanSt\\Source\\Repos\\BudgetPlanner\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Programownie\\Projekty\\Budget-planner\\Domain\\Domain.csproj",
+        "projectUniqueName": "C:\\Users\\PanSt\\Source\\Repos\\BudgetPlanner\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "D:\\Programownie\\Projekty\\Budget-planner\\Domain\\Domain.csproj",
-        "packagesPath": "C:\\Users\\Brdak\\.nuget\\packages\\",
-        "outputPath": "D:\\Programownie\\Projekty\\Budget-planner\\Domain\\obj\\",
+        "projectPath": "C:\\Users\\PanSt\\Source\\Repos\\BudgetPlanner\\Domain\\Domain.csproj",
+        "packagesPath": "C:\\Users\\PanSt\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\PanSt\\Source\\Repos\\BudgetPlanner\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "D:\\Programownie\\VS Others\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Brdak\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\PanSt\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
