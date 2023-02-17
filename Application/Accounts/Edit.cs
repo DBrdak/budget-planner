@@ -1,6 +1,9 @@
 ﻿using Application.Core;
+using Application.DTO;
+using AutoMapper;
 using Domain;
 using MediatR;
+using Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,22 +17,40 @@ namespace Application.Accounts
         public class Command : IRequest<Result<Unit>>
         {
             public Guid AccountId { get; set; }
-
-            // Mapped account
-            public Account NewAccount { get; set; }
+            public AccountDto NewAccount { get; set; }
         }
 
         // Validation
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
-            public Handler()
+            private readonly DataContext _context;
+            private readonly IMapper _mapper;
+
+            public Handler(DataContext context, IMapper mapper)
             {
+                _context = context;
+                _mapper = mapper;
             }
 
-            Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
+            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                throw new NotImplementedException();
+                var oldAccount = await _context.Accounts.FindAsync(request.AccountId);
+
+                if (oldAccount == null)
+                    return null;
+
+                oldAccount.Balance = request.NewAccount.Balance;
+                oldAccount.Name = request.NewAccount.Name;
+
+                _context.Accounts.Update(oldAccount);
+
+                var fail = await _context.SaveChangesAsync() < 0;
+
+                if (fail)
+                    return Result<Unit>.Failure("Problem while updating account");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

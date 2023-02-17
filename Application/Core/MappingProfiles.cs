@@ -42,6 +42,11 @@ namespace Application.Core
             CreateMap<Account, AccountDto>()
                 .ForMember(d => d.Expenditures, o => o.MapFrom(s => s.Transactions.Where(t => t.Amount < 0)))
                 .ForMember(d => d.Incomes, o => o.MapFrom(s => s.Transactions.Where(t => t.Amount > 0)));
+
+            CreateMap<AccountDto, Account>()
+                .ForMember(d => d.Transactions, o => o.Ignore())
+                .ForMember(d => d.SavingsIn, o => o.Ignore())
+                .ForMember(d => d.SavingsOut, o => o.Ignore());
         }
     }
 }
