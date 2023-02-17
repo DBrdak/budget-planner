@@ -1859,23 +1859,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Brdak\\.nuget\\packages\\": {},
-    "D:\\Programownie\\VS Others\\NuGetPackages": {}
+    "C:\\Users\\PanSt\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Programownie\\Projekty\\Budget-planner\\Infrastructure\\Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Infrastructure\\Infrastructure.csproj",
       "projectName": "Infrastructure",
-      "projectPath": "D:\\Programownie\\Projekty\\Budget-planner\\Infrastructure\\Infrastructure.csproj",
-      "packagesPath": "C:\\Users\\Brdak\\.nuget\\packages\\",
-      "outputPath": "D:\\Programownie\\Projekty\\Budget-planner\\Infrastructure\\obj\\",
+      "projectPath": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Infrastructure\\Infrastructure.csproj",
+      "packagesPath": "C:\\Users\\PanSt\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "D:\\Programownie\\VS Others\\NuGetPackages"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Brdak\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\PanSt\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -1890,8 +1890,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "D:\\Programownie\\Projekty\\Budget-planner\\Application\\Application.csproj": {
-              "projectPath": "D:\\Programownie\\Projekty\\Budget-planner\\Application\\Application.csproj"
+            "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Application\\Application.csproj": {
+              "projectPath": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Application\\Application.csproj"
             }
           }
         }
