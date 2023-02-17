@@ -178,7 +178,7 @@ namespace Persistence
                     {
                         Budget= budgets[0],
                         Date= date.AddDays(13),
-                        Amount=75,
+                        Amount=-75,
                         Title="Biedra",
                         Category="Groceries",
                         Account=johnAccounts[0],
@@ -187,7 +187,7 @@ namespace Persistence
                     {
                         Budget= budgets[0],
                         Date= date.AddDays(28),
-                        Amount=50,
+                        Amount=-50,
                         Title="Mefedron",
                         Category="Drugs",
                         Account=johnAccounts[1],
