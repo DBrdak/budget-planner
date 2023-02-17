@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.FutureSavings
+namespace Application.SpendingPlan.Savings
 {
     public class List
     {

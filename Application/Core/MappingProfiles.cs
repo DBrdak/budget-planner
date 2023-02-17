@@ -22,12 +22,10 @@ namespace Application.Core
                 .ForAllMembers(d => d.Condition(t => t.Amount > 0));
 
             CreateMap<FutureTransaction, FutureExpenditureDto>()
-                .ForMember(d => d.AccountName, o => o.MapFrom(s => s.Account.Name))
-                .ForAllMembers(d => d.Condition(t => t.Amount > 0));
+                .ForMember(d => d.AccountName, o => o.MapFrom(s => s.Account.Name));
 
             CreateMap<FutureTransaction, FutureIncomeDto>()
-                .ForMember(d => d.AccountName, o => o.MapFrom(s => s.Account.Name))
-                .ForAllMembers(d => d.Condition(t => t.Amount > 0));
+                .ForMember(d => d.AccountName, o => o.MapFrom(s => s.Account.Name));
 
             CreateMap<Saving, SavingDto>()
                 .ForMember(d => d.FromAccountName, o => o.MapFrom(s => s.FromAccount.Name))

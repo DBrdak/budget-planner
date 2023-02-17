@@ -11,7 +11,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230215223107_init")]
+    [Migration("20230217020254_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -54,17 +54,12 @@ namespace Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Budgets");
                 });
 
-            modelBuilder.Entity("Domain.FutureSavings", b =>
+            modelBuilder.Entity("Domain.FutureSaving", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -168,13 +163,10 @@ namespace Persistence.Migrations
                     b.ToTable("Goals");
                 });
 
-            modelBuilder.Entity("Domain.Savings", b =>
+            modelBuilder.Entity("Domain.Saving", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("AccountId")
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Amount")
@@ -186,16 +178,24 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("FromAccountId")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("GoalId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ToAccountId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
-
                     b.HasIndex("BudgetId");
 
+                    b.HasIndex("FromAccountId");
+
                     b.HasIndex("GoalId");
+
+                    b.HasIndex("ToAccountId");
 
                     b.ToTable("Savings");
                 });
@@ -240,6 +240,9 @@ namespace Persistence.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("BudgetId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -289,6 +292,9 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BudgetId")
+                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -439,16 +445,7 @@ namespace Persistence.Migrations
                     b.Navigation("Budget");
                 });
 
-            modelBuilder.Entity("Domain.Budget", b =>
-                {
-                    b.HasOne("Domain.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.FutureSavings", b =>
+            modelBuilder.Entity("Domain.FutureSaving", b =>
                 {
                     b.HasOne("Domain.Budget", "Budget")
                         .WithMany("FutureSavings")
@@ -505,15 +502,17 @@ namespace Persistence.Migrations
                     b.Navigation("Budget");
                 });
 
-            modelBuilder.Entity("Domain.Savings", b =>
+            modelBuilder.Entity("Domain.Saving", b =>
                 {
-                    b.HasOne("Domain.Account", null)
-                        .WithMany("Transactions")
-                        .HasForeignKey("AccountId");
-
                     b.HasOne("Domain.Budget", "Budget")
                         .WithMany("Savings")
                         .HasForeignKey("BudgetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Account", "FromAccount")
+                        .WithMany("SavingsOut")
+                        .HasForeignKey("FromAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -523,15 +522,25 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Account", "ToAccount")
+                        .WithMany("SavingsIn")
+                        .HasForeignKey("ToAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Budget");
 
+                    b.Navigation("FromAccount");
+
                     b.Navigation("Goal");
+
+                    b.Navigation("ToAccount");
                 });
 
             modelBuilder.Entity("Domain.Transaction", b =>
                 {
                     b.HasOne("Domain.Account", "Account")
-                        .WithMany()
+                        .WithMany("Transactions")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -543,6 +552,17 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Account");
+
+                    b.Navigation("Budget");
+                });
+
+            modelBuilder.Entity("Domain.User", b =>
+                {
+                    b.HasOne("Domain.Budget", "Budget")
+                        .WithOne("User")
+                        .HasForeignKey("Domain.User", "BudgetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Budget");
                 });
@@ -600,6 +620,10 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Account", b =>
                 {
+                    b.Navigation("SavingsIn");
+
+                    b.Navigation("SavingsOut");
+
                     b.Navigation("Transactions");
                 });
 
@@ -616,6 +640,8 @@ namespace Persistence.Migrations
                     b.Navigation("Savings");
 
                     b.Navigation("Transactions");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }
