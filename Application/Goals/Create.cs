@@ -10,18 +10,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Accounts
+namespace Application.Goals
 {
     public class Create
     {
         public class Command : IRequest<Result<Unit>>
         {
 
-            // Mapped account
-            public AccountDto NewAccount { get; set; }
+            public GoalDto newGoal { get; set;}
         }
-
-        // Validation
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
@@ -33,7 +30,6 @@ namespace Application.Accounts
                 _context = context;
                 _userAccessor = userAccessor;
             }
-
             Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
                 return null;
