@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230216220748_Fix02")]
-    partial class Fix02
+    [Migration("20230217020812_test")]
+    partial class test
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -169,9 +169,6 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("AccountId")
-                        .HasColumnType("TEXT");
-
                     b.Property<double>("Amount")
                         .HasColumnType("REAL");
 
@@ -191,8 +188,6 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
 
                     b.HasIndex("BudgetId");
 
@@ -509,10 +504,6 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Saving", b =>
                 {
-                    b.HasOne("Domain.Account", null)
-                        .WithMany("Transactions")
-                        .HasForeignKey("AccountId");
-
                     b.HasOne("Domain.Budget", "Budget")
                         .WithMany("Savings")
                         .HasForeignKey("BudgetId")
@@ -549,7 +540,7 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Transaction", b =>
                 {
                     b.HasOne("Domain.Account", "Account")
-                        .WithMany()
+                        .WithMany("Transactions")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

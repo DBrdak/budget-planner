@@ -13,15 +13,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.FutureTransactions
+namespace Application.SpendingPlan.Savings
 {
-    public class IncomesList
+    public class List
     {
-        public class Query : IRequest<Result<List<FutureIncomeDto>>>
+        public class Query : IRequest<Result<List<FutureSavingDto>>>
         {
         }
 
-        public class Handler : IRequestHandler<Query, Result<List<FutureIncomeDto>>>
+        public class Handler : IRequestHandler<Query, Result<List<FutureSavingDto>>>
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
@@ -34,15 +34,15 @@ namespace Application.FutureTransactions
                 _mapper = mapper;
             }
 
-            async Task<Result<List<FutureIncomeDto>>> IRequestHandler<Query, Result<List<FutureIncomeDto>>>.Handle(Query request, CancellationToken cancellationToken)
+            async Task<Result<List<FutureSavingDto>>> IRequestHandler<Query, Result<List<FutureSavingDto>>>.Handle(Query request, CancellationToken cancellationToken)
             {
-                var futureTransactions = await _context.FutureTransactions
+                var futureSavings = await _context.FutureSavings
                     .AsNoTracking()
-                    .Where(ft => ft.Budget.User.UserName == _userAccessor.GetUsername())
-                    .ProjectTo<FutureIncomeDto>(_mapper.ConfigurationProvider)
+                    .Where(fs => fs.Budget.User.UserName == _userAccessor.GetUsername())
+                    .ProjectTo<FutureSavingDto>(_mapper.ConfigurationProvider)
                     .ToListAsync();
 
-                return Result<List<FutureIncomeDto>>.Success(futureTransactions);
+                return Result<List<FutureSavingDto>>.Success(futureSavings);
             }
         }
     }

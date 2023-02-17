@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Persistence
 {
@@ -16,79 +17,13 @@ namespace Persistence
             if (!userManager.Users.Any() && !context.Budgets.Any() && !context.Goals.Any() && !context.Accounts.Any() &&
                 !context.FutureTransactions.Any() && !context.FutureSavings.Any() && !context.Transactions.Any() && !context.Savings.Any())
             {
-                var johnAccounts = new List<Account>
-                {
-                    new Account
-                    {
-                        Name="Checking account 01",
-                        AccountType="Checking",
-                        Balance=2000
-                    },
-                    new Account
-                    {
-                        Name="Checking account 02",
-                        AccountType="Checking",
-                        Balance=400
-                    },
-                    new Account
-                    {
-                        Name="Saving account",
-                        AccountType="Saving",
-                        Balance=6500
-                    },
-                };
-                var johnGoals = new List<Goal>();
-                var johnFutureSavings = new List<FutureSaving>
-                {
-                };
-                var johnFutureTransactions = new List<FutureTransaction>
-                {
-                };
-                var johnSavings = new List<Saving>
-                {
-                };
-                var johnTransaction = new List<Transaction>
-                {
-                };
-
-                var budgets = new List<Budget>
-                {
-                    new Budget
-                    {
-                        Name="JohnnyBudget",
-                    },
-                    new Budget
-                    {
-                        Name="BobBudget"
-                    },
-                    new Budget
-                    {
-                        Name="JaneBudget"
-                    }
-                };
-
                 var users = new List<User>
                 {
                     new User
                     {
                         DisplayName="John",
                         UserName="john",
-                        Email="john@test.com",
-                        Budget = budgets[0]
-                    },
-                    new User
-                    {
-                        DisplayName="Bob",
-                        UserName="bob",
-                        Email="bob@test.com",
-                        Budget = budgets[1]
-                    },
-                    new User
-                    {
-                        DisplayName="Jane",
-                        UserName="jane",
-                        Email="jane@test.com",
-                        Budget = budgets[2]
+                        Email="john@test.com"
                     }
                 };
 
@@ -97,10 +32,39 @@ namespace Persistence
                     await userManager.CreateAsync(user, "Pa$$w0rd");
                 }
 
-                budgets[0].Accounts = johnAccounts;
-                budgets[0].User = users[0];
-                budgets[1].User = users[1];
-                budgets[2].User = users[2];
+                var budgets = new List<Budget>
+                {
+                    new Budget
+                    {
+                        Name = "JohnnyBudget",
+                        User = users[0]
+                    }
+                };
+
+                var johnAccounts = new List<Account>
+                {
+                    new Account
+                    {
+                        Budget=budgets[0],
+                        Name="Checking account 01",
+                        AccountType="Checking",
+                        Balance=2000
+                    },
+                    new Account
+                    {
+                        Budget=budgets[0],
+                        Name="Checking account 02",
+                        AccountType="Checking",
+                        Balance=400
+                    },
+                    new Account
+                    {
+                        Budget=budgets[0],
+                        Name="Saving account",
+                        AccountType="Saving",
+                        Balance=6500
+                    },
+                };
 
                 var ffdate = DateTime.UtcNow.AddDays(300);
                 var goals = new List<Goal> {
@@ -110,7 +74,7 @@ namespace Persistence
                         EndDate = ffdate,
                         CurrentAmount = 234.21,
                         RequiredAmount = 222222.12,
-                        BudgetId = budgets[0].Id
+                        Budget = budgets[0]
                     },
                     new Goal
                     {
@@ -118,7 +82,7 @@ namespace Persistence
                         EndDate = ffdate.AddDays(325),
                         CurrentAmount = 1234.21,
                         RequiredAmount = 2112222.12,
-                        BudgetId = budgets[0].Id
+                        Budget = budgets[0]
                     }
                 };
 
@@ -214,7 +178,7 @@ namespace Persistence
                     {
                         Budget= budgets[0],
                         Date= date.AddDays(13),
-                        Amount=50,
+                        Amount=75,
                         Title="Biedra",
                         Category="Groceries",
                         Account=johnAccounts[0],
@@ -227,16 +191,34 @@ namespace Persistence
                         Title="Mefedron",
                         Category="Drugs",
                         Account=johnAccounts[1],
+                    },
+                    new Transaction
+                    {
+                        Budget= budgets[0],
+                        Date= date.AddDays(13),
+                        Amount=50,
+                        Title="Prezes",
+                        Category="Job",
+                        Account=johnAccounts[0],
+                    },
+                    new Transaction
+                    {
+                        Budget= budgets[0],
+                        Date= date.AddDays(28),
+                        Amount=50,
+                        Title="Prezes",
+                        Category="Blowjob",
+                        Account=johnAccounts[1],
                     }
                 };
 
+                await context.Budgets.AddRangeAsync(budgets);
+                await context.Accounts.AddRangeAsync(johnAccounts);
+                await context.Goals.AddRangeAsync(goals);
                 await context.Transactions.AddRangeAsync(tran);
                 await context.Savings.AddRangeAsync(sav);
                 await context.FutureTransactions.AddRangeAsync(fTran);
                 await context.FutureSavings.AddRangeAsync(fSav);
-                await context.Goals.AddRangeAsync(goals);
-                await context.Accounts.AddRangeAsync(johnAccounts);
-                await context.Budgets.AddRangeAsync(budgets);
                 await context.SaveChangesAsync();
             }
         }

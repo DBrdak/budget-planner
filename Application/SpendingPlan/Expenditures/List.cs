@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.FutureTransactions
+namespace Application.SpendingPlan.Expenditures
 {
-    public class ExpendituresList
+    public class List
     {
     }
 }
