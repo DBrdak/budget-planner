@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
@@ -20,12 +21,14 @@ namespace Infrastructure.Security
     {
         private readonly DataContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IBudgetAccessor _budgetAccessor;
 
         public BudgetOwnerRequirementHandler(DataContext dbContext,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor, IBudgetAccessor budgetAccessor)
         {
             _context = dbContext;
             _httpContextAccessor = httpContextAccessor;
+            _budgetAccessor = budgetAccessor;
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, BudgetOwnerRequirement requirement)
@@ -35,8 +38,7 @@ namespace Infrastructure.Security
             if (userId == null)
                 return Task.CompletedTask;
 
-            var budgetName = _httpContextAccessor.HttpContext.Request.RouteValues
-                .SingleOrDefault(x => x.Key == "budgetName").Value.ToString();
+            var budgetName = _budgetAccessor.GetBudgetName();
 
             var user = _context.Budgets
                 .AsNoTracking()

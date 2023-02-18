@@ -26,19 +26,18 @@ namespace Application.Accounts
             public CommandValidator()
             {
                 RuleFor(x => x.AccountId).NotEmpty();
-                RuleFor(x => x.NewAccount).SetValidator(new AccountValidator());
+                RuleFor(x => x.NewAccount.Balance).NotEmpty();
+                RuleFor(x => x.NewAccount.Name).NotEmpty();
             }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
-            private readonly IMapper _mapper;
 
-            public Handler(DataContext context, IMapper mapper)
+            public Handler(DataContext context)
             {
                 _context = context;
-                _mapper = mapper;
             }
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)

@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Domain;
 using FluentValidation;
 using System;
 using System.Collections.Generic;

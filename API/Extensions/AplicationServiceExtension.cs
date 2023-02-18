@@ -38,6 +38,7 @@ namespace API.Extensions
             services.AddHttpContextAccessor();
 
             services.AddScoped<IUserAccessor, UserAccessor>();
+            services.AddScoped<IBudgetAccessor, BudgetAccessor>();
 
             return services;
         }

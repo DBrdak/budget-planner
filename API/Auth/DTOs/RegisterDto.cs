@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace API.Auth.DTOs
 {
-    internal class RegisterDto
+    public class RegisterDto
     {
     }
 }
