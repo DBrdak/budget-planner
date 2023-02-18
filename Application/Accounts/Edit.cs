@@ -2,6 +2,7 @@
 using Application.DTO;
 using AutoMapper;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
@@ -20,7 +21,14 @@ namespace Application.Accounts
             public AccountDto NewAccount { get; set; }
         }
 
-        // Validation
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.AccountId).NotEmpty();
+                RuleFor(x => x.NewAccount).SetValidator(new AccountValidator());
+            }
+        }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
