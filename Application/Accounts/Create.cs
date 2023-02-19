@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
 
 namespace Application.Accounts
 {
@@ -22,27 +23,34 @@ namespace Application.Accounts
             public AccountDto NewAccount { get; set; }
         }
 
-        // Validation
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.NewAccount).SetValidator(new AccountValidator());
+            }
+        }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
             private readonly IHttpContextAccessor _httpContext;
+            private readonly IBudgetAccessor _budgetAccessor;
 
-            public Handler(DataContext context, IMapper mapper, IHttpContextAccessor httpContext)
+            public Handler(DataContext context, IMapper mapper, IHttpContextAccessor httpContext, IBudgetAccessor budgetAccessor)
             {
                 _context = context;
                 _mapper = mapper;
                 _httpContext = httpContext;
+                _budgetAccessor = budgetAccessor;
             }
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
                 var newAccount = _mapper.Map<Account>(request.NewAccount);
 
-                var budgetName = _httpContext.HttpContext.Request.RouteValues
-                    .SingleOrDefault(x => x.Key == "budgetName").Value.ToString();
+                var budgetName = _budgetAccessor.GetBudgetName();
 
                 newAccount.Budget = await _context.Budgets
                     .FirstOrDefaultAsync(b => b.Name == budgetName);
