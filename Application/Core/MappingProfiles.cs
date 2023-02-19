@@ -66,7 +66,7 @@ namespace Application.Core
             CreateMap<Goal, GoalDto>();
 
             CreateMap<GoalDto, Goal>()
-                .ForMember(d => d.CurrentAmount, o => o.Ignore());
+                .ForMember(d => d.Id, o => o.Ignore());
 
             CreateMap<Account, AccountDto>()
                 .ForMember(d => d.Expenditures, o => o.MapFrom(s => s.Transactions.Where(t => t.Amount < 0)))
