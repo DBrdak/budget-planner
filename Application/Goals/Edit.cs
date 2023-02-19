@@ -17,9 +17,10 @@ namespace Application.Goals
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Guid goalId { get; set; }
+            public Guid GoalId { get; set; }
             public GoalDto NewGoal { get; set; }
         }
+
         /*
         public class CommandValidator : AbstractValidator<Command>
         {
@@ -31,6 +32,7 @@ namespace Application.Goals
             }
         }
         */
+
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
