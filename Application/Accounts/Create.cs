@@ -13,6 +13,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
+using Persistence.Migrations;
 
 namespace Application.Accounts
 {

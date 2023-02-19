@@ -19,9 +19,9 @@ namespace API.Controllers
         }
 
         [HttpPut("{goalId}")]
-        public async Task<IActionResult> EditAccount(Guid goalId, GoalDto newGoal)
+        public async Task<IActionResult> EditAccount(GoalDto newGoal)
         {
-            return HandleResult(await Mediator.Send(new Edit.Command() { GoalId = goalId, NewGoal = newGoal }));
+            return HandleResult(await Mediator.Send(new Edit.Command() { NewGoal = newGoal }));
         }
 
         [HttpPost]

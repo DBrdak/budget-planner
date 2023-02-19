@@ -15,17 +15,11 @@ namespace Application.Accounts
         public AccountValidator()
         {
             RuleFor(x => x.AccountType).Must(x => x == "Saving" || x == "Checking")
-                .WithMessage("Account type must be one of following: \"Saving\", \"Checking\"");
-            RuleFor(x => x.Incomes.Select(i => i.Amount)).Must(x => x.Sum() == 0)
-                .WithMessage("You cannot add incomes right now");
-            RuleFor(x => x.Expenditures.Select(i => i.Amount)).Must(x => x.Sum() == 0)
-                .WithMessage("You cannot add expenditures right now");
-            RuleFor(x => x.SavingsIn.Select(i => i.Amount)).Must(x => x.Sum() == 0)
-                .WithMessage("You cannot add incoming savings right now");
-            RuleFor(x => x.SavingsOut.Select(i => i.Amount)).Must(x => x.Sum() == 0)
-                .WithMessage("You cannot add outgoing savings right now");
+                .WithMessage("Account type must be one of following: Saving, Checking");
             RuleFor(x => x.Name).NotEmpty()
                 .WithMessage("Name of account is required");
+            RuleFor(x => x.Balance).NotEmpty()
+                .WithMessage("Balance is required");
         }
     }
 }

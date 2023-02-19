@@ -5,6 +5,7 @@ using Domain;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using Persistence.Migrations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,45 +18,36 @@ namespace Application.Goals
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Guid GoalId { get; set; }
             public GoalDto NewGoal { get; set; }
         }
 
-        /*
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.AccountId).NotEmpty();
-                RuleFor(x => x.NewAccount.Balance).NotEmpty();
-                RuleFor(x => x.NewAccount.Name).NotEmpty();
+                RuleFor(x => x.NewGoal).SetValidator(new GoalValidator());
             }
         }
-        */
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
+            private readonly IMapper _mapper;
 
-            public Handler(DataContext context)
+            public Handler(DataContext context, IMapper mapper)
             {
                 _context = context;
+                _mapper = mapper;
             }
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                var oldGoal = await _context.Goals.FindAsync(request.GoalId);
+                var oldGoal = await _context.Goals.FindAsync(request.NewGoal.Id);
 
                 if (oldGoal == null)
                     return null;
 
-                oldGoal.Name = request.NewGoal.Name;
-                oldGoal.Description = request.NewGoal.Description;
-                oldGoal.EndDate = request.NewGoal.EndDate;
-                oldGoal.CurrentAmount = request.NewGoal.CurrentAmount;
-                oldGoal.RequiredAmount = request.NewGoal.RequiredAmount;
-
-                _context.Goals.Update(oldGoal);
+                _mapper.Map(request.NewGoal, oldGoal);
 
                 var fail = await _context.SaveChangesAsync() < 0;
 

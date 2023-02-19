@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Infrastructure\\Infrastructure.csproj": {}
+    "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Infrastructure\\Infrastructure.csproj": {}
   },
   "projects": {
-    "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Application\\Application.csproj": {
+    "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Application\\Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Application\\Application.csproj",
+        "projectUniqueName": "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Application\\Application.csproj",
         "projectName": "Application",
-        "projectPath": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Application\\Application.csproj",
-        "packagesPath": "C:\\Users\\PanSt\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Application\\obj\\",
+        "projectPath": "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Application\\Application.csproj",
+        "packagesPath": "C:\\Users\\Brdak\\.nuget\\packages\\",
+        "outputPath": "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "D:\\Programownie\\VS Others\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\PanSt\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Brdak\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -32,11 +32,11 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Domain\\Domain.csproj": {
-                "projectPath": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Domain\\Domain.csproj"
+              "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Domain\\Domain.csproj": {
+                "projectPath": "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Domain\\Domain.csproj"
               },
-              "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Persistence\\Persistence.csproj": {
-                "projectPath": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Persistence\\Persistence.csproj"
+              "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Persistence\\Persistence.csproj": {
+                "projectPath": "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Persistence\\Persistence.csproj"
               }
             }
           }
@@ -84,20 +84,20 @@
         }
       }
     },
-    "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Domain\\Domain.csproj": {
+    "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Domain\\Domain.csproj",
+        "projectUniqueName": "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Domain\\Domain.csproj",
-        "packagesPath": "C:\\Users\\PanSt\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Domain\\obj\\",
+        "projectPath": "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Domain\\Domain.csproj",
+        "packagesPath": "C:\\Users\\Brdak\\.nuget\\packages\\",
+        "outputPath": "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "D:\\Programownie\\VS Others\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\PanSt\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Brdak\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -149,20 +149,20 @@
         }
       }
     },
-    "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Infrastructure\\Infrastructure.csproj": {
+    "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Infrastructure\\Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Infrastructure\\Infrastructure.csproj",
+        "projectUniqueName": "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Infrastructure\\Infrastructure.csproj",
         "projectName": "Infrastructure",
-        "projectPath": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Infrastructure\\Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\PanSt\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Infrastructure\\obj\\",
+        "projectPath": "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Infrastructure\\Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\Brdak\\.nuget\\packages\\",
+        "outputPath": "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "D:\\Programownie\\VS Others\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\PanSt\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Brdak\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -177,8 +177,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Application\\Application.csproj": {
-                "projectPath": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Application\\Application.csproj"
+              "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Application\\Application.csproj": {
+                "projectPath": "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Application\\Application.csproj"
               }
             }
           }
@@ -218,20 +218,20 @@
         }
       }
     },
-    "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Persistence\\Persistence.csproj": {
+    "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Persistence\\Persistence.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Persistence\\Persistence.csproj",
+        "projectUniqueName": "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Persistence\\Persistence.csproj",
         "projectName": "Persistence",
-        "projectPath": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Persistence\\Persistence.csproj",
-        "packagesPath": "C:\\Users\\PanSt\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Persistence\\obj\\",
+        "projectPath": "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Persistence\\Persistence.csproj",
+        "packagesPath": "C:\\Users\\Brdak\\.nuget\\packages\\",
+        "outputPath": "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Persistence\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "D:\\Programownie\\VS Others\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\PanSt\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Brdak\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -246,8 +246,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Domain\\Domain.csproj": {
-                "projectPath": "C:\\Users\\PanSt\\Source\\Repos\\Budget-Planner\\Domain\\Domain.csproj"
+              "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Domain\\Domain.csproj": {
+                "projectPath": "D:\\Programowanie\\Projekty\\Budget-Planner-Clone\\DBrdak\\Budget-Planner\\Domain\\Domain.csproj"
               }
             }
           }
