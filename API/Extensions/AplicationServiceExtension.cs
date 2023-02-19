@@ -1,4 +1,5 @@
 using Application.Accounts;
+using Application.Core;
 using Application.Interfaces;
 using FluentValidation.AspNetCore;
 using Infrastructure.Security;
@@ -32,11 +33,12 @@ namespace API.Extensions
             });
 
             services.AddMediatR(typeof(List.Handler));
-            //services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddFluentValidationAutoValidation();
             services.AddHttpContextAccessor();
 
             services.AddScoped<IUserAccessor, UserAccessor>();
+            services.AddScoped<IBudgetAccessor, BudgetAccessor>();
 
             return services;
         }

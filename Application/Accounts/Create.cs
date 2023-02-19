@@ -1,5 +1,6 @@
 ﻿using Application.Core;
 using Application.Interfaces;
+using Application.DTO;
 using Domain;
 using MediatR;
 using Persistence;
@@ -8,6 +9,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using FluentValidation;
 
 namespace Application.Accounts
 {
@@ -15,28 +20,51 @@ namespace Application.Accounts
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Guid AccountId { get; set; }
-
-            // Mapped account
-            public Account NewAccount { get; set; }
+            public AccountDto NewAccount { get; set; }
         }
 
-        // Validation
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.NewAccount).SetValidator(new AccountValidator());
+            }
+        }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
-            private readonly IUserAccessor _userAccessor;
+            private readonly IMapper _mapper;
+            private readonly IHttpContextAccessor _httpContext;
+            private readonly IBudgetAccessor _budgetAccessor;
 
-            public Handler(DataContext context, IUserAccessor userAccessor)
+            public Handler(DataContext context, IMapper mapper, IHttpContextAccessor httpContext, IBudgetAccessor budgetAccessor)
             {
                 _context = context;
-                _userAccessor = userAccessor;
+                _mapper = mapper;
+                _httpContext = httpContext;
+                _budgetAccessor = budgetAccessor;
             }
 
-            Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
+            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                return null;
+                var newAccount = _mapper.Map<Account>(request.NewAccount);
+
+                var budgetName = _budgetAccessor.GetBudgetName();
+
+                newAccount.Budget = await _context.Budgets
+                    .FirstOrDefaultAsync(b => b.Name == budgetName);
+
+                if (newAccount.Budget == null)
+                    return null;
+
+                await _context.Accounts.AddAsync(newAccount);
+                var fail = await _context.SaveChangesAsync() < 0;
+
+                if (fail)
+                    return Result<Unit>.Failure("Problem while adding new account");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

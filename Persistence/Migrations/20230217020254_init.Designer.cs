@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230216005351_Fix03")]
-    partial class Fix03
+    [Migration("20230217020254_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,7 +59,7 @@ namespace Persistence.Migrations
                     b.ToTable("Budgets");
                 });
 
-            modelBuilder.Entity("Domain.FutureSavings", b =>
+            modelBuilder.Entity("Domain.FutureSaving", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -163,13 +163,10 @@ namespace Persistence.Migrations
                     b.ToTable("Goals");
                 });
 
-            modelBuilder.Entity("Domain.Savings", b =>
+            modelBuilder.Entity("Domain.Saving", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("AccountId")
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Amount")
@@ -191,8 +188,6 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
 
                     b.HasIndex("BudgetId");
 
@@ -450,7 +445,7 @@ namespace Persistence.Migrations
                     b.Navigation("Budget");
                 });
 
-            modelBuilder.Entity("Domain.FutureSavings", b =>
+            modelBuilder.Entity("Domain.FutureSaving", b =>
                 {
                     b.HasOne("Domain.Budget", "Budget")
                         .WithMany("FutureSavings")
@@ -507,12 +502,8 @@ namespace Persistence.Migrations
                     b.Navigation("Budget");
                 });
 
-            modelBuilder.Entity("Domain.Savings", b =>
+            modelBuilder.Entity("Domain.Saving", b =>
                 {
-                    b.HasOne("Domain.Account", null)
-                        .WithMany("Transactions")
-                        .HasForeignKey("AccountId");
-
                     b.HasOne("Domain.Budget", "Budget")
                         .WithMany("Savings")
                         .HasForeignKey("BudgetId")
@@ -549,7 +540,7 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Transaction", b =>
                 {
                     b.HasOne("Domain.Account", "Account")
-                        .WithMany()
+                        .WithMany("Transactions")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -18,6 +18,6 @@ namespace Domain
 
         public IEnumerable<Saving> SavingsOut { get; set; }
         public IEnumerable<Saving> SavingsIn { get; set; }
-        public IEnumerable<Saving> Transactions { get; set; }
+        public IEnumerable<Transaction> Transactions { get; set; }
     }
 }

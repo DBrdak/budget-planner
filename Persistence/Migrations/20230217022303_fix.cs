@@ -6,10 +6,44 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class fix01 : Migration
+    public partial class fix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_AspNetUsers_Budgets_BudgetId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropIndex(
+                name: "IX_AspNetUsers_BudgetId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "BudgetId",
+                table: "AspNetUsers");
+
+            migrationBuilder.AddColumn<string>(
+                name: "UserId",
+                table: "Budgets",
+                type: "TEXT",
+                nullable: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Budgets_UserId",
+                table: "Budgets",
+                column: "UserId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Budgets_AspNetUsers_UserId",
+                table: "Budgets",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Budgets_AspNetUsers_UserId",
@@ -43,40 +77,6 @@ namespace Persistence.Migrations
                 principalTable: "Budgets",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
-        }
-
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUsers_Budgets_BudgetId",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AspNetUsers_BudgetId",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "BudgetId",
-                table: "AspNetUsers");
-
-            migrationBuilder.AddColumn<string>(
-                name: "UserId",
-                table: "Budgets",
-                type: "TEXT",
-                nullable: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Budgets_UserId",
-                table: "Budgets",
-                column: "UserId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Budgets_AspNetUsers_UserId",
-                table: "Budgets",
-                column: "UserId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id");
         }
     }
 }
