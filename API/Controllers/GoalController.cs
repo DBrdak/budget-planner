@@ -18,6 +18,12 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Delete.Command() { GoalId = goalId }));
         }
 
+        [HttpPut("{goalId}")]
+        public async Task<IActionResult> EditAccount(Guid goalId, GoalDto newGoal)
+        {
+            return HandleResult(await Mediator.Send(new Edit.Command() { GoalId = goalId, NewGoal = newGoal }));
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateGoal(GoalDto newGoal)
         {
