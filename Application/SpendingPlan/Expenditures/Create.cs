@@ -25,7 +25,14 @@ namespace Application.SpendingPlan.Expenditures
             public FutureExpenditureDto NewFutureExpenditure { get; set; }
         }
 
-        //public class CommandValidator : AbstractValidator<Command>
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.NewFutureExpenditure).SetValidator(new FutureTransactionValidator());
+            }
+        }
+
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
@@ -43,14 +50,16 @@ namespace Application.SpendingPlan.Expenditures
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                var newFutureExpenditure = _mapper.Map<FutureTransaction>(request.newFutureExpenditure);
-
-                var budgetName = _budgetAccessor.GetBudgetName();
+                var newFutureExpenditure = _mapper.Map<FutureTransaction>(request.NewFutureExpenditure);
 
                 newFutureExpenditure.Budget = await _context.Budgets
-                    .FirstOrDefaultAsync(b => b.Name == budgetName);
+                    .FirstOrDefaultAsync(b => b.Name == _budgetAccessor.GetBudgetName());
 
-                if (newFutureExpenditure.Budget == null)
+                newFutureExpenditure.Account = await _context.Accounts
+                    .FirstOrDefaultAsync(a => a.Name == request.NewFutureExpenditure.AccountName
+                    && a.Budget.Name == _budgetAccessor.GetBudgetName());
+
+                if (newFutureExpenditure.Budget == null || newFutureExpenditure.Account == null)
                     return null;
 
                 await _context.FutureTransactions.AddAsync(newFutureExpenditure);
@@ -62,6 +71,5 @@ namespace Application.SpendingPlan.Expenditures
                 return Result<Unit>.Success(Unit.Value);
             }
         }
-        
     }
 }
