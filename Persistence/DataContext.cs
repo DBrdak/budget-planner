@@ -31,7 +31,11 @@ namespace Persistence
                 .HasForeignKey(s => s.FromAccountId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            
+            builder.Entity<Budget>()
+                .HasOne(b => b.User)
+                .WithOne()
+                .HasPrincipalKey<User>(u => u.Id)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         public DbSet<Account> Accounts { get; set; }
