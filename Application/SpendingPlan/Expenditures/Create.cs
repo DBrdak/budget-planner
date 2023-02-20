@@ -43,7 +43,7 @@ namespace Application.SpendingPlan.Expenditures
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                var newFutureExpenditure = _mapper.Map<FutureTransaction>(request.newFutureExpenditure);
+                var newFutureExpenditure = _mapper.Map<FutureTransaction>(request.NewFutureExpenditure);
 
                 var budgetName = _budgetAccessor.GetBudgetName();
 
