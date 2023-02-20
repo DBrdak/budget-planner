@@ -9,20 +9,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.SpendingPlan.Expenditures
+namespace Application.SpendingPlan.Savings
 {
     public class Delete
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Guid FutureExpenditureId { get; set; }
+            public Guid FutureSavingId { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
-            public CommandValidator() 
-            { 
-                RuleFor(x => x.FutureExpenditureId).NotEmpty();
+            public CommandValidator()
+            {
+                RuleFor(x => x.FutureSavingId).NotEmpty();
             }
         }
 
@@ -37,13 +37,13 @@ namespace Application.SpendingPlan.Expenditures
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                var futureExpenditure = await _context.FutureTransactions
-                    .FirstOrDefaultAsync(fe => fe.Id == request.FutureExpenditureId);
+                var futureSaving = await _context.FutureSavings
+                    .FirstOrDefaultAsync(fs => fs.Id == request.FutureSavingId);
 
-                if (futureExpenditure == null)
+                if (futureSaving == null)
                     return null;
 
-                _context.FutureTransactions.Remove(futureExpenditure);
+                _context.FutureSavings.Remove(futureSaving);
 
                 var fail = await _context.SaveChangesAsync() < 0;
 

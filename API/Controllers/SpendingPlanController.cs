@@ -45,8 +45,20 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Application.SpendingPlan.Expenditures.Create.Command() { NewFutureExpenditure = newFutureExpenditure}));
         }
 
+        [HttpDelete("savings/{savingId}")]
+        public async Task<IActionResult> DeleteFutureSaving(Guid FutureSavingId)
+        {
+            return HandleResult(await Mediator.Send(new Delete.Command() { FutureSavingId = FutureSavingId }));
+        }
+
+        [HttpDelete("incomes/{incomeId}")]
+        public async Task<IActionResult> DeleteFutureIncome(Guid FutureIncomeId)
+        {
+            return HandleResult(await Mediator.Send(new Delete.Command() { FutureIncomeId = FutureIncomeId }));
+        }
+
         [HttpDelete("expenditures/{expenditureId}")]
-        public async Task<IActionResult> DeleteFutureSaving(Guid FutureExpenditureId)
+        public async Task<IActionResult> DeleteFutureExpenditure(Guid FutureExpenditureId)
         {
             return HandleResult(await Mediator.Send(new Delete.Command() { FutureExpenditureId = FutureExpenditureId }));
         }
