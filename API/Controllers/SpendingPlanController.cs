@@ -28,9 +28,9 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAccount(FutureExpenditureDto newFutureExpenditure)
+        public async Task<IActionResult> CreateFutureSaving(FutureSavingDto newFutureExpenditure)
         {
-            return HandleResult(await Mediator.Send(new Application.SpendingPlan.Savings.Create.Command() { NewFutureSaving = newFutureSaving }));
+            return HandleResult(await Mediator.Send(new Application.SpendingPlan.Expenditures.Create.Command() { NewFutureExpenditure = newFutureExpenditure }));
         }
 
         [HttpPost]
@@ -44,7 +44,6 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Application.SpendingPlan.Expenditures.Create.Command() { NewFutureExpenditure = newFutureExpenditure}));
         }
-
 
         [HttpDelete("{budgetId}")]
         public async Task<IActionResult> DeleteFutureSaving(Guid FutureExpenditureId)
