@@ -51,7 +51,7 @@ namespace API.Controllers
         {
             var usernameIsUnique = await _context.Users.AnyAsync(u => u.UserName == dto.Username);
             var emailIsUnique = await _context.Users.AnyAsync(u => u.Email == dto.Email);
-            var budgetIsUnique = await _context.Budgets.AnyAsync(b => b.Name == dto.Username);
+            var budgetIsUnique = await _context.Budgets.AnyAsync(b => b.Name == dto.BudgetName);
 
             if (usernameIsUnique)
             {
