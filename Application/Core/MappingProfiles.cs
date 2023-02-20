@@ -16,9 +16,6 @@ namespace Application.Core
     {
         public MappingProfiles()
         {
-            DataContext context = null;
-            IBudgetAccessor budgetAccessor = null;
-
             //Get
 
             CreateMap<Transaction, ExpenditureDto>()
@@ -55,26 +52,12 @@ namespace Application.Core
 
             //Set
 
-            CreateMap<FutureExpenditureDto, FutureTransaction>();
-            //.ForMember(d => d.Account, o => o.MapFrom(s => context.Accounts
-            //    .Where(a => a.Budget.Name == budgetAccessor.GetBudgetName())
-            //    .FirstOrDefault(a => a.Name == s.AccountName)));
+            CreateMap<FutureExpenditureDto, FutureTransaction>()
+                .ForMember(d => d.Amount, o => o.MapFrom(s => -s.Amount));
 
             CreateMap<FutureIncomeDto, FutureTransaction>();
-            //.ForMember(d => d.Account, o => o.MapFrom(s => context.Accounts
-            //    .Where(a => a.Budget.Name == budgetAccessor.GetBudgetName())
-            //    .FirstOrDefault(a => a.Name == s.AccountName)));
 
             CreateMap<FutureSavingDto, FutureSaving>();
-            //.ForMember(d => d.FromAccount, o => o.MapFrom(s => context.Accounts
-            //    .Where(a => a.Budget.Name == budgetAccessor.GetBudgetName())
-            //    .FirstOrDefault(a => a.Name == s.FromAccountName)))
-            //.ForMember(d => d.ToAccount, o => o.MapFrom(s => context.Accounts
-            //    .Where(a => a.Budget.Name == budgetAccessor.GetBudgetName())
-            //    .FirstOrDefault(a => a.Name == s.ToAccountName)))
-            //.ForMember(d => d.Goal, o => o.MapFrom(s => context.Goals
-            //    .Where(g => g.Budget.Name == budgetAccessor.GetBudgetName())
-            //    .FirstOrDefault(g => g.Name == s.GoalName)));
 
             CreateMap<GoalDto, Goal>()
                 .ForMember(d => d.CurrentAmount, o => o.Ignore());
