@@ -27,10 +27,10 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Application.SpendingPlan.Expenditures.List.Query()));
         }
 
-        [HttpPost]
+        [HttpPost("expenditures")]
         public async Task<IActionResult> CreateAccount(FutureExpenditureDto newFutureExpenditure)
         {
-            return HandleResult(await Mediator.Send(new Create.Command() { FutureExpenditure = newFutureExpenditure }));
+            return HandleResult(await Mediator.Send(new Create.Command() { NewFutureExpenditure = newFutureExpenditure }));
         }
     }
 }
