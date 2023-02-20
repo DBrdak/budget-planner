@@ -51,6 +51,8 @@ namespace Application.Core
                 .ForMember(d => d.Expenditures, o => o.MapFrom(s => s.Transactions.Where(t => t.Amount < 0)))
                 .ForMember(d => d.Incomes, o => o.MapFrom(s => s.Transactions.Where(t => t.Amount > 0)));
 
+            CreateMap<User, ProfileDto>();
+
             //Set
 
             CreateMap<FutureExpenditureDto, FutureTransaction>();
@@ -81,6 +83,8 @@ namespace Application.Core
                 .ForMember(d => d.Transactions, o => o.Ignore())
                 .ForMember(d => d.SavingsIn, o => o.Ignore())
                 .ForMember(d => d.SavingsOut, o => o.Ignore());
+
+            CreateMap<ProfileDto, User>();
         }
     }
 }
