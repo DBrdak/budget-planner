@@ -27,25 +27,25 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Application.SpendingPlan.Expenditures.List.Query()));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateFutureSaving(FutureSavingDto newFutureExpenditure)
+        [HttpPost("savings")]
+        public async Task<IActionResult> CreateFutureSaving(FutureSavingDto newFutureSaving)
         {
-            return HandleResult(await Mediator.Send(new Application.SpendingPlan.Expenditures.Create.Command() { NewFutureExpenditure = newFutureExpenditure }));
+            return HandleResult(await Mediator.Send(new Application.SpendingPlan.Savings.Create.Command() { NewFutureSaving = newFutureSaving }));
         }
 
-        [HttpPost]
+        [HttpPost("incomes")]
         public async Task<IActionResult> CreateFutureIncome(FutureIncomeDto newFutureIncome)
         {
             return HandleResult(await Mediator.Send(new Application.SpendingPlan.Incomes.Create.Command() { NewFutureIncome = newFutureIncome }));
         }
 
-        [HttpPost]
+        [HttpPost("expenditures")]
         public async Task<IActionResult> CreateFutureExpenditure(FutureExpenditureDto newFutureExpenditure)
         {
             return HandleResult(await Mediator.Send(new Application.SpendingPlan.Expenditures.Create.Command() { NewFutureExpenditure = newFutureExpenditure}));
         }
 
-        [HttpDelete("{budgetId}")]
+        [HttpDelete("expenditures/{expenditureId}")]
         public async Task<IActionResult> DeleteFutureSaving(Guid FutureExpenditureId)
         {
             return HandleResult(await Mediator.Send(new Delete.Command() { FutureExpenditureId = FutureExpenditureId }));
