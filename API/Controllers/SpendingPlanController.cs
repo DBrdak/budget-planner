@@ -32,5 +32,10 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Create.Command() { NewFutureExpenditure = newFutureExpenditure}));
         }
+        [HttpPost]
+        public async Task<IActionResult> CreateAccount(FutureIncomeDto newFutureIncome)
+        {
+            return HandleResult(await Mediator.Send(new Create.Command() { NewFutureIncome = newFutureIncome }));
+        }
     }
 }
