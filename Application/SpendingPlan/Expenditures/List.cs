@@ -36,14 +36,14 @@ namespace Application.SpendingPlan.Expenditures
 
             async Task<Result<List<FutureExpenditureDto>>> IRequestHandler<Query, Result<List<FutureExpenditureDto>>>.Handle(Query request, CancellationToken cancellationToken)
             {
-                var futureTransactions = await _context.FutureTransactions
+                var futureExpenditures = await _context.FutureTransactions
                     .AsNoTracking()
                     .Where(ft => ft.Budget.User.UserName == _userAccessor.GetUsername()
                         && ft.Amount < 0)
                     .ProjectTo<FutureExpenditureDto>(_mapper.ConfigurationProvider)
                     .ToListAsync();
 
-                return Result<List<FutureExpenditureDto>>.Success(futureTransactions);
+                return Result<List<FutureExpenditureDto>>.Success(futureExpenditures);
             }
         }
     }
