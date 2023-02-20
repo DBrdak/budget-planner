@@ -28,7 +28,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateFutureSaving(FutureSavingDto newFutureSaving)
+        public async Task<IActionResult> CreateAccount(FutureExpenditureDto newFutureExpenditure)
         {
             return HandleResult(await Mediator.Send(new Application.SpendingPlan.Savings.Create.Command() { NewFutureSaving = newFutureSaving }));
         }

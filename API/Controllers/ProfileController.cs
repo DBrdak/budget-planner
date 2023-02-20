@@ -6,6 +6,12 @@ namespace API.Controllers
 {
     public class ProfileController : BaseController
     {
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetProfile()
+        {
+            return HandleResult(await Mediator.Send(new Details.Query()));
+        }
+
         [HttpDelete("{username}")]
         public async Task<IActionResult> DeleteGoal(string username)
         {
