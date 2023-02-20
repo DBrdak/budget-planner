@@ -30,6 +30,8 @@ namespace Persistence
                 .WithOne(s => s.FromAccount)
                 .HasForeignKey(s => s.FromAccountId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            
         }
 
         public DbSet<Account> Accounts { get; set; }
