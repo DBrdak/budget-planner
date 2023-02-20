@@ -5,6 +5,7 @@ using Domain;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using Persistence.Migrations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,6 @@ namespace Application.Accounts
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Guid AccountId { get; set; }
             public AccountDto NewAccount { get; set; }
         }
 
@@ -25,7 +25,6 @@ namespace Application.Accounts
         {
             public CommandValidator()
             {
-                RuleFor(x => x.AccountId).NotEmpty();
                 RuleFor(x => x.NewAccount.Balance).NotEmpty();
                 RuleFor(x => x.NewAccount.Name).NotEmpty();
             }
@@ -42,15 +41,13 @@ namespace Application.Accounts
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                var oldAccount = await _context.Accounts.FindAsync(request.AccountId);
+                var oldAccount = await _context.Accounts.FindAsync(request.NewAccount.Id);
 
                 if (oldAccount == null)
                     return null;
 
                 oldAccount.Balance = request.NewAccount.Balance;
                 oldAccount.Name = request.NewAccount.Name;
-
-                _context.Accounts.Update(oldAccount);
 
                 var fail = await _context.SaveChangesAsync() < 0;
 

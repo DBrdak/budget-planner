@@ -1,4 +1,5 @@
 using API.Extensions;
+using API.Middleware;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +18,8 @@ public class Program
         builder.Services.AddIdentityServices(builder.Configuration);
 
         var app = builder.Build();
+
+        app.UseMiddleware<ExceptionMiddleware>();
 
         if (app.Environment.IsDevelopment())
         {
