@@ -53,7 +53,7 @@ namespace Application.SpendingPlan.Savings
                 if (newFutureSaving.Budget == null)
                     return null;
 
-                await _context.FutureTransactions.AddAsync(newFutureSaving);
+                await _context.FutureSavings.AddAsync(newFutureSaving);
                 var fail = await _context.SaveChangesAsync() < 0;
 
                 if (fail)
