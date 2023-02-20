@@ -32,10 +32,17 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Application.SpendingPlan.Expenditures.Create.Command() { NewFutureExpenditure = newFutureExpenditure}));
         }
+
         [HttpPost]
         public async Task<IActionResult> CreateAccount(FutureSavingDto newFutureSaving)
         {
             return HandleResult(await Mediator.Send(new Application.SpendingPlan.Savings.Create.Command() { NewFutureSaving = newFutureSaving }));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateAccount(FutureIncomeDto newFutureIncome)
+        {
+            return HandleResult(await Mediator.Send(new Application.SpendingPlan.Incomes.Create.Command() { NewFutureIncome = newFutureIncome }));
         }
     }
 }
