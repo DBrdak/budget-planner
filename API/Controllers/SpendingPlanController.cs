@@ -17,5 +17,11 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Application.SpendingPlan.Incomes.List.Query()));
         }
+
+        [HttpGet("expenditures")]
+        public async Task<IActionResult> GetFutureExpenditures()
+        {
+            return HandleResult(await Mediator.Send(new Application.SpendingPlan.Expenditures.List.Query()));
+        }
     }
 }

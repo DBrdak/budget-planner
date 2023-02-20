@@ -28,6 +28,7 @@ namespace API.Extensions
             services.AddIdentityCore<User>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 8;
                 options.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<DataContext>();
 

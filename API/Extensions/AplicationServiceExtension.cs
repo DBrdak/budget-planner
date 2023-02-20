@@ -4,6 +4,7 @@ using Application.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Infrastructure.Security;
+using Infrastructure.Validation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -42,6 +43,7 @@ namespace API.Extensions
 
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IBudgetAccessor, BudgetAccessor>();
+            services.AddScoped<IUniqueUser, UniqueUser>();
 
             return services;
         }
