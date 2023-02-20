@@ -1,5 +1,8 @@
-﻿using Application.SpendingPlan.Incomes;
+﻿using Application.DTO;
+using Application.SpendingPlan.Expenditures;
+using Application.SpendingPlan.Incomes;
 using Application.SpendingPlan.Savings;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -22,6 +25,12 @@ namespace API.Controllers
         public async Task<IActionResult> GetFutureExpenditures()
         {
             return HandleResult(await Mediator.Send(new Application.SpendingPlan.Expenditures.List.Query()));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateAccount(FutureExpenditureDto newFutureExpenditure)
+        {
+            return HandleResult(await Mediator.Send(new Create.Command() { FutureExpenditure = newFutureExpenditure }));
         }
     }
 }
