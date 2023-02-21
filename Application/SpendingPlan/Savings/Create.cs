@@ -16,20 +16,20 @@ using FluentValidation;
 using Persistence.Migrations;
 using System.Net.Http;
 
-namespace Application.SpendingPlan.Expenditures
+namespace Application.SpendingPlan.Savings
 {
     public class Create
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public FutureExpenditureDto NewFutureExpenditure { get; set; }
+            public FutureSavingDto NewFutureSaving { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.NewFutureExpenditure).SetValidator(new FutureExpenditureValidator());
+                RuleFor(x => x.NewFutureSaving).SetValidator(new FutureSavingValidator());
             }
         }
 
@@ -50,25 +50,35 @@ namespace Application.SpendingPlan.Expenditures
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                var newFutureExpenditure = _mapper.Map<FutureTransaction>(request.NewFutureExpenditure);
+                var newFutureSaving = _mapper.Map<FutureSaving>(request.NewFutureSaving);
 
                 var budgetName = _budgetAccessor.GetBudgetName();
 
-                newFutureExpenditure.Budget = await _context.Budgets
+                newFutureSaving.Budget = await _context.Budgets
                     .FirstOrDefaultAsync(b => b.Name == budgetName);
 
-                newFutureExpenditure.Account = await _context.Accounts
-                    .FirstOrDefaultAsync(a => a.Name == request.NewFutureExpenditure.AccountName
+                newFutureSaving.FromAccount = await _context.Accounts
+                    .FirstOrDefaultAsync(a => a.Name == request.NewFutureSaving.FromAccountName
                     && a.Budget.Name == budgetName);
 
-                if (newFutureExpenditure.Budget == null || newFutureExpenditure.Account == null)
+                newFutureSaving.ToAccount = await _context.Accounts
+                    .FirstOrDefaultAsync(a => a.Name == request.NewFutureSaving.ToAccountName
+                    && a.Budget.Name == budgetName);
+
+                newFutureSaving.Goal = await _context.Goals
+                    .FirstOrDefaultAsync(g => g.Name == request.NewFutureSaving.GoalName
+                    && g.Budget.Name == budgetName);
+
+                if (newFutureSaving.Budget == null
+                    || newFutureSaving.ToAccount == null
+                    || newFutureSaving.FromAccount == null)
                     return null;
 
-                await _context.FutureTransactions.AddAsync(newFutureExpenditure);
+                await _context.FutureSavings.AddAsync(newFutureSaving);
                 var fail = await _context.SaveChangesAsync() < 0;
 
                 if (fail)
-                    return Result<Unit>.Failure("Problem while adding new expenditure");
+                    return Result<Unit>.Failure("Problem while adding new income");
 
                 return Result<Unit>.Success(Unit.Value);
             }
