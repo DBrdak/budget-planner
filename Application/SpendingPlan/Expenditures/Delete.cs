@@ -20,8 +20,8 @@ namespace Application.SpendingPlan.Expenditures
 
         public class CommandValidator : AbstractValidator<Command>
         {
-            public CommandValidator() 
-            { 
+            public CommandValidator()
+            {
                 RuleFor(x => x.FutureExpenditureId).NotEmpty();
             }
         }
@@ -37,8 +37,7 @@ namespace Application.SpendingPlan.Expenditures
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                var futureExpenditure = await _context.FutureTransactions
-                    .FirstOrDefaultAsync(fe => fe.Id == request.FutureExpenditureId);
+                var futureExpenditure = await _context.FutureTransactions.FindAsync(request.FutureExpenditureId);
 
                 if (futureExpenditure == null)
                     return null;

@@ -37,8 +37,7 @@ namespace Application.SpendingPlan.Incomes
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                var futureIncome = await _context.FutureTransactions
-                    .FirstOrDefaultAsync(fi => fi.Id == request.FutureIncomeId);
+                var futureIncome = await _context.FutureTransactions.FindAsync(request.FutureIncomeId);
 
                 if (futureIncome == null)
                     return null;
