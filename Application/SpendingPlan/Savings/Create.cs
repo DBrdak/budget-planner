@@ -25,7 +25,14 @@ namespace Application.SpendingPlan.Savings
             public FutureSavingDto NewFutureSaving { get; set; }
         }
 
-        //public class CommandValidator : AbstractValidator<Command>
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.NewFutureSaving).SetValidator(new FutureSavingValidator());
+            }
+        }
+
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
@@ -50,7 +57,21 @@ namespace Application.SpendingPlan.Savings
                 newFutureSaving.Budget = await _context.Budgets
                     .FirstOrDefaultAsync(b => b.Name == budgetName);
 
-                if (newFutureSaving.Budget == null)
+                newFutureSaving.FromAccount = await _context.Accounts
+                    .FirstOrDefaultAsync(a => a.Name == request.NewFutureSaving.FromAccountName
+                    && a.Budget.Name == budgetName);
+
+                newFutureSaving.ToAccount = await _context.Accounts
+                    .FirstOrDefaultAsync(a => a.Name == request.NewFutureSaving.ToAccountName
+                    && a.Budget.Name == budgetName);
+
+                newFutureSaving.Goal = await _context.Goals
+                    .FirstOrDefaultAsync(g => g.Name == request.NewFutureSaving.GoalName
+                    && g.Budget.Name == budgetName);
+
+                if (newFutureSaving.Budget == null
+                    || newFutureSaving.ToAccount == null
+                    || newFutureSaving.FromAccount == null)
                     return null;
 
                 await _context.FutureSavings.AddAsync(newFutureSaving);
@@ -62,6 +83,5 @@ namespace Application.SpendingPlan.Savings
                 return Result<Unit>.Success(Unit.Value);
             }
         }
-
     }
 }

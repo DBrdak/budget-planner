@@ -25,7 +25,14 @@ namespace Application.SpendingPlan.Incomes
             public FutureIncomeDto NewFutureIncome { get; set; }
         }
 
-        //public class CommandValidator : AbstractValidator<Command>
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.NewFutureIncome).SetValidator(new FutureIncomeValidator());
+            }
+        }
+
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
@@ -50,7 +57,11 @@ namespace Application.SpendingPlan.Incomes
                 newFutureIncome.Budget = await _context.Budgets
                     .FirstOrDefaultAsync(b => b.Name == budgetName);
 
-                if (newFutureIncome.Budget == null)
+                newFutureIncome.Account = await _context.Accounts
+                    .FirstOrDefaultAsync(a => a.Name == request.NewFutureIncome.AccountName
+                    && a.Budget.Name == budgetName);
+
+                if (newFutureIncome.Budget == null || newFutureIncome.Account == null)
                     return null;
 
                 await _context.FutureTransactions.AddAsync(newFutureIncome);
@@ -62,6 +73,5 @@ namespace Application.SpendingPlan.Incomes
                 return Result<Unit>.Success(Unit.Value);
             }
         }
-
     }
 }

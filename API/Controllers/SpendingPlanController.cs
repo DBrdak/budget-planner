@@ -28,19 +28,19 @@ namespace API.Controllers
         }
 
         [HttpPost("expenditures")]
-        public async Task<IActionResult> CreateAccount(FutureExpenditureDto newFutureExpenditure)
+        public async Task<IActionResult> CreateFutureExpenditure(FutureExpenditureDto newFutureExpenditure)
         {
-            return HandleResult(await Mediator.Send(new Application.SpendingPlan.Expenditures.Create.Command() { NewFutureExpenditure = newFutureExpenditure}));
+            return HandleResult(await Mediator.Send(new Application.SpendingPlan.Expenditures.Create.Command() { NewFutureExpenditure = newFutureExpenditure }));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateAccount(FutureIncomeDto newFutureIncome)
+        [HttpPost("incomes")]
+        public async Task<IActionResult> CreateFutureIncome(FutureIncomeDto newFutureIncome)
         {
             return HandleResult(await Mediator.Send(new Application.SpendingPlan.Incomes.Create.Command() { NewFutureIncome = newFutureIncome }));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateAccount(FutureSavingDto newFutureSaving)
+        [HttpPost("savings")]
+        public async Task<IActionResult> CreateFutureSaving(FutureSavingDto newFutureSaving)
         {
             return HandleResult(await Mediator.Send(new Application.SpendingPlan.Savings.Create.Command() { NewFutureSaving = newFutureSaving }));
         }

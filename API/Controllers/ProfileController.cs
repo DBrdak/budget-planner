@@ -23,5 +23,11 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Edit.Command() { NewProfile = newProfile }));
         }
+
+        [HttpPut("{username}/password")]
+        public async Task<IActionResult> UpdatePassword(PasswordFormDto passwordForm)
+        {
+            return HandleResult(await Mediator.Send(new UpdatePassword.Command() { PasswordForm = passwordForm }));
+        }
     }
 }
