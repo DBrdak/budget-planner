@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.SpendingPlan
+namespace Application.SpendingPlan.Expenditures
 {
-    public class FutureTransactionValidator : AbstractValidator<FutureExpenditureDto>
+    public class FutureExpenditureValidator : AbstractValidator<FutureExpenditureDto>
     {
-        public FutureTransactionValidator()
+        public FutureExpenditureValidator()
         {
             RuleFor(x => x.AccountName).NotEmpty()
                 .WithMessage("Account name is required");

@@ -29,7 +29,7 @@ namespace Application.SpendingPlan.Expenditures
         {
             public CommandValidator()
             {
-                RuleFor(x => x.NewFutureExpenditure).SetValidator(new FutureTransactionValidator());
+                RuleFor(x => x.NewFutureExpenditure).SetValidator(new FutureExpenditureValidator());
             }
         }
 
@@ -52,12 +52,14 @@ namespace Application.SpendingPlan.Expenditures
             {
                 var newFutureExpenditure = _mapper.Map<FutureTransaction>(request.NewFutureExpenditure);
 
+                var budgetName = _budgetAccessor.GetBudgetName();
+
                 newFutureExpenditure.Budget = await _context.Budgets
-                    .FirstOrDefaultAsync(b => b.Name == _budgetAccessor.GetBudgetName());
+                    .FirstOrDefaultAsync(b => b.Name == budgetName);
 
                 newFutureExpenditure.Account = await _context.Accounts
                     .FirstOrDefaultAsync(a => a.Name == request.NewFutureExpenditure.AccountName
-                    && a.Budget.Name == _budgetAccessor.GetBudgetName());
+                    && a.Budget.Name == budgetName);
 
                 if (newFutureExpenditure.Budget == null || newFutureExpenditure.Account == null)
                     return null;

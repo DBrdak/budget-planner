@@ -1,4 +1,5 @@
 ﻿using Application.Core;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -15,6 +16,14 @@ namespace Application.Accounts
         public class Command : IRequest<Result<Unit>>
         {
             public Guid AccountId { get; set; }
+        }
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.AccountId).NotEmpty();
+            }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
