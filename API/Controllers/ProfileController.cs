@@ -13,9 +13,9 @@ namespace API.Controllers
         }
 
         [HttpDelete("{username}")]
-        public async Task<IActionResult> DeleteGoal(string username)
+        public async Task<IActionResult> DeleteGoal([FromBody] string password)
         {
-            return HandleResult(await Mediator.Send(new Delete.Command() { Username = username }));
+            return HandleResult(await Mediator.Send(new Delete.Command() { Password = password }));
         }
 
         [HttpPut("{username}")]

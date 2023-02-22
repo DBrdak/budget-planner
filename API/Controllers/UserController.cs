@@ -29,6 +29,7 @@ namespace API.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserDto>> Login(LoginDto dto)
         {
             var user = await _userManager.Users
@@ -47,6 +48,7 @@ namespace API.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserDto>> Register(RegisterDto dto)
         {
             var usernameIsUnique = await _context.Users.AnyAsync(u => u.UserName == dto.Username);
