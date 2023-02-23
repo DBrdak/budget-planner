@@ -27,6 +27,7 @@ namespace API.Auth.DTOs
         public string DisplayName { get; set; }
 
         [Required]
+        [RegularExpression("^[a-zA-Z0-9]{1,16}$", ErrorMessage = "Max lenght is 16 and only letters and digits can be used")]
         public string BudgetName { get; set; }
     }
 }

@@ -30,10 +30,11 @@ namespace Application.Profiles
 
             RuleFor(x => x.DisplayName).NotEmpty();
 
-            RuleFor(x => x.BudgetName).NotEmpty().Must((user, cancellation) =>
-            {
-                return !_uniqueUser.UniqueBudgetName(user.BudgetName).Result;
-            }).WithMessage("Budget name must be unique");
+            RuleFor(x => x.BudgetName).NotEmpty()
+                .Must(bn => !_uniqueUser.UniqueBudgetName(bn).Result)
+                    .WithMessage("Budget name must be unique")
+                .Must(bn => bn.All(char.IsLetterOrDigit) && bn.Length < 16)
+                    .WithMessage("Max lenght is 16 and only letters and digits can be used");
         }
     }
 }

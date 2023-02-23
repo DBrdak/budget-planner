@@ -105,10 +105,9 @@ namespace Persistence
                         FromAccount=johnAccounts[1],
                         ToAccount=johnAccounts[2],
                         Amount=172.32,
-                        Frequency="Monthly",
                         Goal = goals[1],
                         Date = fdate.AddDays(5),
-                        Budget=budgets[0]
+                        Budget=budgets[0],
                     },
                 };
 
@@ -117,7 +116,6 @@ namespace Persistence
                     new FutureTransaction
                     {
                         Category="Groceries",
-                        Frequency="Weekly",
                         Amount=-100,
                         Account=johnAccounts[0],
                         Budget=budgets[0],
@@ -134,7 +132,6 @@ namespace Persistence
                     new FutureTransaction
                     {
                         Category="Job",
-                        Frequency="Monthly",
                         Amount=1500,
                         Account=johnAccounts[0],
                         Budget=budgets[0],
@@ -159,7 +156,8 @@ namespace Persistence
                         Amount=50,
                         FromAccount=johnAccounts[0],
                         ToAccount=johnAccounts[2],
-                        Goal=goals[1]
+                        Goal=goals[1],
+                        FutureSaving=fSav[1]
                     },
                     new Saving
                     {
@@ -168,8 +166,33 @@ namespace Persistence
                         Amount=200,
                         FromAccount=johnAccounts[1],
                         ToAccount=johnAccounts[2],
-                        Goal=goals[0]
+                        Goal=goals[0],
+                        FutureSaving=fSav[0]
                     }
+                };
+
+                var categories = new List<TransactionCategory>
+                {
+                    new TransactionCategory
+                    {
+                        Value="Groceries",
+                        Budget=budgets[0]
+                    },
+                    new TransactionCategory
+                    {
+                        Value="Drugs",
+                        Budget=budgets[0]
+                    },
+                    new TransactionCategory
+                    {
+                        Value="Job",
+                        Budget=budgets[0]
+                    },
+                    new TransactionCategory
+                    {
+                        Value="Blowjob",
+                        Budget=budgets[0]
+                    },
                 };
 
                 var tran = new List<Transaction>
@@ -182,6 +205,7 @@ namespace Persistence
                         Title="Biedra",
                         Category="Groceries",
                         Account=johnAccounts[0],
+                        FutureTransaction = fTran[0]
                     },
                     new Transaction
                     {
@@ -191,6 +215,7 @@ namespace Persistence
                         Title="Mefedron",
                         Category="Drugs",
                         Account=johnAccounts[1],
+                        FutureTransaction = fTran[1]
                     },
                     new Transaction
                     {
@@ -200,6 +225,7 @@ namespace Persistence
                         Title="Prezes",
                         Category="Job",
                         Account=johnAccounts[0],
+                        FutureTransaction = fTran[2]
                     },
                     new Transaction
                     {
@@ -209,9 +235,11 @@ namespace Persistence
                         Title="Prezes",
                         Category="Blowjob",
                         Account=johnAccounts[1],
+                        FutureTransaction = fTran[3]
                     }
                 };
 
+                await context.TransactionCategories.AddRangeAsync(categories);
                 await context.Budgets.AddRangeAsync(budgets);
                 await context.Accounts.AddRangeAsync(johnAccounts);
                 await context.Goals.AddRangeAsync(goals);

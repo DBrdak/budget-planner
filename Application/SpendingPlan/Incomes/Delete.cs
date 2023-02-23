@@ -1,4 +1,5 @@
 ﻿using Application.Core;
+using Application.Interfaces;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -29,10 +30,12 @@ namespace Application.SpendingPlan.Incomes
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
+            private readonly IBudgetAccessor _budgetAccessor;
 
-            public Handler(DataContext dataContext)
+            public Handler(DataContext dataContext, IBudgetAccessor budgetAccessor)
             {
                 _context = dataContext;
+                _budgetAccessor = budgetAccessor;
             }
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
@@ -42,7 +45,12 @@ namespace Application.SpendingPlan.Incomes
                 if (futureIncome == null)
                     return null;
 
+                var category = await _context.TransactionCategories
+                    .FirstOrDefaultAsync(tc => tc.Value == futureIncome.Category
+                    && tc.BudgetId == _budgetAccessor.GetBudget().Result.Id);
+
                 _context.FutureTransactions.Remove(futureIncome);
+                _context.TransactionCategories.Remove(category);
 
                 var fail = await _context.SaveChangesAsync() < 0;
 

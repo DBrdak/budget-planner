@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230222232308_EntitiesPropsExtended")]
+    partial class EntitiesPropsExtended
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.2");
@@ -244,25 +247,6 @@ namespace Persistence.Migrations
                     b.HasIndex("FutureTransactionId");
 
                     b.ToTable("Transactions");
-                });
-
-            modelBuilder.Entity("Domain.TransactionCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("BudgetId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BudgetId");
-
-                    b.ToTable("TransactionCategories");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -559,7 +543,7 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.FutureSaving", "FutureSaving")
-                        .WithMany("CompletedSavings")
+                        .WithMany("Savings")
                         .HasForeignKey("FutureSavingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -602,7 +586,7 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.FutureTransaction", "FutureTransaction")
-                        .WithMany("CompletedTransactions")
+                        .WithMany("Transactions")
                         .HasForeignKey("FutureTransactionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -612,17 +596,6 @@ namespace Persistence.Migrations
                     b.Navigation("Budget");
 
                     b.Navigation("FutureTransaction");
-                });
-
-            modelBuilder.Entity("Domain.TransactionCategory", b =>
-                {
-                    b.HasOne("Domain.Budget", "Budget")
-                        .WithMany("TransactionCategories")
-                        .HasForeignKey("BudgetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Budget");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -703,19 +676,17 @@ namespace Persistence.Migrations
 
                     b.Navigation("Savings");
 
-                    b.Navigation("TransactionCategories");
-
                     b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("Domain.FutureSaving", b =>
                 {
-                    b.Navigation("CompletedSavings");
+                    b.Navigation("Savings");
                 });
 
             modelBuilder.Entity("Domain.FutureTransaction", b =>
                 {
-                    b.Navigation("CompletedTransactions");
+                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }

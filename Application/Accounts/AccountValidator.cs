@@ -16,8 +16,8 @@ namespace Application.Accounts
         {
             RuleFor(x => x.AccountType).Must(x => x == "Saving" || x == "Checking")
                 .WithMessage("Account type must be one of following: Saving, Checking");
-            RuleFor(x => x.Name).NotEmpty()
-                .WithMessage("Name of account is required");
+            RuleFor(x => x.Name).NotEmpty().Must(n => n.All(x => char.IsLetterOrDigit(x) || char.IsWhiteSpace(x))).MaximumLength(16)
+                .WithMessage("Only spaces, letters and digits are allowed for account name, with max lenght of 16");
             RuleFor(x => x.Balance).NotEmpty()
                 .WithMessage("Balance is required");
         }

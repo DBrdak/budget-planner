@@ -64,7 +64,15 @@ namespace Application.SpendingPlan.Incomes
                 if (newFutureIncome.Budget == null || newFutureIncome.Account == null)
                     return null;
 
+                var category = new TransactionCategory
+                {
+                    Value = newFutureIncome.Category,
+                    Budget = await _budgetAccessor.GetBudget()
+                };
+
                 await _context.FutureTransactions.AddAsync(newFutureIncome);
+                await _context.TransactionCategories.AddAsync(category);
+
                 var fail = await _context.SaveChangesAsync() < 0;
 
                 if (fail)

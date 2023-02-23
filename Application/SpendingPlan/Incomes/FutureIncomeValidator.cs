@@ -14,8 +14,6 @@ namespace Application.SpendingPlan
         {
             RuleFor(x => x.AccountName).NotEmpty()
                 .WithMessage("Account name is required");
-            RuleFor(x => x.Frequency).Must(f => f == "Weekly" || f == "Monthly" || f == "Quarterly" || f == "Semi-Annually" || f == "Annually")
-                .WithMessage("Please choose frequency from list");
             RuleFor(x => x.Date).NotEmpty().Must(d => d > DateTime.UtcNow)
                 .WithMessage("Pick future date");
             RuleFor(x => x.Amount).Must(a => a > 0)
