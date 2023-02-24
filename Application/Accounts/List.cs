@@ -24,13 +24,13 @@ namespace Application.Accounts
         public class Handler : IRequestHandler<Query, Result<List<AccountDto>>>
         {
             private readonly DataContext _context;
-            private readonly IUserAccessor _userAccessor;
+            private readonly IBudgetAccessor _budgetAccessor;
             private readonly IMapper _mapper;
 
-            public Handler(DataContext context, IUserAccessor userAccessor, IMapper mapper)
+            public Handler(DataContext context, IBudgetAccessor budgetAccessor, IMapper mapper)
             {
                 _context = context;
-                _userAccessor = userAccessor;
+                _budgetAccessor = budgetAccessor;
                 _mapper = mapper;
             }
 
@@ -38,7 +38,7 @@ namespace Application.Accounts
             {
                 var accounts = await _context.Accounts
                     .AsNoTracking()
-                    .Where(a => a.Budget.User.UserName == _userAccessor.GetUsername())
+                    .Where(a => a.BudgetId == _budgetAccessor.GetBudget().Result.Id)
                     .ProjectTo<AccountDto>(_mapper.ConfigurationProvider)
                     .ToListAsync();
 

@@ -27,9 +27,15 @@ namespace Application.SpendingPlan.Incomes
 
         public class CommandValidator : AbstractValidator<Command>
         {
-            public CommandValidator()
+            private readonly DataContext _context;
+            private readonly IBudgetAccessor _budgetAccessor;
+
+            public CommandValidator(DataContext context, IBudgetAccessor budgetAccessor)
             {
-                RuleFor(x => x.NewFutureIncome).SetValidator(new FutureIncomeValidator());
+                _context = context;
+                _budgetAccessor = budgetAccessor;
+                RuleFor(x => x.NewFutureIncome).SetValidator(
+                    new FutureIncomeValidator(_context, _budgetAccessor));
             }
         }
 
@@ -37,14 +43,12 @@ namespace Application.SpendingPlan.Incomes
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
-            private readonly IHttpContextAccessor _httpContext;
             private readonly IBudgetAccessor _budgetAccessor;
 
-            public Handler(DataContext context, IMapper mapper, IHttpContextAccessor httpContext, IBudgetAccessor budgetAccessor)
+            public Handler(DataContext context, IMapper mapper, IBudgetAccessor budgetAccessor)
             {
                 _context = context;
                 _mapper = mapper;
-                _httpContext = httpContext;
                 _budgetAccessor = budgetAccessor;
             }
 
@@ -67,7 +71,8 @@ namespace Application.SpendingPlan.Incomes
                 var category = new TransactionCategory
                 {
                     Value = newFutureIncome.Category,
-                    Budget = await _budgetAccessor.GetBudget()
+                    Budget = await _budgetAccessor.GetBudget(),
+                    Type = "income"
                 };
 
                 await _context.FutureTransactions.AddAsync(newFutureIncome);

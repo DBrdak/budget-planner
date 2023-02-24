@@ -55,6 +55,8 @@ namespace Persistence
 
             builder.Entity<Saving>(b =>
             {
+                b.Property(s => s.Date).HasColumnType("Date");
+
                 b.HasOne(s => s.Goal)
                     .WithMany()
                     .OnDelete(DeleteBehavior.Restrict);
@@ -67,6 +69,8 @@ namespace Persistence
 
             builder.Entity<Transaction>(b =>
             {
+                b.Property(t => t.Date).HasColumnType("Date");
+
                 b.HasOne(t => t.FutureTransaction)
                     .WithMany(ft => ft.CompletedTransactions)
                     .HasForeignKey(t => t.FutureTransactionId)
@@ -114,6 +118,21 @@ namespace Persistence
                     .WithOne(tc => tc.Budget)
                     .HasForeignKey(tc => tc.BudgetId)
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<FutureSaving>(b =>
+            {
+                b.Property(fs => fs.Date).HasColumnType("Date");
+            });
+
+            builder.Entity<FutureTransaction>(b =>
+            {
+                b.Property(ft => ft.Date).HasColumnType("Date");
+            });
+
+            builder.Entity<Goal>(b =>
+            {
+                b.Property(g => g.EndDate).HasColumnType("Date");
             });
         }
 

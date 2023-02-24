@@ -66,7 +66,7 @@ namespace Persistence
                     },
                 };
 
-                var ffdate = DateTime.UtcNow.AddDays(300);
+                var ffdate = DateTime.Today.AddDays(300);
                 var goals = new List<Goal> {
                     new Goal
                     {
@@ -86,7 +86,7 @@ namespace Persistence
                     }
                 };
 
-                var fdate = DateTime.UtcNow.AddDays(20);
+                var fdate = DateTime.Today.AddDays(20);
                 var date = new DateTime(2022, 12, 1);
 
                 var fSav = new List<FutureSaving>
@@ -176,22 +176,26 @@ namespace Persistence
                     new TransactionCategory
                     {
                         Value="Groceries",
-                        Budget=budgets[0]
+                        Budget=budgets[0],
+                        Type="expenditure"
                     },
                     new TransactionCategory
                     {
                         Value="Drugs",
-                        Budget=budgets[0]
+                        Budget=budgets[0],
+                        Type="expenditure"
                     },
                     new TransactionCategory
                     {
                         Value="Job",
-                        Budget=budgets[0]
+                        Budget=budgets[0],
+                        Type="income"
                     },
                     new TransactionCategory
                     {
                         Value="Blowjob",
-                        Budget=budgets[0]
+                        Budget=budgets[0],
+                        Type="income"
                     },
                 };
 
