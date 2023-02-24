@@ -1,5 +1,8 @@
 ﻿using Application.Interfaces;
+using Domain;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +13,25 @@ namespace Infrastructure.Security
 {
     public class BudgetAccessor : IBudgetAccessor
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly DataContext _context;
+        private readonly IUserAccessor _userAccessor;
 
-        public BudgetAccessor(IHttpContextAccessor httpContextAccessor)
+        public BudgetAccessor(DataContext context, IUserAccessor userAccessor)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _context = context;
+            _userAccessor = userAccessor;
         }
 
         public string GetBudgetName()
         {
-            return _httpContextAccessor.HttpContext.Request.RouteValues
-                .SingleOrDefault(x => x.Key == "budgetName").Value.ToString();
+            return _context.Budgets
+                .FirstOrDefault(b => b.User.UserName == _userAccessor.GetUsername()).Name;
+        }
+
+        public async Task<Budget> GetBudget()
+        {
+            return await _context.Budgets
+                .FirstOrDefaultAsync(b => b.User.UserName == _userAccessor.GetUsername());
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230222212004_EntitiesRelationFix")]
+    partial class EntitiesRelationFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.2");
@@ -74,11 +77,11 @@ namespace Persistence.Migrations
                     b.Property<Guid>("BudgetId")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("CompletedAmount")
-                        .HasColumnType("REAL");
-
                     b.Property<DateTime>("Date")
-                        .HasColumnType("Date");
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Frequency")
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("FromAccountId")
                         .HasColumnType("TEXT");
@@ -120,11 +123,11 @@ namespace Persistence.Migrations
                     b.Property<string>("Category")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("CompletedAmount")
-                        .HasColumnType("REAL");
-
                     b.Property<DateTime>("Date")
-                        .HasColumnType("Date");
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Frequency")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -151,7 +154,7 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("Date");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
@@ -179,12 +182,9 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("Date");
-
-                    b.Property<Guid>("FromAccountId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("FutureSavingId")
+                    b.Property<Guid>("FromAccountId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("GoalId")
@@ -198,8 +198,6 @@ namespace Persistence.Migrations
                     b.HasIndex("BudgetId");
 
                     b.HasIndex("FromAccountId");
-
-                    b.HasIndex("FutureSavingId");
 
                     b.HasIndex("GoalId");
 
@@ -227,9 +225,6 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("Date");
-
-                    b.Property<Guid>("FutureTransactionId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
@@ -241,31 +236,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("BudgetId");
 
-                    b.HasIndex("FutureTransactionId");
-
                     b.ToTable("Transactions");
-                });
-
-            modelBuilder.Entity("Domain.TransactionCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("BudgetId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BudgetId");
-
-                    b.ToTable("TransactionCategories");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -561,12 +532,6 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.FutureSaving", "FutureSaving")
-                        .WithMany("CompletedSavings")
-                        .HasForeignKey("FutureSavingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Goal", "Goal")
                         .WithMany()
                         .HasForeignKey("GoalId")
@@ -582,8 +547,6 @@ namespace Persistence.Migrations
                     b.Navigation("Budget");
 
                     b.Navigation("FromAccount");
-
-                    b.Navigation("FutureSaving");
 
                     b.Navigation("Goal");
 
@@ -604,26 +567,7 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.FutureTransaction", "FutureTransaction")
-                        .WithMany("CompletedTransactions")
-                        .HasForeignKey("FutureTransactionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Account");
-
-                    b.Navigation("Budget");
-
-                    b.Navigation("FutureTransaction");
-                });
-
-            modelBuilder.Entity("Domain.TransactionCategory", b =>
-                {
-                    b.HasOne("Domain.Budget", "Budget")
-                        .WithMany("TransactionCategories")
-                        .HasForeignKey("BudgetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Budget");
                 });
@@ -706,19 +650,7 @@ namespace Persistence.Migrations
 
                     b.Navigation("Savings");
 
-                    b.Navigation("TransactionCategories");
-
                     b.Navigation("Transactions");
-                });
-
-            modelBuilder.Entity("Domain.FutureSaving", b =>
-                {
-                    b.Navigation("CompletedSavings");
-                });
-
-            modelBuilder.Entity("Domain.FutureTransaction", b =>
-                {
-                    b.Navigation("CompletedTransactions");
                 });
 #pragma warning restore 612, 618
         }

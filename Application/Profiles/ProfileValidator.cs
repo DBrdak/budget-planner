@@ -18,22 +18,33 @@ namespace Application.Profiles
         {
             this._uniqueUser = _uniqueUser;
 
-            RuleFor(x => x.Email).EmailAddress().Must((user, cancellation) =>
-            {
-                return !_uniqueUser.UniqueEmail(user.Email).Result;
-            }).WithMessage("Email must be unique");
+            RuleFor(x => x.Email).EmailAddress()
+                .WithMessage("Invalid email")
+                .Must((user, cancellation) =>
+                    !_uniqueUser.UniqueEmail(user.Email).Result)
+                .WithMessage("Email must be unique");
 
-            RuleFor(x => x.Username).NotEmpty().Must((user, cancellation) =>
-            {
-                return !_uniqueUser.UniqueUsername(user.Username).Result;
-            }).WithMessage("Username must be unique");
+            RuleFor(x => x.Username).NotEmpty()
+                .WithMessage("Username is required")
+                .MaximumLength(16)
+                .WithMessage("Username is too long, maximum length is 16")
+                .Must((user, cancellation) =>
+                    !_uniqueUser.UniqueUsername(user.Username).Result)
+                .WithMessage("Username must be unique");
 
-            RuleFor(x => x.DisplayName).NotEmpty();
+            RuleFor(x => x.DisplayName).NotEmpty()
+                .WithMessage("Display name is required")
+                .MaximumLength(16)
+                .WithMessage("Display name is too long, maximum length is 16");
 
-            RuleFor(x => x.BudgetName).NotEmpty().Must((user, cancellation) =>
-            {
-                return !_uniqueUser.UniqueBudgetName(user.BudgetName).Result;
-            }).WithMessage("Budget name must be unique");
+            RuleFor(x => x.BudgetName).NotEmpty()
+                .WithMessage("Budget name is required")
+                .Must(bn => !_uniqueUser.UniqueBudgetName(bn).Result)
+                    .WithMessage("Budget name must be unique")
+                .MaximumLength(16)
+                    .WithMessage("Budget name is too long, maximum length is 16")
+                .Must(bn => bn.All(char.IsLetterOrDigit))
+                    .WithMessage("Only letters and digits can be used");
         }
     }
 }

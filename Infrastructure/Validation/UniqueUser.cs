@@ -26,7 +26,7 @@ namespace Infrastructure.Validation
         {
             return await _context.Budgets
                 .Where(b => b.Name != _budgetAccessor.GetBudgetName())
-                .AnyAsync(b => b.Name == newBudgetName);
+                .AnyAsync(b => b.Name.ToUpper() == newBudgetName.ToUpper());
         }
 
         async Task<bool> IUniqueUser.UniqueEmail(string newEmail)
@@ -39,7 +39,7 @@ namespace Infrastructure.Validation
         async Task<bool> IUniqueUser.UniqueUsername(string newUsername)
         {
             return await _context.Users
-                .Where(u => u.UserName != _userAccessor.GetUsername() || u.UserName != null)
+                .Where(u => u.UserName != _userAccessor.GetUsername())
                 .AnyAsync(u => u.UserName == newUsername);
         }
     }

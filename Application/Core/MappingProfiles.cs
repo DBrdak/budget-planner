@@ -32,10 +32,12 @@ namespace Application.Core
                 .ForMember(d => d.GoalName, o => o.MapFrom(s => s.Goal.Name));
 
             CreateMap<FutureTransaction, FutureExpenditureDto>()
-                .ForMember(d => d.AccountName, o => o.MapFrom(s => s.Account.Name));
+                .ForMember(d => d.AccountName, o => o.MapFrom(s => s.Account.Name))
+                .ForMember(d => d.CompletedExpenditures, o => o.MapFrom(s => s.CompletedTransactions.Where(ct => ct.Amount < 0)));
 
             CreateMap<FutureTransaction, FutureIncomeDto>()
-                .ForMember(d => d.AccountName, o => o.MapFrom(s => s.Account.Name));
+                .ForMember(d => d.AccountName, o => o.MapFrom(s => s.Account.Name))
+                .ForMember(d => d.CompletedIncomes, o => o.MapFrom(s => s.CompletedTransactions.Where(ct => ct.Amount > 0)));
 
             CreateMap<FutureSaving, FutureSavingDto>()
                 .ForMember(d => d.FromAccountName, o => o.MapFrom(s => s.FromAccount.Name))
@@ -49,6 +51,8 @@ namespace Application.Core
                 .ForMember(d => d.Incomes, o => o.MapFrom(s => s.Transactions.Where(t => t.Amount > 0)));
 
             CreateMap<User, ProfileDto>();
+
+            CreateMap<TransactionCategory, TransactionCategoryDto>();
 
             //Set
 
