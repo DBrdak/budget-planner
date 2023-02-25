@@ -37,8 +37,7 @@ namespace Application.Goals
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                var goal = await _context.Goals
-                    .FirstOrDefaultAsync(g => g.Id == request.GoalId);
+                var goal = await _context.Goals.FindAsync(request.GoalId);
 
                 if (goal == null)
                     return null;

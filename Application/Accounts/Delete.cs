@@ -37,8 +37,7 @@ namespace Application.Accounts
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                var account = await _context.Accounts
-                    .FirstOrDefaultAsync(a => a.Id == request.AccountId);
+                var account = await _context.Accounts.FindAsync(request.AccountId);
 
                 if (account == null)
                     return null;
