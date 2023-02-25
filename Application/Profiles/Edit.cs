@@ -24,12 +24,13 @@ namespace Application.Profiles
 
         public class CommandValidator : AbstractValidator<Command>
         {
-            private readonly IUniqueUser _uniqueUser;
+            private readonly IValidationExtension _validationExtension;
 
-            public CommandValidator(IUniqueUser uniqueUser)
+            public CommandValidator(IValidationExtension validationExtension)
             {
-                _uniqueUser = uniqueUser;
-                RuleFor(x => x.NewProfile).SetValidator(new ProfileValidator(_uniqueUser));
+                _validationExtension = validationExtension;
+
+                RuleFor(x => x.NewProfile).SetValidator(new ProfileValidator(_validationExtension));
             }
         }
 

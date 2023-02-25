@@ -11,10 +11,16 @@ namespace API.Controllers
 {
     public class ExtrasController : BaseController
     {
-        [HttpGet("categories")]
-        public async Task<IActionResult> GetCategories()
+        [HttpGet("expenditures/categories")]
+        public async Task<IActionResult> GetExpenditureCategories()
         {
-            return HandleResult(await Mediator.Send(new List.Query()));
+            return HandleResult(await Mediator.Send(new ExpendituresList.Query()));
+        }
+
+        [HttpGet("incomes/categories")]
+        public async Task<IActionResult> GetIncomeCategories()
+        {
+            return HandleResult(await Mediator.Send(new IncomesList.Query()));
         }
     }
 }

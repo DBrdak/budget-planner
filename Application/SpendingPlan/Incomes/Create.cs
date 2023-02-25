@@ -27,15 +27,14 @@ namespace Application.SpendingPlan.Incomes
 
         public class CommandValidator : AbstractValidator<Command>
         {
-            private readonly DataContext _context;
-            private readonly IBudgetAccessor _budgetAccessor;
+            private readonly IValidationExtension _validationExtension;
 
-            public CommandValidator(DataContext context, IBudgetAccessor budgetAccessor)
+            public CommandValidator(IValidationExtension validationExtension)
             {
-                _context = context;
-                _budgetAccessor = budgetAccessor;
+                _validationExtension = validationExtension;
+
                 RuleFor(x => x.NewFutureIncome).SetValidator(
-                    new FutureIncomeValidator(_context, _budgetAccessor));
+                    new FutureIncomeValidator(_validationExtension));
             }
         }
 

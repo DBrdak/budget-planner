@@ -12,16 +12,16 @@ namespace Application.Profiles
 {
     public class ProfileValidator : AbstractValidator<ProfileDto>
     {
-        private readonly IUniqueUser _uniqueUser;
+        private readonly IValidationExtension _validationExtension;
 
-        public ProfileValidator(IUniqueUser _uniqueUser)
+        public ProfileValidator(IValidationExtension validationExtension)
         {
-            this._uniqueUser = _uniqueUser;
+            _validationExtension = validationExtension;
 
             RuleFor(x => x.Email).EmailAddress()
                 .WithMessage("Invalid email")
                 .Must((user, cancellation) =>
-                    !_uniqueUser.UniqueEmail(user.Email).Result)
+                    !_validationExtension.UniqueEmail(user.Email).Result)
                 .WithMessage("Email must be unique");
 
             RuleFor(x => x.Username).NotEmpty()
@@ -29,7 +29,7 @@ namespace Application.Profiles
                 .MaximumLength(16)
                 .WithMessage("Username is too long, maximum length is 16")
                 .Must((user, cancellation) =>
-                    !_uniqueUser.UniqueUsername(user.Username).Result)
+                    !_validationExtension.UniqueUsername(user.Username).Result)
                 .WithMessage("Username must be unique");
 
             RuleFor(x => x.DisplayName).NotEmpty()
@@ -39,7 +39,7 @@ namespace Application.Profiles
 
             RuleFor(x => x.BudgetName).NotEmpty()
                 .WithMessage("Budget name is required")
-                .Must(bn => !_uniqueUser.UniqueBudgetName(bn).Result)
+                .Must(bn => !_validationExtension.UniqueBudgetName(bn).Result)
                     .WithMessage("Budget name must be unique")
                 .MaximumLength(16)
                     .WithMessage("Budget name is too long, maximum length is 16")
