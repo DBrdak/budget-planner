@@ -8,10 +8,10 @@ namespace Application.Interfaces
 {
     public interface IUniqueUser
     {
-        public Task<bool> UniqueUsername(string newBudgetName);
+        public Task<bool> UniqueUsername(string newUsername);
 
         public Task<bool> UniqueEmail(string newEmail);
 
-        public Task<bool> UniqueBudgetName(string newUsername);
+        public Task<bool> UniqueBudgetName(string newBudgetName);
     }
 }

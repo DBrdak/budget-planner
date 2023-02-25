@@ -37,8 +37,7 @@ namespace Application.SpendingPlan.Savings
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                var futureSaving = await _context.FutureSavings
-                    .FirstOrDefaultAsync(fs => fs.Id == request.FutureSavingId);
+                var futureSaving = await _context.FutureSavings.FindAsync(request.FutureSavingId);
 
                 if (futureSaving == null)
                     return null;

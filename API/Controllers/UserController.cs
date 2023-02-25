@@ -29,6 +29,7 @@ namespace API.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserDto>> Login(LoginDto dto)
         {
             var user = await _userManager.Users
@@ -47,11 +48,12 @@ namespace API.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserDto>> Register(RegisterDto dto)
         {
             var usernameIsUnique = await _context.Users.AnyAsync(u => u.UserName == dto.Username);
             var emailIsUnique = await _context.Users.AnyAsync(u => u.Email == dto.Email);
-            var budgetIsUnique = await _context.Budgets.AnyAsync(b => b.Name == dto.BudgetName);
+            var budgetIsUnique = await _context.Budgets.AnyAsync(b => b.Name.ToUpper() == dto.BudgetName.ToUpper());
 
             if (usernameIsUnique)
             {
@@ -104,7 +106,7 @@ namespace API.Controllers
             return CreateUserObject(user);
         }
 
-        [Authorize] // Autoryzacja jedynie właściciela konta
+        [Authorize]
         [HttpGet("user")]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
@@ -120,7 +122,9 @@ namespace API.Controllers
             {
                 DisplayName = user.DisplayName,
                 Token = _tokenService.CreateToken(user),
-                Username = user.UserName
+                Username = user.UserName,
+                BudgetName = _context.Budgets
+                    .FirstOrDefault(u => u.UserId == user.Id).Name,
             };
         }
     }

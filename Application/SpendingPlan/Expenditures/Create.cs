@@ -27,9 +27,15 @@ namespace Application.SpendingPlan.Expenditures
 
         public class CommandValidator : AbstractValidator<Command>
         {
-            public CommandValidator()
+            private readonly DataContext _context;
+            private readonly IBudgetAccessor _budgetAccessor;
+
+            public CommandValidator(DataContext context, IBudgetAccessor budgetAccessor)
             {
-                RuleFor(x => x.NewFutureExpenditure).SetValidator(new FutureExpenditureValidator());
+                _context = context;
+                _budgetAccessor = budgetAccessor;
+                RuleFor(x => x.NewFutureExpenditure).SetValidator(
+                    new FutureExpenditureValidator(_context, _budgetAccessor));
             }
         }
 
@@ -37,14 +43,12 @@ namespace Application.SpendingPlan.Expenditures
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
-            private readonly IHttpContextAccessor _httpContext;
             private readonly IBudgetAccessor _budgetAccessor;
 
-            public Handler(DataContext context, IMapper mapper, IHttpContextAccessor httpContext, IBudgetAccessor budgetAccessor)
+            public Handler(DataContext context, IMapper mapper, IBudgetAccessor budgetAccessor)
             {
                 _context = context;
                 _mapper = mapper;
-                _httpContext = httpContext;
                 _budgetAccessor = budgetAccessor;
             }
 
@@ -61,10 +65,19 @@ namespace Application.SpendingPlan.Expenditures
                     .FirstOrDefaultAsync(a => a.Name == request.NewFutureExpenditure.AccountName
                     && a.Budget.Name == budgetName);
 
-                if (newFutureExpenditure.Budget == null || newFutureExpenditure.Account == null)
+                if (newFutureExpenditure.Budget == null
+                    || newFutureExpenditure.Account == null)
                     return null;
 
+                var category = new TransactionCategory
+                {
+                    Value = newFutureExpenditure.Category,
+                    Budget = await _budgetAccessor.GetBudget(),
+                    Type = "expenditure"
+                };
+
                 await _context.FutureTransactions.AddAsync(newFutureExpenditure);
+                await _context.TransactionCategories.AddAsync(category);
                 var fail = await _context.SaveChangesAsync() < 0;
 
                 if (fail)

@@ -10,5 +10,7 @@ namespace Application.Interfaces
     public interface IBudgetAccessor
     {
         string GetBudgetName();
+
+        Task<Budget> GetBudget();
     }
 }

@@ -24,13 +24,13 @@ namespace Application.SpendingPlan.Incomes
         public class Handler : IRequestHandler<Query, Result<List<FutureIncomeDto>>>
         {
             private readonly DataContext _context;
-            private readonly IUserAccessor _userAccessor;
+            private readonly IBudgetAccessor _budgetAccessor;
             private readonly IMapper _mapper;
 
-            public Handler(DataContext context, IUserAccessor userAccessor, IMapper mapper)
+            public Handler(DataContext context, IBudgetAccessor budgetAccessor, IMapper mapper)
             {
                 _context = context;
-                _userAccessor = userAccessor;
+                _budgetAccessor = budgetAccessor;
                 _mapper = mapper;
             }
 
@@ -38,7 +38,7 @@ namespace Application.SpendingPlan.Incomes
             {
                 var futureTransactions = await _context.FutureTransactions
                     .AsNoTracking()
-                    .Where(ft => ft.Budget.User.UserName == _userAccessor.GetUsername()
+                    .Where(ft => ft.BudgetId == _budgetAccessor.GetBudget().Result.Id
                         && ft.Amount > 0)
                     .ProjectTo<FutureIncomeDto>(_mapper.ConfigurationProvider)
                     .ToListAsync();

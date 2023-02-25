@@ -16,6 +16,9 @@ namespace Domain
         public Guid BudgetId { get; set; }
         public Budget Budget { get; set; }
 
+        public IEnumerable<FutureSaving> FutureSavingsOut { get; set; }
+        public IEnumerable<FutureSaving> FutureSavingsIn { get; set; }
+        public IEnumerable<FutureTransaction> FutureTransactions { get; set; }
         public IEnumerable<Saving> SavingsOut { get; set; }
         public IEnumerable<Saving> SavingsIn { get; set; }
         public IEnumerable<Transaction> Transactions { get; set; }

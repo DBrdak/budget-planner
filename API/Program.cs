@@ -13,7 +13,11 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers(options =>
+        {
+            var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+            options.Filters.Add(new AuthorizeFilter(policy));
+        });
         builder.Services.AddAppCollection(builder.Configuration);
         builder.Services.AddIdentityServices(builder.Configuration);
 
