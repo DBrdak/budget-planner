@@ -21,16 +21,28 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Application.DailyActions.DailyIncomes.Create.Command() { NewIncome = newIncome }));
         }
 
+        [HttpPost("expenditures")]
+        public async Task<IActionResult> CreateExpenditure(ExpenditureDto newExpenditure)
+        {
+            return HandleResult(await Mediator.Send(new Application.DailyActions.DailyExpenditures.Create.Command() { NewExpenditure = newExpenditure }));
+        }
+
         [HttpDelete("savings/{SavingId}")]
         public async Task<IActionResult> DeleteSaving(Guid savingId)
         {
             return HandleResult(await Mediator.Send(new Application.DailyActions.DailySavings.Delete.Command() { SavingId = savingId }));
         }
 
-        [HttpDelete("incomes/{IncomesId}")]
+        [HttpDelete("incomes/{IncomeId}")]
         public async Task<IActionResult> DeleteIncome(Guid incomeId)
         {
             return HandleResult(await Mediator.Send(new Application.DailyActions.DailyIncomes.Delete.Command() { IncomeId = incomeId }));
+        }
+
+        [HttpDelete("expenditures/{ExpenditureId}")]
+        public async Task<IActionResult> DeleteExpenditure(Guid expenditureId)
+        {
+            return HandleResult(await Mediator.Send(new Application.DailyActions.DailyExpenditures.Delete.Command() { ExpenditureId = expenditureId }));
         }
     }
 }
