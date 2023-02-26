@@ -12,13 +12,12 @@ namespace Application.SpendingPlan
 {
     public class FutureIncomeValidator : AbstractValidator<FutureIncomeDto>
     {
-        private readonly DataContext _context;
-        private readonly IBudgetAccessor _budgetAccessor;
+        private readonly IValidationExtension _validationExtension;
 
-        public FutureIncomeValidator(DataContext context, IBudgetAccessor budgetAccessor)
+        public FutureIncomeValidator(IValidationExtension validationExtension)
         {
-            _context = context;
-            _budgetAccessor = budgetAccessor;
+            _validationExtension = validationExtension;
+
             RuleFor(x => x.AccountName).NotEmpty()
                 .WithMessage("Account name is required");
             RuleFor(x => x.Date).NotEmpty().Must(d => d > DateTime.UtcNow)
@@ -29,10 +28,7 @@ namespace Application.SpendingPlan
                 .WithMessage("Category name is required")
                 .MaximumLength(16)
                 .WithMessage("Category name is too long, max length is 16")
-                .Must(c => !_context.TransactionCategories
-                    .Where(tc => tc.Type == "income"
-                    && tc.BudgetId == _budgetAccessor.GetBudget().Result.Id)
-                    .Any(tc => tc.Value == c))
+                .Must(c => _validationExtension.UniqueCategory(c, "income").Result)
                 .WithMessage(x => $"Category {x.Category} already exists");
         }
     }

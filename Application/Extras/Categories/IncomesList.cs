@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Application.Extras.Categories
 {
-    public class List
+    public class IncomesList
     {
         public class Query : IRequest<Result<List<TransactionCategoryDto>>>
         {
@@ -24,14 +24,12 @@ namespace Application.Extras.Categories
         public class Handler : IRequestHandler<Query, Result<List<TransactionCategoryDto>>>
         {
             private readonly DataContext _context;
-            private readonly IUserAccessor _userAccessor;
             private readonly IBudgetAccessor _budgetAccessor;
             private readonly IMapper _mapper;
 
-            public Handler(DataContext context, IUserAccessor userAccessor, IBudgetAccessor budgetAccessor, IMapper mapper)
+            public Handler(DataContext context, IBudgetAccessor budgetAccessor, IMapper mapper)
             {
                 _context = context;
-                _userAccessor = userAccessor;
                 _budgetAccessor = budgetAccessor;
                 _mapper = mapper;
             }
@@ -44,7 +42,7 @@ namespace Application.Extras.Categories
                     return null;
 
                 var categories = await _context.TransactionCategories
-                    .Where(tc => tc.BudgetId == budgetId)
+                    .Where(tc => tc.BudgetId == budgetId && tc.Type == "income")
                     .ProjectTo<TransactionCategoryDto>(_mapper.ConfigurationProvider)
                     .ToListAsync();
 
