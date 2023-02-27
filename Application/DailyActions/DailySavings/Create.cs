@@ -47,7 +47,7 @@ namespace Application.DailyActions.DailySavings
                 var newSaving = _mapper.Map<Saving>(request.NewSaving);
 
                 // Obczaj nową funkcje w BudgetAccessor, większa wydajność
-                var budgetName = _budgetAccessor.GetBudgetName();
+                var budgetName = await _budgetAccessor.GetBudgetName();
 
                 // Jak wykorzystasz inną funkcję to masz Guid, więc możesz zmienić FirstOrDefault,
                 // na coś "czystszego" (chodzi o konkretną metodę wbudowaną)

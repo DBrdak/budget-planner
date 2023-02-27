@@ -24,6 +24,7 @@ namespace Application.DailyActions.DailyIncomes
         {
             public IncomeDto NewIncome { get; set; }
         }
+
         //Place for validator function
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
@@ -31,6 +32,7 @@ namespace Application.DailyActions.DailyIncomes
             private readonly IMapper _mapper;
             private readonly IHttpContextAccessor _httpContext;
             private readonly IBudgetAccessor _budgetAccessor;
+
             public Handler(DataContext context, IMapper mapper, IHttpContextAccessor httpContext, IBudgetAccessor budgetAccessor)
             {
                 _context = context;
@@ -38,11 +40,12 @@ namespace Application.DailyActions.DailyIncomes
                 _httpContext = httpContext;
                 _budgetAccessor = budgetAccessor;
             }
+
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
                 var newIncome = _mapper.Map<Transaction>(request.NewIncome);
 
-                var budgetName = _budgetAccessor.GetBudgetName();
+                var budgetName = await _budgetAccessor.GetBudgetName();
 
                 newIncome.Budget = await _context.Budgets
                     .FirstOrDefaultAsync(b => b.Name == budgetName);

@@ -38,12 +38,12 @@ namespace Infrastructure.Security
             if (userId == null)
                 return Task.CompletedTask;
 
-            var budgetName = _budgetAccessor.GetBudgetName();
+            var budgetName = _budgetAccessor.GetBudgetName().Result;
 
             var user = _context.Budgets
                 .AsNoTracking()
                 .Include(x => x.User)
-                .SingleOrDefaultAsync(x => x.User.Id == userId && x.Name == budgetName).Result;
+                .SingleOrDefault(x => x.User.Id == userId && x.Name == budgetName);
 
             if (user == null)
                 return Task.CompletedTask;

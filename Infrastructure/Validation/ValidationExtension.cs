@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Domain;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
@@ -24,8 +25,10 @@ namespace Infrastructure.Validation
 
         async Task<bool> IValidationExtension.UniqueBudgetName(string newBudgetName)
         {
+            var budgetName = await _budgetAccessor.GetBudgetName();
+
             return await _context.Budgets
-                .Where(b => b.Name != _budgetAccessor.GetBudgetName())
+                .Where(b => b.Name != budgetName)
                 .AnyAsync(b => b.Name.ToUpper() == newBudgetName.ToUpper());
         }
 
@@ -43,10 +46,23 @@ namespace Infrastructure.Validation
                 .AnyAsync(u => u.UserName == newUsername);
         }
 
-        async Task<bool> IValidationExtension.UniqueCategory(string categoryName, string categoryType) =>
-            !await _context.TransactionCategories
+        async Task<bool> IValidationExtension.UniqueCategory(string categoryName, string categoryType)
+        {
+            var budgetId = await _budgetAccessor.GetBudgetId();
+
+            return !await _context.TransactionCategories
                 .Where(tc => tc.Type == categoryType
-                    && tc.BudgetId == _budgetAccessor.GetBudget().Result.Id)
+                    && tc.BudgetId == budgetId)
                 .AnyAsync(tc => tc.Value == categoryName);
+        }
+
+        async Task<bool> IValidationExtension.AccountExists(string accountName)
+        {
+            var budgetId = await _budgetAccessor.GetBudgetId();
+
+            return await _context.Accounts
+                .Where(a => a.BudgetId == budgetId)
+                .AnyAsync(a => a.Name == accountName);
+        }
     }
 }

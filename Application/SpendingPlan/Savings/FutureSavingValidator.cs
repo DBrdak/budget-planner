@@ -18,8 +18,10 @@ namespace Application.SpendingPlan.Savings
                 .WithMessage("Pick future date");
             RuleFor(x => x.FromAccountName).NotEmpty()
                 .WithMessage("Source account is required");
+            // Dodać walidację z account exists
             RuleFor(x => x.ToAccountName).NotEmpty()
                 .WithMessage("Destination account is required");
+            // Dodać walidację z account exists
         }
     }
 }

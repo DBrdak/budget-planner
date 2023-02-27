@@ -15,5 +15,7 @@ namespace Application.Interfaces
         public Task<bool> UniqueBudgetName(string newBudgetName);
 
         public Task<bool> UniqueCategory(string categoryName, string categoryType);
+
+        public Task<bool> AccountExists(string accountName);
     }
 }

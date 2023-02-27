@@ -45,7 +45,7 @@ namespace Application.Profiles
                 if (profile == null)
                     return null;
 
-                profile.BudgetName = _budgetAccessor.GetBudgetName();
+                profile.BudgetName = await _budgetAccessor.GetBudgetName();
 
                 return Result<ProfileDto>.Success(profile);
             }

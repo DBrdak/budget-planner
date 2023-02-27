@@ -21,6 +21,7 @@ namespace Application.SpendingPlan.Expenditures
 
             RuleFor(x => x.AccountName).NotEmpty()
                 .WithMessage("Account name is required");
+            // Dodać walidację z account exists
             RuleFor(x => x.Date).NotEmpty().Must(d => d > DateTime.UtcNow)
                 .WithMessage("Pick future date");
             RuleFor(x => x.Amount).Must(a => a > 0)

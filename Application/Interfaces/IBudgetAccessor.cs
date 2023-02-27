@@ -9,7 +9,7 @@ namespace Application.Interfaces
 {
     public interface IBudgetAccessor
     {
-        string GetBudgetName();
+        Task<string> GetBudgetName();
 
         Task<Guid> GetBudgetId();
 

@@ -49,7 +49,7 @@ namespace Application.DailyActions.DailyExpenditures
                 // Nie mapujemy, zbyt duzy koszt wydajności, zamiast tego spróbuj tradycyjnie stworzyć nowy obiekt typu Transaction
                 var newExpenditure = _mapper.Map<Transaction>(request.NewExpenditure);
 
-                var budgetName = _budgetAccessor.GetBudgetName();
+                var budgetName = await _budgetAccessor.GetBudgetName();
 
                 newExpenditure.Budget = await _context.Budgets
                     .FirstOrDefaultAsync(b => b.Name == budgetName);

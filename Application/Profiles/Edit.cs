@@ -58,7 +58,9 @@ namespace Application.Profiles
 
                 _mapper.Map(request.NewProfile, oldProfile);
 
-                var budget = await _context.Budgets.FirstOrDefaultAsync(b => b.Name == _budgetAccessor.GetBudgetName());
+                var budgetName = await _budgetAccessor.GetBudgetName();
+
+                var budget = await _context.Budgets.FirstOrDefaultAsync(b => b.Name == budgetName);
 
                 budget.Name = request.NewProfile.BudgetName;
 

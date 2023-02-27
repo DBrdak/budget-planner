@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Infrastructure.Security
 {
@@ -22,10 +23,10 @@ namespace Infrastructure.Security
             _userAccessor = userAccessor;
         }
 
-        public string GetBudgetName()
+        public async Task<string> GetBudgetName()
         {
-            return _context.Budgets
-                .FirstOrDefault(b => b.User.UserName == _userAccessor.GetUsername()).Name;
+            return (await _context.Budgets
+                .FirstOrDefaultAsync(b => b.User.UserName == _userAccessor.GetUsername())).Name;
         }
 
         public async Task<Budget> GetBudget()
