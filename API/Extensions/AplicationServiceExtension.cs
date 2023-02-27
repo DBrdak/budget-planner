@@ -7,8 +7,10 @@ using Infrastructure.Security;
 using Infrastructure.Validation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Persistence;
+using System.Reflection;
 
 namespace API.Extensions
 {
@@ -35,7 +37,7 @@ namespace API.Extensions
                 });
             });
 
-            services.AddMediatR(typeof(List.Handler));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<Create>();
