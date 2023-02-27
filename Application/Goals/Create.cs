@@ -51,10 +51,9 @@ namespace Application.Goals
             {
                 var newGoal = _mapper.Map<Goal>(request.NewGoal);
 
-                var budgetName = _budgetAccessor.GetBudgetName();
+                var budgetId = await _budgetAccessor.GetBudgetId();
 
-                newGoal.Budget = await _context.Budgets
-                    .FirstOrDefaultAsync(b => b.Name == budgetName);
+                newGoal.Budget = await _context.Budgets.FindAsync(budgetId);
 
                 if (newGoal.Budget == null)
                     return null;

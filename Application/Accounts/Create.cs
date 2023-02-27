@@ -36,14 +36,12 @@ namespace Application.Accounts
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
-            private readonly IHttpContextAccessor _httpContext;
             private readonly IBudgetAccessor _budgetAccessor;
 
-            public Handler(DataContext context, IMapper mapper, IHttpContextAccessor httpContext, IBudgetAccessor budgetAccessor)
+            public Handler(DataContext context, IMapper mapper, IBudgetAccessor budgetAccessor)
             {
                 _context = context;
                 _mapper = mapper;
-                _httpContext = httpContext;
                 _budgetAccessor = budgetAccessor;
             }
 
@@ -51,10 +49,9 @@ namespace Application.Accounts
             {
                 var newAccount = _mapper.Map<Account>(request.NewAccount);
 
-                var budgetName = _budgetAccessor.GetBudgetName();
+                var budgetId = await _budgetAccessor.GetBudgetId();
 
-                newAccount.Budget = await _context.Budgets
-                    .FirstOrDefaultAsync(b => b.Name == budgetName);
+                newAccount.Budget = await _context.Budgets.FindAsync(budgetId);
 
                 if (newAccount.Budget == null)
                     return null;

@@ -36,10 +36,14 @@ namespace Application.SpendingPlan.Expenditures
 
             async Task<Result<List<FutureExpenditureDto>>> IRequestHandler<Query, Result<List<FutureExpenditureDto>>>.Handle(Query request, CancellationToken cancellationToken)
             {
+                var budgetId = await _budgetAccessor.GetBudgetId();
+
+                if (budgetId == Guid.Empty)
+                    return null;
+
                 var futureExpenditures = await _context.FutureTransactions
                     .AsNoTracking()
-                    .Where(ft => ft.BudgetId == _budgetAccessor.GetBudget().Result.Id
-                        && ft.Amount < 0)
+                    .Where(ft => ft.BudgetId == budgetId && ft.Amount < 0)
                     .ProjectTo<FutureExpenditureDto>(_mapper.ConfigurationProvider)
                     .ToListAsync();
 

@@ -11,6 +11,8 @@ namespace Application.Interfaces
     {
         string GetBudgetName();
 
+        Task<Guid> GetBudgetId();
+
         Task<Budget> GetBudget();
     }
 }

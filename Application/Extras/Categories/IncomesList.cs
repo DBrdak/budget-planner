@@ -36,7 +36,7 @@ namespace Application.Extras.Categories
 
             async Task<Result<List<TransactionCategoryDto>>> IRequestHandler<Query, Result<List<TransactionCategoryDto>>>.Handle(Query request, CancellationToken cancellationToken)
             {
-                var budgetId = _budgetAccessor.GetBudget().Result.Id;
+                var budgetId = await _budgetAccessor.GetBudgetId();
 
                 if (budgetId == Guid.Empty)
                     return null;

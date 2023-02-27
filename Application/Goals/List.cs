@@ -36,9 +36,14 @@ namespace Application.Goals
 
             async Task<Result<List<GoalDto>>> IRequestHandler<Query, Result<List<GoalDto>>>.Handle(Query request, CancellationToken cancellation)
             {
+                var budgetId = await _budgetAccessor.GetBudgetId();
+
+                if (budgetId == Guid.Empty)
+                    return null;
+
                 var goals = await _context.Goals
                     .AsNoTracking()
-                    .Where(g => g.BudgetId == _budgetAccessor.GetBudget().Result.Id)
+                    .Where(g => g.BudgetId == budgetId)
                     .ProjectTo<GoalDto>(_mapper.ConfigurationProvider)
                     .ToListAsync();
 

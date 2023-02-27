@@ -36,9 +36,14 @@ namespace Application.Accounts
 
             async Task<Result<List<AccountDto>>> IRequestHandler<Query, Result<List<AccountDto>>>.Handle(Query request, CancellationToken cancellationToken)
             {
+                var budgetId = await _budgetAccessor.GetBudgetId();
+
+                if (budgetId == Guid.Empty)
+                    return null;
+
                 var accounts = await _context.Accounts
                     .AsNoTracking()
-                    .Where(a => a.BudgetId == _budgetAccessor.GetBudget().Result.Id)
+                    .Where(a => a.BudgetId == budgetId)
                     .ProjectTo<AccountDto>(_mapper.ConfigurationProvider)
                     .ToListAsync();
 

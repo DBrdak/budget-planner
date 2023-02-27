@@ -27,6 +27,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Application.DailyActions.DailyExpenditures.Create.Command() { NewExpenditure = newExpenditure }));
         }
 
+        // Zróć uwagę na wielkość liter w url i zmiennej w funkcji, dla każdego delete'a
         [HttpDelete("savings/{SavingId}")]
         public async Task<IActionResult> DeleteSaving(Guid savingId)
         {

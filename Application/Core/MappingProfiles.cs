@@ -71,11 +71,6 @@ namespace Application.Core
                 .ForMember(d => d.SavingsIn, o => o.Ignore())
                 .ForMember(d => d.SavingsOut, o => o.Ignore());
 
-            CreateMap<SavingDto, Saving>()
-                .ForMember(d => d.Goal, o => o.Ignore())
-                .ForMember(d => d.ToAccount, o => o.Ignore())
-                .ForMember(d => d.FromAccount, o => o.Ignore());
-
             CreateMap<ProfileDto, User>();
         }
     }

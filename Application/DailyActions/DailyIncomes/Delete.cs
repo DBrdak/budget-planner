@@ -10,7 +10,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace Application.DailyActions.DailyIncomes
 {
     public class Delete
@@ -19,6 +18,7 @@ namespace Application.DailyActions.DailyIncomes
         {
             public Guid IncomeId { get; set; }
         }
+
         //Place for validator
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -34,16 +34,16 @@ namespace Application.DailyActions.DailyIncomes
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                var Income = await _context.Transactions.FindAsync(request.IncomeId);
+                var income = await _context.Transactions.FindAsync(request.IncomeId);
 
-                if (Income == null)
+                if (income == null)
                     return null;
 
                 var category = await _context.TransactionCategories
-                    .FirstOrDefaultAsync(tc => tc.Value == Income.Category
+                    .FirstOrDefaultAsync(tc => tc.Value == income.Category
                     && tc.BudgetId == _budgetAccessor.GetBudget().Result.Id);
 
-                _context.Transactions.Remove(Income);
+                _context.Transactions.Remove(income);
                 _context.TransactionCategories.Remove(category);
 
                 var fail = await _context.SaveChangesAsync() < 0;

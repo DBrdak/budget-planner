@@ -36,9 +36,14 @@ namespace Application.SpendingPlan.Savings
 
             async Task<Result<List<FutureSavingDto>>> IRequestHandler<Query, Result<List<FutureSavingDto>>>.Handle(Query request, CancellationToken cancellationToken)
             {
+                var budgetId = await _budgetAccessor.GetBudgetId();
+
+                if (budgetId == Guid.Empty)
+                    return null;
+
                 var futureSavings = await _context.FutureSavings
                     .AsNoTracking()
-                    .Where(fs => fs.BudgetId == _budgetAccessor.GetBudget().Result.Id)
+                    .Where(fs => fs.BudgetId == budgetId)
                     .ProjectTo<FutureSavingDto>(_mapper.ConfigurationProvider)
                     .ToListAsync();
 

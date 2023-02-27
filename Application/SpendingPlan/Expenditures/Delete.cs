@@ -45,9 +45,11 @@ namespace Application.SpendingPlan.Expenditures
                 if (futureExpenditure == null)
                     return null;
 
+                var budgetId = await _budgetAccessor.GetBudgetId();
+
                 var category = await _context.TransactionCategories
                     .FirstOrDefaultAsync(tc => tc.Value == futureExpenditure.Category
-                    && tc.BudgetId == _budgetAccessor.GetBudget().Result.Id);
+                    && tc.BudgetId == budgetId);
 
                 _context.FutureTransactions.Remove(futureExpenditure);
                 _context.TransactionCategories.Remove(category);

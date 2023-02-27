@@ -55,14 +55,14 @@ namespace Application.SpendingPlan.Expenditures
             {
                 var newFutureExpenditure = _mapper.Map<FutureTransaction>(request.NewFutureExpenditure);
 
-                var budgetName = _budgetAccessor.GetBudgetName();
+                var budgetId = await _budgetAccessor.GetBudgetId();
 
                 newFutureExpenditure.Budget = await _context.Budgets
-                    .FirstOrDefaultAsync(b => b.Name == budgetName);
+                    .FindAsync(budgetId);
 
                 newFutureExpenditure.Account = await _context.Accounts
                     .FirstOrDefaultAsync(a => a.Name == request.NewFutureExpenditure.AccountName
-                    && a.Budget.Name == budgetName);
+                    && a.Budget.Id == budgetId);
 
                 if (newFutureExpenditure.Budget == null
                     || newFutureExpenditure.Account == null)

@@ -20,7 +20,6 @@ namespace Application.DailyActions.DailyExpenditures
         }
 
         //Place for validator
-        
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
@@ -33,18 +32,24 @@ namespace Application.DailyActions.DailyExpenditures
                 _budgetAccessor = budgetAccessor;
             }
 
+            // Podpowiedzi odnoszą się też do delete income
+
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                var Expenditure = await _context.Transactions.FindAsync(request.ExpenditureId);
+                var expenditure = await _context.Transactions.FindAsync(request.ExpenditureId);
 
-                if (Expenditure == null)
+                if (expenditure == null)
                     return null;
 
+                // Nie usuwamy kategorii
+
                 var category = await _context.TransactionCategories
-                    .FirstOrDefaultAsync(tc => tc.Value == Expenditure.Category
+                    .FirstOrDefaultAsync(tc => tc.Value == expenditure.Category
                     && tc.BudgetId == _budgetAccessor.GetBudget().Result.Id);
 
-                _context.Transactions.Remove(Expenditure);
+                // Musisz też odjąć od completed amount (w odpowiednim future transaction) amount z expenditure
+
+                _context.Transactions.Remove(expenditure);
                 _context.TransactionCategories.Remove(category);
 
                 var fail = await _context.SaveChangesAsync() < 0;

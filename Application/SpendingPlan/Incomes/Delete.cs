@@ -45,9 +45,11 @@ namespace Application.SpendingPlan.Incomes
                 if (futureIncome == null)
                     return null;
 
+                var budgetId = await _budgetAccessor.GetBudgetId();
+
                 var category = await _context.TransactionCategories
                     .FirstOrDefaultAsync(tc => tc.Value == futureIncome.Category
-                    && tc.BudgetId == _budgetAccessor.GetBudget().Result.Id);
+                    && tc.BudgetId == budgetId);
 
                 _context.FutureTransactions.Remove(futureIncome);
                 _context.TransactionCategories.Remove(category);

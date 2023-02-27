@@ -52,22 +52,22 @@ namespace Application.SpendingPlan.Savings
             {
                 var newFutureSaving = _mapper.Map<FutureSaving>(request.NewFutureSaving);
 
-                var budgetName = _budgetAccessor.GetBudgetName();
+                var budgetId = await _budgetAccessor.GetBudgetId();
 
                 newFutureSaving.Budget = await _context.Budgets
-                    .FirstOrDefaultAsync(b => b.Name == budgetName);
+                    .FindAsync(budgetId);
 
                 newFutureSaving.FromAccount = await _context.Accounts
                     .FirstOrDefaultAsync(a => a.Name == request.NewFutureSaving.FromAccountName
-                    && a.Budget.Name == budgetName);
+                    && a.Budget.Id == budgetId);
 
                 newFutureSaving.ToAccount = await _context.Accounts
                     .FirstOrDefaultAsync(a => a.Name == request.NewFutureSaving.ToAccountName
-                    && a.Budget.Name == budgetName);
+                    && a.Budget.Id == budgetId);
 
                 newFutureSaving.Goal = await _context.Goals
                     .FirstOrDefaultAsync(g => g.Name == request.NewFutureSaving.GoalName
-                    && g.Budget.Name == budgetName);
+                    && g.Budget.Id == budgetId);
 
                 if (newFutureSaving.Budget == null
                     || newFutureSaving.ToAccount == null

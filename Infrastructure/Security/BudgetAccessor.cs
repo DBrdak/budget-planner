@@ -33,5 +33,13 @@ namespace Infrastructure.Security
             return await _context.Budgets
                 .FirstOrDefaultAsync(b => b.User.UserName == _userAccessor.GetUsername());
         }
+
+        public async Task<Guid> GetBudgetId()
+        {
+            var budget = await _context.Budgets
+                .FirstOrDefaultAsync(b => b.User.UserName == _userAccessor.GetUsername());
+
+            return budget.Id;
+        }
     }
 }
