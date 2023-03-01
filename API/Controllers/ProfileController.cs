@@ -1,30 +1,35 @@
 using Application.DTO;
 using Application.Profiles;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 
 namespace API.Controllers
 {
     public class ProfileController : BaseController
     {
         [HttpGet("{username}")]
+        [Description("Gets user profile")]
         public async Task<IActionResult> GetProfile()
         {
             return HandleResult(await Mediator.Send(new Details.Query()));
         }
 
         [HttpDelete("{username}")]
-        public async Task<IActionResult> DeleteGoal([FromBody] string password)
+        [Description("Deletes an entire user data")]
+        public async Task<IActionResult> DeleteUser([FromBody] string password)
         {
             return HandleResult(await Mediator.Send(new Delete.Command() { Password = password }));
         }
 
         [HttpPut("{username}")]
-        public async Task<IActionResult> EditAccount(ProfileDto newProfile)
+        [Description("Updates profile")]
+        public async Task<IActionResult> EditProfile(ProfileDto newProfile)
         {
             return HandleResult(await Mediator.Send(new Edit.Command() { NewProfile = newProfile }));
         }
 
         [HttpPut("{username}/password")]
+        [Description("Updates a password")]
         public async Task<IActionResult> UpdatePassword(PasswordFormDto passwordForm)
         {
             return HandleResult(await Mediator.Send(new UpdatePassword.Command() { PasswordForm = passwordForm }));

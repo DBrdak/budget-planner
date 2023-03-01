@@ -45,7 +45,7 @@ namespace Application.Accounts
                 _budgetAccessor = budgetAccessor;
             }
 
-            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var newAccount = _mapper.Map<Account>(request.NewAccount);
 

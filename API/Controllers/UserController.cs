@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using System.ComponentModel;
 using System.Security.Claims;
 
 namespace API.Controllers
@@ -30,6 +31,7 @@ namespace API.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
+        [Description("Logging in an user")]
         public async Task<ActionResult<UserDto>> Login(LoginDto dto)
         {
             var user = await _userManager.Users
@@ -49,6 +51,7 @@ namespace API.Controllers
 
         [HttpPost("register")]
         [AllowAnonymous]
+        [Description("Signing up an user")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto dto)
         {
             var usernameIsUnique = await _context.Users.AnyAsync(u => u.UserName == dto.Username);
@@ -108,6 +111,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("user")]
+        [Description("Gets current instance of user")]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var user = await _userManager.Users

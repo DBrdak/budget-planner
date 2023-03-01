@@ -16,8 +16,7 @@ namespace Application.DailyActions.DailyExpenditures
         // Date -> mniejszy lub równy niż aktualny czas
         // Category -> tu musisz w ValidationExtension stworzyć metodę
         // która sprawdza czy podana kategoria występuje w tabeli FutureTransactions
-        // AccountName -> tu musisz stworzyć metodę w ValidationExtension
-        // która sprawdzi czy istnieje konto dla konkretnego AccountName
+        // AccountName -> tu musisz wykorzystać metodę z ValidationExtension, AccountExists()
         // Do każdej property musimy dać jakiś message dla clienta
     }
 }
