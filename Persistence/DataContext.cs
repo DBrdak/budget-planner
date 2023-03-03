@@ -2,11 +2,14 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
+using Persistence.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +23,15 @@ namespace Persistence
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            //new AccountConfiguration().Configure(builder.Entity<Account>());
+            //new BudgetConfiguration().Configure(builder.Entity<Budget>());
+            //new FutureSavingConfiguration().Configure(builder.Entity<FutureSaving>());
+            //new FutureTransactionConfiguration().Configure(builder.Entity<FutureTransaction>());
+            //new GoalConfiguration().Configure(builder.Entity<Goal>());
+            //new SavingConfiguration().Configure(builder.Entity<Saving>());
+            //new TransactionConfiguration().Configure(builder.Entity<Transaction>());
+
+            builder.ApplyConfigurationsFromAssembly(typeof(FutureSavingConfiguration).Assembly);
 
             base.OnModelCreating(builder);
         }

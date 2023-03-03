@@ -13,7 +13,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
-using Persistence.Migrations;
 using System.Net.Http;
 
 namespace Application.DailyActions.DailyIncomes

@@ -13,7 +13,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
-using Persistence.Migrations;
 using System.Net.Http;
 
 namespace Application.SpendingPlan.Savings
@@ -27,9 +26,12 @@ namespace Application.SpendingPlan.Savings
 
         public class CommandValidator : AbstractValidator<Command>
         {
-            public CommandValidator()
+            private readonly IValidationExtension _validationExtension;
+
+            public CommandValidator(IValidationExtension validationExtension)
             {
-                RuleFor(x => x.NewFutureSaving).SetValidator(new FutureSavingValidator());
+                _validationExtension = validationExtension;
+                RuleFor(x => x.NewFutureSaving).SetValidator(new FutureSavingValidator(_validationExtension));
             }
         }
 

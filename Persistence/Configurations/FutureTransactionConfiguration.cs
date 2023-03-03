@@ -15,6 +15,11 @@ namespace Persistence.Configurations
         public void Configure(EntityTypeBuilder<FutureTransaction> builder)
         {
             builder.Property(ft => ft.Date).HasColumnType("Date");
+
+            builder.HasMany(ft => ft.CompletedTransactions)
+                .WithOne(t => t.FutureTransaction)
+                .HasForeignKey(t => t.FutureTransactionId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

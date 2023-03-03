@@ -23,7 +23,9 @@ namespace API.Extensions
 
             services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlite(config.GetConnectionString("DefaultConnection"));
+                options.UseSqlite(
+                    config.GetConnectionString("DefaultConnection"),
+                    b => b.MigrationsAssembly(typeof(DataContext).Assembly.FullName));
             });
 
             services.AddCors(options =>
@@ -37,7 +39,7 @@ namespace API.Extensions
                 });
             });
 
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(List.Handler))));
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<Create>();

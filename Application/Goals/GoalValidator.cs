@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.Interfaces;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,18 @@ namespace Application.Goals
 {
     public class GoalValidator : AbstractValidator<GoalDto>
     {
-        public GoalValidator()
+        private readonly IValidationExtension _validationExtension;
+
+        public GoalValidator(IValidationExtension validationExtension)
         {
+            _validationExtension = validationExtension;
+
             RuleFor(x => x.Name).NotEmpty()
                     .WithMessage("Name is required")
                 .MaximumLength(16)
-                    .WithMessage("Goal name is too long, maximum length is 16");
+                    .WithMessage("Goal name is too long, maximum length is 16")
+                .Must(gn => _validationExtension.UniqueGoalName(gn).Result)
+                    .WithMessage("Goal with this name already exists");
 
             RuleFor(x => x.RequiredAmount).GreaterThan(0)
                 .WithMessage("Required amount must be greater than 0");

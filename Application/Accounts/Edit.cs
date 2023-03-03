@@ -5,7 +5,6 @@ using Domain;
 using FluentValidation;
 using MediatR;
 using Persistence;
-using Persistence.Migrations;
 using System;
 using System.Collections.Generic;
 using System.Linq;

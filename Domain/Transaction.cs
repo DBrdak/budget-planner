@@ -17,7 +17,7 @@ namespace Domain
         public Guid AccountId { get; set; }
         public Account Account { get; set; }
 
-        public Guid FutureTransactionId { get; set; }
+        public Guid? FutureTransactionId { get; set; }
         public FutureTransaction FutureTransaction { get; set; }
 
         public Guid BudgetId { get; set; }

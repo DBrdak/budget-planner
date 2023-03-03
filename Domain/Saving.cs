@@ -21,7 +21,8 @@ namespace Domain
         public Guid GoalId { get; set; }
         public Goal Goal { get; set; }
 
-        public Guid FutureSavingId { get; set; }
+        public Guid? FutureSavingId { get; set; }
+
         public FutureSaving FutureSaving { get; set; }
 
         public Guid BudgetId { get; set; }

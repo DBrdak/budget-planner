@@ -1,11 +1,11 @@
 ﻿using Application.Core;
 using Application.DTO;
+using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using FluentValidation;
 using MediatR;
 using Persistence;
-using Persistence.Migrations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,9 +23,12 @@ namespace Application.Goals
 
         public class CommandValidator : AbstractValidator<Command>
         {
-            public CommandValidator()
+            private readonly IValidationExtension _validationExtension;
+
+            public CommandValidator(IValidationExtension validationExtension)
             {
-                RuleFor(x => x.NewGoal).SetValidator(new GoalValidator());
+                _validationExtension = validationExtension;
+                RuleFor(x => x.NewGoal).SetValidator(new GoalValidator(_validationExtension));
             }
         }
 

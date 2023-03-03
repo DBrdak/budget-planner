@@ -18,11 +18,6 @@ namespace Persistence.Configurations
             builder.HasOne(s => s.Goal)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasOne(s => s.FutureSaving)
-                .WithMany(fs => fs.CompletedSavings)
-                .HasForeignKey(s => s.FutureSavingId)
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

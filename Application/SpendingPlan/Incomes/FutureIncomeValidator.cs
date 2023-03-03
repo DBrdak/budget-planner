@@ -18,9 +18,8 @@ namespace Application.SpendingPlan
         {
             _validationExtension = validationExtension;
 
-            RuleFor(x => x.AccountName).NotEmpty()
-                .WithMessage("Account name is required");
-            // Dodać walidację z account exists
+            RuleFor(x => x.AccountName).Must(an => _validationExtension.AccountTypeOf(an, "Checking").Result)
+                .WithMessage("Wrong account choosen");
             RuleFor(x => x.Date).NotEmpty().Must(d => d > DateTime.UtcNow)
                 .WithMessage("Pick future date");
             RuleFor(x => x.Amount).Must(a => a > 0)

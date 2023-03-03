@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain;
+using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
@@ -10,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Validation
 {
+    // Export functions to other classes
+
     public class ValidationExtension : IValidationExtension
     {
         private readonly DataContext _context;
@@ -23,46 +26,86 @@ namespace Infrastructure.Validation
             _budgetAccessor = budgetAccessor;
         }
 
-        async Task<bool> IValidationExtension.UniqueBudgetName(string newBudgetName)
+        public async Task<bool> UniqueBudgetName(string newBudgetName)
         {
             var budgetName = await _budgetAccessor.GetBudgetName();
 
             return await _context.Budgets
+                .AsNoTracking()
                 .Where(b => b.Name != budgetName)
                 .AnyAsync(b => b.Name.ToUpper() == newBudgetName.ToUpper());
         }
 
-        async Task<bool> IValidationExtension.UniqueEmail(string newEmail)
+        public async Task<bool> UniqueEmail(string newEmail)
         {
             return await _context.Users
+                .AsNoTracking()
                 .Where(u => u.UserName != _userAccessor.GetUsername())
-                .AnyAsync(u => u.Email == newEmail);
+                .AnyAsync(u => u.NormalizedEmail == newEmail.ToUpper());
         }
 
-        async Task<bool> IValidationExtension.UniqueUsername(string newUsername)
+        public async Task<bool> UniqueUsername(string newUsername)
         {
             return await _context.Users
+                .AsNoTracking()
                 .Where(u => u.UserName != _userAccessor.GetUsername())
-                .AnyAsync(u => u.UserName == newUsername);
+                .AnyAsync(u => u.NormalizedUserName == newUsername.ToUpper());
         }
 
-        async Task<bool> IValidationExtension.UniqueCategory(string categoryName, string categoryType)
+        public async Task<bool> UniqueCategory(string categoryName, string categoryType)
         {
             var budgetId = await _budgetAccessor.GetBudgetId();
 
             return !await _context.TransactionCategories
+                .AsNoTracking()
                 .Where(tc => tc.Type == categoryType
                     && tc.BudgetId == budgetId)
-                .AnyAsync(tc => tc.Value == categoryName);
+                .AnyAsync(tc => tc.Value.ToUpper() == categoryName.ToUpper());
         }
 
-        async Task<bool> IValidationExtension.AccountExists(string accountName)
+        public async Task<bool> AccountExists(string accountName)
         {
             var budgetId = await _budgetAccessor.GetBudgetId();
 
             return await _context.Accounts
+                .AsNoTracking()
                 .Where(a => a.BudgetId == budgetId)
                 .AnyAsync(a => a.Name == accountName);
+        }
+
+        public async Task<bool> AccountTypeOf(string accountName, string accountType)
+        {
+            var budgetId = await _budgetAccessor.GetBudgetId();
+
+            var account = await _context.Accounts
+                .AsNoTracking()
+                .Where(a => a.BudgetId == budgetId)
+                .FirstOrDefaultAsync(a => a.Name == accountName);
+
+            if (account == null)
+                return false;
+
+            return account.AccountType == accountType;
+        }
+
+        public async Task<bool> GoalExists(string goalName)
+        {
+            var budgetId = await _budgetAccessor.GetBudgetId();
+
+            return await _context.Goals
+                .AsNoTracking()
+                .Where(g => g.BudgetId == budgetId)
+                .AnyAsync(g => g.Name == goalName);
+        }
+
+        public async Task<bool> UniqueGoalName(string goalName)
+        {
+            var budgetId = await _budgetAccessor.GetBudgetId();
+
+            return !await _context.Goals
+                .AsNoTracking()
+                .Where(g => g.BudgetId == budgetId)
+                .AnyAsync(g => g.Name == goalName);
         }
     }
 }

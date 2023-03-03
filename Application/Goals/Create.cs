@@ -13,7 +13,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
-using Persistence.Migrations;
 
 namespace Application.Goals
 {
@@ -26,9 +25,12 @@ namespace Application.Goals
 
         public class CommandValidator : AbstractValidator<Command>
         {
-            public CommandValidator()
+            private readonly IValidationExtension _validationExtension;
+
+            public CommandValidator(IValidationExtension validationExtension)
             {
-                RuleFor(x => x.NewGoal).SetValidator(new GoalValidator());
+                _validationExtension = validationExtension;
+                RuleFor(x => x.NewGoal).SetValidator(new GoalValidator(_validationExtension));
             }
         }
 

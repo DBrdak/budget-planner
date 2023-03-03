@@ -14,6 +14,11 @@ namespace Persistence.Configurations
         public void Configure(EntityTypeBuilder<FutureSaving> builder)
         {
             builder.Property(fs => fs.Date).HasColumnType("Date");
+
+            builder.HasMany(ft => ft.CompletedSavings)
+                .WithOne(t => t.FutureSaving)
+                .HasForeignKey(t => t.FutureSavingId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

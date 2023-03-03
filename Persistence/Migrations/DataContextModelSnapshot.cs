@@ -184,7 +184,7 @@ namespace Persistence.Migrations
                     b.Property<Guid>("FromAccountId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("FutureSavingId")
+                    b.Property<Guid?>("FutureSavingId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("GoalId")
@@ -229,7 +229,7 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("Date");
 
-                    b.Property<Guid>("FutureTransactionId")
+                    b.Property<Guid?>("FutureTransactionId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
@@ -564,8 +564,7 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.FutureSaving", "FutureSaving")
                         .WithMany("CompletedSavings")
                         .HasForeignKey("FutureSavingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Goal", "Goal")
                         .WithMany()
@@ -607,8 +606,7 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.FutureTransaction", "FutureTransaction")
                         .WithMany("CompletedTransactions")
                         .HasForeignKey("FutureTransactionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Account");
 
