@@ -22,7 +22,7 @@ namespace Application.Goals
                 .MaximumLength(16)
                     .WithMessage("Goal name is too long, maximum length is 16")
                 .Must(gn => _validationExtension.UniqueGoalName(gn).Result)
-                    .WithMessage("Goal with this name already exists");
+                    .WithMessage(x => $"Goal with name {x.Name} already exists");
 
             RuleFor(x => x.RequiredAmount).GreaterThan(0)
                 .WithMessage("Required amount must be greater than 0");

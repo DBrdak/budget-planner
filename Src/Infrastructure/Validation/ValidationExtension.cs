@@ -26,32 +26,6 @@ namespace Infrastructure.Validation
             _budgetAccessor = budgetAccessor;
         }
 
-        public async Task<bool> UniqueBudgetName(string newBudgetName)
-        {
-            var budgetName = await _budgetAccessor.GetBudgetName();
-
-            return await _context.Budgets
-                .AsNoTracking()
-                .Where(b => b.Name != budgetName)
-                .AnyAsync(b => b.Name.ToUpper() == newBudgetName.ToUpper());
-        }
-
-        public async Task<bool> UniqueEmail(string newEmail)
-        {
-            return await _context.Users
-                .AsNoTracking()
-                .Where(u => u.UserName != _userAccessor.GetUsername())
-                .AnyAsync(u => u.NormalizedEmail == newEmail.ToUpper());
-        }
-
-        public async Task<bool> UniqueUsername(string newUsername)
-        {
-            return await _context.Users
-                .AsNoTracking()
-                .Where(u => u.UserName != _userAccessor.GetUsername())
-                .AnyAsync(u => u.NormalizedUserName == newUsername.ToUpper());
-        }
-
         public async Task<bool> UniqueCategory(string categoryName, string categoryType)
         {
             var budgetId = await _budgetAccessor.GetBudgetId();
@@ -60,7 +34,7 @@ namespace Infrastructure.Validation
                 .AsNoTracking()
                 .Where(tc => tc.Type == categoryType
                     && tc.BudgetId == budgetId)
-                .AnyAsync(tc => tc.Value.ToUpper() == categoryName.ToUpper());
+                .AnyAsync(tc => tc.Value == categoryName);
         }
 
         public async Task<bool> AccountExists(string accountName)
@@ -106,6 +80,16 @@ namespace Infrastructure.Validation
                 .AsNoTracking()
                 .Where(g => g.BudgetId == budgetId)
                 .AnyAsync(g => g.Name == goalName);
+        }
+
+        public async Task<bool> UniqueAccountName(string accountName)
+        {
+            var budgetId = await _budgetAccessor.GetBudgetId();
+
+            return !await _context.Accounts
+                .AsNoTracking()
+                .Where(a => a.BudgetId == budgetId)
+                .AnyAsync(a => a.Name == accountName);
         }
     }
 }

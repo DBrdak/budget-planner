@@ -23,14 +23,6 @@ namespace Persistence
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //new AccountConfiguration().Configure(builder.Entity<Account>());
-            //new BudgetConfiguration().Configure(builder.Entity<Budget>());
-            //new FutureSavingConfiguration().Configure(builder.Entity<FutureSaving>());
-            //new FutureTransactionConfiguration().Configure(builder.Entity<FutureTransaction>());
-            //new GoalConfiguration().Configure(builder.Entity<Goal>());
-            //new SavingConfiguration().Configure(builder.Entity<Saving>());
-            //new TransactionConfiguration().Configure(builder.Entity<Transaction>());
-
             builder.ApplyConfigurationsFromAssembly(typeof(FutureSavingConfiguration).Assembly);
 
             base.OnModelCreating(builder);

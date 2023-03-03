@@ -24,9 +24,9 @@ namespace Application.Profiles
 
         public class CommandValidator : AbstractValidator<Command>
         {
-            private readonly IValidationExtension _validationExtension;
+            private readonly IProfileValidationExtension _validationExtension;
 
-            public CommandValidator(IValidationExtension validationExtension)
+            public CommandValidator(IProfileValidationExtension validationExtension)
             {
                 _validationExtension = validationExtension;
 

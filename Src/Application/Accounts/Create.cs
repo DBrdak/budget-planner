@@ -25,9 +25,13 @@ namespace Application.Accounts
 
         public class CommandValidator : AbstractValidator<Command>
         {
-            public CommandValidator()
+            private readonly IValidationExtension _validationExtension;
+
+            public CommandValidator(IValidationExtension validationExtension)
             {
-                RuleFor(x => x.NewAccount).SetValidator(new AccountValidator());
+                _validationExtension = validationExtension;
+
+                RuleFor(x => x.NewAccount).SetValidator(new AccountValidator(_validationExtension));
             }
         }
 

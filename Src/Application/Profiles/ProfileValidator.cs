@@ -12,16 +12,15 @@ namespace Application.Profiles
 {
     public class ProfileValidator : AbstractValidator<ProfileDto>
     {
-        private readonly IValidationExtension _validationExtension;
+        private readonly IProfileValidationExtension _validationExtension;
 
-        public ProfileValidator(IValidationExtension validationExtension)
+        public ProfileValidator(IProfileValidationExtension validationExtension)
         {
             _validationExtension = validationExtension;
 
             RuleFor(x => x.Email).EmailAddress()
                 .WithMessage("Invalid email")
-                .Must((user, cancellation) =>
-                    !_validationExtension.UniqueEmail(user.Email).Result)
+                .Must(e => !_validationExtension.UniqueEmail(e).Result)
                 .WithMessage("Email must be unique");
 
             RuleFor(x => x.Username).NotEmpty()

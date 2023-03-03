@@ -48,6 +48,7 @@ namespace API.Extensions
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IBudgetAccessor, BudgetAccessor>();
             services.AddScoped<IValidationExtension, ValidationExtension>();
+            services.AddScoped<IProfileValidationExtension, ProfileValidationExtension>();
 
             return services;
         }
