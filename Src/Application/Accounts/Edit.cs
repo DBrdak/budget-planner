@@ -38,7 +38,7 @@ namespace Application.Accounts
                 _context = context;
             }
 
-            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var oldAccount = await _context.Accounts.FindAsync(request.NewAccount.Id);
 

@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Src\Persiste
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Src\Infrastructure\Infrastructure.csproj", "{EFDA331F-2EA4-4AE3-B90E-99E90937FCE4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Tests", "Tests\BudgetPlanner.Application.Tests\Application.Tests.csproj", "{FD24802C-6F17-49A5-9EEC-27EB4552D3F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{EFDA331F-2EA4-4AE3-B90E-99E90937FCE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFDA331F-2EA4-4AE3-B90E-99E90937FCE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFDA331F-2EA4-4AE3-B90E-99E90937FCE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD24802C-6F17-49A5-9EEC-27EB4552D3F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD24802C-6F17-49A5-9EEC-27EB4552D3F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD24802C-6F17-49A5-9EEC-27EB4552D3F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD24802C-6F17-49A5-9EEC-27EB4552D3F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

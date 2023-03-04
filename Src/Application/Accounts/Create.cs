@@ -50,6 +50,9 @@ namespace Application.Accounts
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
+                if (request.NewAccount is null)
+                    return null;
+
                 var newAccount = _mapper.Map<Account>(request.NewAccount);
 
                 var budgetId = await _budgetAccessor.GetBudgetId();

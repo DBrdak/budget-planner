@@ -42,6 +42,7 @@ namespace Application.Extras.Categories
                     return null;
 
                 var categories = await _context.TransactionCategories
+                    .AsNoTracking()
                     .Where(tc => tc.BudgetId == budgetId && tc.Type == "expenditure")
                     .ProjectTo<TransactionCategoryDto>(_mapper.ConfigurationProvider)
                     .ToListAsync();

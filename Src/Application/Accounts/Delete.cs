@@ -1,4 +1,6 @@
 ﻿using Application.Core;
+using Application.Interfaces;
+using Domain;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +37,7 @@ namespace Application.Accounts
                 _context = dataContext;
             }
 
-            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var account = await _context.Accounts.FindAsync(request.AccountId);
 
