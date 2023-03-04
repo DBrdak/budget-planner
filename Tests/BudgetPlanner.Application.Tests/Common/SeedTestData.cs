@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.Tests.Common
 {
-    public class SeedTestDb
+    public class SeedTestData
     {
         public static void Seed(DataContext context)
         {

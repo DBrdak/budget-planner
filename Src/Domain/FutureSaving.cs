@@ -11,7 +11,15 @@ namespace Domain
         public Guid Id { get; set; }
         public double Amount { get; set; }
 
-        public double CompletedAmount { get; set; } = 0;
+        public double CompletedAmount
+        {
+            get
+            {
+                return CompletedSavings.Select(cs => cs.Amount).Sum();
+            }
+            set => _ = 0;
+        }
+
         public DateTime Date { get; set; }
 
         public Goal Goal { get; set; }

@@ -16,7 +16,8 @@ namespace Persistence.Configurations
             builder.Property(s => s.Date).HasColumnType("Date");
 
             builder.HasOne(s => s.Goal)
-                .WithMany()
+                .WithMany(g => g.Savings)
+                .HasForeignKey(s => s.GoalId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

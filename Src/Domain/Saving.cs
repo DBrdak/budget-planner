@@ -18,7 +18,7 @@ namespace Domain
         public Guid ToAccountId { get; set; }
         public Account ToAccount { get; set; }
 
-        public Guid GoalId { get; set; }
+        public Guid? GoalId { get; set; }
         public Goal Goal { get; set; }
 
         public Guid? FutureSavingId { get; set; }

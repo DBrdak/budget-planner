@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230304223858_Fixes")]
+    partial class Fixes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -187,7 +190,7 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("FutureSavingId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("GoalId")
+                    b.Property<Guid>("GoalId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ToAccountId")
@@ -569,7 +572,8 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Goal", "Goal")
                         .WithMany("Savings")
                         .HasForeignKey("GoalId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Domain.Account", "ToAccount")
                         .WithMany("SavingsIn")

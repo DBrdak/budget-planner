@@ -34,7 +34,7 @@ namespace Application.Accounts
                 _mapper = mapper;
             }
 
-            async Task<Result<List<AccountDto>>> IRequestHandler<Query, Result<List<AccountDto>>>.Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<AccountDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var budgetId = await _budgetAccessor.GetBudgetId();
 

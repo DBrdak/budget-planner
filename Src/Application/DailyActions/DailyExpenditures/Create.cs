@@ -40,8 +40,6 @@ namespace Application.DailyActions.DailyExpenditures
             }
 
             // Podpowiedzi odnoszą się też do create income
-            // Do walidatorów nie chce mi się już pisać, bo za 5h wstaję, więc pisz jak coś
-            // Tam będzie dużo roboty, będzie trzeba też wstrzyknąć zależność do IValidationExtension
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
