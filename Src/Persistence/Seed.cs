@@ -71,17 +71,15 @@ namespace Persistence
                 var goals = new List<Goal> {
                     new Goal
                     {
-                        Name = "chuj",
+                        Name = "Vacation",
                         EndDate = ffdate,
-                        CurrentAmount = 234.21,
                         RequiredAmount = 222222.12,
                         Budget = budgets[0]
                     },
                     new Goal
                     {
-                        Name = "chujec",
+                        Name = "New Car",
                         EndDate = ffdate.AddDays(325),
-                        CurrentAmount = 1234.21,
                         RequiredAmount = 2112222.12,
                         Budget = budgets[0]
                     }
@@ -89,6 +87,28 @@ namespace Persistence
 
                 var fdate = DateTime.Today.AddDays(20);
                 var date = new DateTime(2022, 12, 1);
+
+                var sav = new List<Saving>
+                {
+                    new Saving
+                    {
+                        Budget= budgets[0],
+                        Date= date.AddDays(1),
+                        Amount=50,
+                        FromAccount=johnAccounts[0],
+                        ToAccount=johnAccounts[2],
+                        Goal=goals[1]
+                    },
+                    new Saving
+                    {
+                        Budget= budgets[0],
+                        Date= date.AddDays(11),
+                        Amount=200,
+                        FromAccount=johnAccounts[1],
+                        ToAccount=johnAccounts[2],
+                        Goal=goals[0]
+                    }
+                };
 
                 var fSav = new List<FutureSaving>
                 {
@@ -99,7 +119,11 @@ namespace Persistence
                         Amount=1201.21,
                         Goal = goals[0],
                         Date = fdate,
-                        Budget=budgets[0]
+                        Budget=budgets[0],
+                        CompletedSavings = new List<Saving>()
+                        {
+                            sav[1]
+                        }
                     },
                     new FutureSaving
                     {
@@ -109,6 +133,10 @@ namespace Persistence
                         Goal = goals[1],
                         Date = fdate.AddDays(5),
                         Budget=budgets[0],
+                        CompletedSavings = new List<Saving>()
+                        {
+                            sav[0]
+                        }
                     },
                 };
 
@@ -124,7 +152,7 @@ namespace Persistence
                     },
                     new FutureTransaction
                     {
-                        Category="Drugs",
+                        Category="Transport",
                         Amount=-8,
                         Account=johnAccounts[1],
                         Budget=budgets[0],
@@ -140,35 +168,11 @@ namespace Persistence
                     },
                     new FutureTransaction
                     {
-                        Category="Blowjob",
+                        Category="Freelance",
                         Amount=200,
                         Account=johnAccounts[1],
                         Budget=budgets[0],
                         Date=fdate.AddDays(1)
-                    }
-                };
-
-                var sav = new List<Saving>
-                {
-                    new Saving
-                    {
-                        Budget= budgets[0],
-                        Date= date.AddDays(1),
-                        Amount=50,
-                        FromAccount=johnAccounts[0],
-                        ToAccount=johnAccounts[2],
-                        Goal=goals[1],
-                        FutureSaving=fSav[1]
-                    },
-                    new Saving
-                    {
-                        Budget= budgets[0],
-                        Date= date.AddDays(11),
-                        Amount=200,
-                        FromAccount=johnAccounts[1],
-                        ToAccount=johnAccounts[2],
-                        Goal=goals[0],
-                        FutureSaving=fSav[0]
                     }
                 };
 
@@ -182,7 +186,7 @@ namespace Persistence
                     },
                     new TransactionCategory
                     {
-                        Value="Drugs",
+                        Value="Transport",
                         Budget=budgets[0],
                         Type="expenditure"
                     },
@@ -194,7 +198,7 @@ namespace Persistence
                     },
                     new TransactionCategory
                     {
-                        Value="Blowjob",
+                        Value="Freelance",
                         Budget=budgets[0],
                         Type="income"
                     },
@@ -217,8 +221,8 @@ namespace Persistence
                         Budget= budgets[0],
                         Date= date.AddDays(28),
                         Amount=-50,
-                        Title="Mefedron",
-                        Category="Drugs",
+                        Title="Fuel",
+                        Category="Transport",
                         Account=johnAccounts[1],
                         FutureTransaction = fTran[1]
                     },
@@ -237,8 +241,8 @@ namespace Persistence
                         Budget= budgets[0],
                         Date= date.AddDays(28),
                         Amount=50,
-                        Title="Prezes",
-                        Category="Blowjob",
+                        Title="Company",
+                        Category="Frelance",
                         Account=johnAccounts[1],
                         FutureTransaction = fTran[3]
                     }
