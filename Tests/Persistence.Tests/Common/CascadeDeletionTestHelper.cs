@@ -96,6 +96,41 @@ namespace Persistence.Tests.Common
                             expectedResult = context.Find(entity.Value, entity.Key) is null;
                     }
                     break;
+
+                case Type type when type == typeof(FutureTransaction):
+                    foreach (var entity in relatedEntities)
+                    {
+                        expectedResult = context.Find(entity.Value, entity.Key.ToString()) is not null;
+                    }
+                    break;
+
+                case Type type when type == typeof(Saving):
+                    foreach (var entity in relatedEntities)
+                    {
+                        expectedResult = context.Find(entity.Value, entity.Key.ToString()) is not null;
+                    }
+                    break;
+
+                case Type type when type == typeof(FutureSaving):
+                    foreach (var entity in relatedEntities)
+                    {
+                        expectedResult = context.Find(entity.Value, entity.Key.ToString()) is not null;
+                    }
+                    break;
+
+                case Type type when type == typeof(Goal):
+                    foreach (var entity in relatedEntities)
+                    {
+                        expectedResult = context.Find(entity.Value, entity.Key.ToString()) is not null;
+                    }
+                    break;
+
+                case Type type when type == typeof(TransactionCategory):
+                    foreach (var entity in relatedEntities)
+                    {
+                        expectedResult = context.Find(entity.Value, entity.Key.ToString()) is not null;
+                    }
+                    break;
             }
 
             return true;

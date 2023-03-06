@@ -13,10 +13,7 @@ namespace Domain
 
         public double CompletedAmount
         {
-            get
-            {
-                return CompletedSavings.Select(cs => cs.Amount).Sum();
-            }
+            get => CompletedSavings.Select(cs => cs.Amount).Sum();
             set => _ = 0;
         }
 
