@@ -67,16 +67,62 @@ namespace Persistence.Tests
         public async Task ShouldDeleteBudgetCascade()
         {
             //Arrange
+            var budget = await _context.Budgets.FirstOrDefaultAsync();
+
+            //Act
+            var dependentEntities = budget.GetType()
+                .Properties(_context, budget.Id)
+                .RelatedEntities(budget);
+
+            _context.Remove(budget);
+            await _context.SaveChangesAsync();
+
+            var result = dependentEntities.IfAllEntitiesHasBeenDeleted<Budget>(_context);
+
+            //Assert
+            result.ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task ShouldDeleteAccountCascade()
+        {
+            //Arrange
             var account = await _context.Accounts.FirstOrDefaultAsync();
 
             //Act
-            _context.Accounts.Remove(account);
+            var dependentEntities = account.GetType()
+                .Properties(_context, account.Id)
+                .RelatedEntities(account);
+
+            _context.Remove(account);
             await _context.SaveChangesAsync();
-            account = await _context.Accounts.FindAsync(account.Id);
+
+            var result = dependentEntities.IfAllEntitiesHasBeenDeleted<Account>(_context);
 
             //Assert
-            account.ShouldBeNull();
-            // Add more logic for finding if related objects behaviour was proper
+            result.ShouldBeTrue();
         }
+
+        [Fact]
+        public async Task ShouldDeleteTransactionCascade()
+        {
+            //Arrange
+            var transaction = await _context.Transactions.FirstOrDefaultAsync();
+
+            //Act
+            var dependentEntities = transaction.GetType()
+                .Properties(_context, transaction.Id)
+                .RelatedEntities(transaction);
+
+            _context.Remove(transaction);
+            await _context.SaveChangesAsync();
+
+            var result = dependentEntities.IfAllEntitiesHasBeenDeleted<Transaction>(_context);
+
+            //Assert
+            result.ShouldBeTrue();
+        }
+
+        // Add tests for other entities
     }
 }

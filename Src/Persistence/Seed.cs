@@ -15,88 +15,6 @@ namespace Persistence
         public static async Task SeedData(DataContext context,
             UserManager<User> userManager)
         {
-            //        if (!userManager.Users.Any() && !context.Budgets.Any() && !context.Goals.Any() && !context.Accounts.Any() &&
-            //!context.FutureTransactions.Any() && !context.FutureSavings.Any() && !context.Transactions.Any() && !context.Savings.Any())
-            //        {
-            //            var random = new Random(1);
-
-            //            // Users
-
-            //            var userGenerator = new Faker<User>()
-            //                .RuleFor(x => x.DisplayName, f => f.Person.FirstName)
-            //                .RuleFor(x => x.UserName, f => f.Person.FirstName.ToLower())
-            //                .RuleFor(x => x.Email, f => f.Person.Email);
-
-            //            var user = userGenerator.Generate(1);
-
-            //            await userManager.CreateAsync(user[0], "Pa$$w0rd");
-
-            //            // Budgets
-
-            //            var budgetGenerator = new Faker<Budget>()
-            //                .RuleFor(x => x.Name, f => f.Name.FirstName() + "budget");
-
-            //            var budget = budgetGenerator.Generate(1);
-
-            //            budget[0].User = user[0];
-
-            //            // Accounts
-
-            //            var accountGenerator = new Faker<Account>()
-            //                .RuleFor(x => x.AccountType, f => f.PickRandom(new List<string> { "Saving", "Checking" }))
-            //                .RuleFor(x => x.Name, f => f.Hacker.Noun())
-            //                .RuleFor(x => x.Balance, f => f.Random.Double(-150, 20000))
-            //                .RuleFor(x => x.Budget, f => budget[0]);
-
-            //            var accounts = accountGenerator.Generate(5);
-
-            //            // Goals
-
-            //            var goalGenerator = new Faker<Goal>()
-            //                .RuleFor(x => x.Budget, f => budget[0])
-            //                .RuleFor(x => x.EndDate, f => f.Date.Future(1, DateTime.Now))
-            //                .RuleFor(x => x.RequiredAmount, f => f.Random.Double(1000, 500000))
-            //                .RuleFor(x => x.CurrentAmount, f => f.Random.Double(0, 1000))
-            //                .RuleFor(x => x.Description, f => f.Lorem.Sentence(15))
-            //                .RuleFor(x => x.Name, f => f.Hacker.Noun());
-
-            //            var goals = goalGenerator.Generate(6);
-
-            //            // Future Transactions
-
-            //            var futureTransactionGenerator = new Faker<FutureTransaction>()
-            //                .RuleFor(x => x.Budget, f => budget[0])
-            //                .RuleFor(x => x.Account, f => f.PickRandom(accounts.Where(a => a.AccountType == "Checking")))
-            //                .RuleFor(x => x.Date, f => f.Date.Future(0, DateTime.UtcNow.AddDays(-30)))
-            //                .RuleFor(x => x.Category, f => f.Hacker.Noun())
-            //                .RuleFor(x => x.Amount, f => f.Random.Double(-2000, 5000));
-
-            //            var futureTransactions = futureTransactionGenerator.Generate(150);
-
-            //            // Transaction Categories
-
-            //            var categories = new List<TransactionCategory>();
-
-            //            foreach (var futureTransaction in futureTransactions)
-            //            {
-            //                var category = new TransactionCategory
-            //                {
-            //                    Value = futureTransaction.Category,
-            //                    Type = futureTransaction.Amount < 0 ? "expenditure" : "income"
-            //                };
-
-            //                categories.Add(category);
-            //            }
-
-            //            // Transactions
-
-            //            var transactionGenerator = new Faker<Transaction>()
-            //                .RuleFor(x => x.Budget, f => budget[0])
-            //                .RuleFor(x => x.Date, f => f.Date.Past(0, DateTime.Now))
-            //                .RuleFor(x => x.Category, f => f.PickRandom(categories.Select(c => c.Value)))
-            //                .RuleFor(x => x.Amount, f => f.Random.Double(-200, 5000));
-            //        }
-
             if (!userManager.Users.Any() && !context.Budgets.Any() && !context.Goals.Any() && !context.Accounts.Any() &&
                 !context.FutureTransactions.Any() && !context.FutureSavings.Any() && !context.Transactions.Any() && !context.Savings.Any())
             {
@@ -339,3 +257,85 @@ namespace Persistence
         }
     }
 }
+
+//        if (!userManager.Users.Any() && !context.Budgets.Any() && !context.Goals.Any() && !context.Accounts.Any() &&
+//!context.FutureTransactions.Any() && !context.FutureSavings.Any() && !context.Transactions.Any() && !context.Savings.Any())
+//        {
+//            var random = new Random(1);
+
+//            // Users
+
+//            var userGenerator = new Faker<User>()
+//                .RuleFor(x => x.DisplayName, f => f.Person.FirstName)
+//                .RuleFor(x => x.UserName, f => f.Person.FirstName.ToLower())
+//                .RuleFor(x => x.Email, f => f.Person.Email);
+
+//            var user = userGenerator.Generate(1);
+
+//            await userManager.CreateAsync(user[0], "Pa$$w0rd");
+
+//            // Budgets
+
+//            var budgetGenerator = new Faker<Budget>()
+//                .RuleFor(x => x.Name, f => f.Name.FirstName() + "budget");
+
+//            var budget = budgetGenerator.Generate(1);
+
+//            budget[0].User = user[0];
+
+//            // Accounts
+
+//            var accountGenerator = new Faker<Account>()
+//                .RuleFor(x => x.AccountType, f => f.PickRandom(new List<string> { "Saving", "Checking" }))
+//                .RuleFor(x => x.Name, f => f.Hacker.Noun())
+//                .RuleFor(x => x.Balance, f => f.Random.Double(-150, 20000))
+//                .RuleFor(x => x.Budget, f => budget[0]);
+
+//            var accounts = accountGenerator.Generate(5);
+
+//            // Goals
+
+//            var goalGenerator = new Faker<Goal>()
+//                .RuleFor(x => x.Budget, f => budget[0])
+//                .RuleFor(x => x.EndDate, f => f.Date.Future(1, DateTime.Now))
+//                .RuleFor(x => x.RequiredAmount, f => f.Random.Double(1000, 500000))
+//                .RuleFor(x => x.CurrentAmount, f => f.Random.Double(0, 1000))
+//                .RuleFor(x => x.Description, f => f.Lorem.Sentence(15))
+//                .RuleFor(x => x.Name, f => f.Hacker.Noun());
+
+//            var goals = goalGenerator.Generate(6);
+
+//            // Future Transactions
+
+//            var futureTransactionGenerator = new Faker<FutureTransaction>()
+//                .RuleFor(x => x.Budget, f => budget[0])
+//                .RuleFor(x => x.Account, f => f.PickRandom(accounts.Where(a => a.AccountType == "Checking")))
+//                .RuleFor(x => x.Date, f => f.Date.Future(0, DateTime.UtcNow.AddDays(-30)))
+//                .RuleFor(x => x.Category, f => f.Hacker.Noun())
+//                .RuleFor(x => x.Amount, f => f.Random.Double(-2000, 5000));
+
+//            var futureTransactions = futureTransactionGenerator.Generate(150);
+
+//            // Transaction Categories
+
+//            var categories = new List<TransactionCategory>();
+
+//            foreach (var futureTransaction in futureTransactions)
+//            {
+//                var category = new TransactionCategory
+//                {
+//                    Value = futureTransaction.Category,
+//                    Type = futureTransaction.Amount < 0 ? "expenditure" : "income"
+//                };
+
+//                categories.Add(category);
+//            }
+
+//            // Transactions
+
+//            var transactionGenerator = new Faker<Transaction>()
+//                .RuleFor(x => x.Budget, f => budget[0])
+//                .RuleFor(x => x.Date, f => f.Date.Past(0, DateTime.Now))
+//                .RuleFor(x => x.Category, f => f.PickRandom(categories.Select(c => c.Value)))
+//                .RuleFor(x => x.Amount, f => f.Random.Double(-200, 5000));
+//        }
