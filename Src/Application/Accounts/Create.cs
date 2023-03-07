@@ -31,7 +31,8 @@ namespace Application.Accounts
             {
                 _validationExtension = validationExtension;
 
-                RuleFor(x => x.NewAccount).SetValidator(new AccountValidator(_validationExtension));
+                RuleFor(x => x.NewAccount).NotEmpty()
+                    .SetValidator(new AccountValidator(_validationExtension));
             }
         }
 
@@ -50,16 +51,11 @@ namespace Application.Accounts
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                if (request.NewAccount is null)
-                    return null;
-
                 var newAccount = _mapper.Map<Account>(request.NewAccount);
 
-                var budgetId = await _budgetAccessor.GetBudgetId();
+                newAccount.BudgetId = await _budgetAccessor.GetBudgetId();
 
-                newAccount.Budget = await _context.Budgets.FindAsync(budgetId);
-
-                if (newAccount.Budget == null)
+                if (newAccount.BudgetId == Guid.Empty)
                     return null;
 
                 await _context.Accounts.AddAsync(newAccount);
