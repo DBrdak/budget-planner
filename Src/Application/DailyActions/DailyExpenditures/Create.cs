@@ -43,45 +43,18 @@ namespace Application.DailyActions.DailyExpenditures
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                // Nie mapujemy, zbyt duzy koszt wydajności, zamiast tego spróbuj tradycyjnie stworzyć nowy obiekt typu Transaction
-                var newExpenditure = _mapper.Map<Transaction>(request.NewExpenditure);
+                Transaction newExpenditure = new Transaction();
 
-                var budgetName = await _budgetAccessor.GetBudgetName();
+                var budgetId = await _budgetAccessor.GetBudgetId();
 
-                newExpenditure.Budget = await _context.Budgets
-                    .FirstOrDefaultAsync(b => b.Name == budgetName);
-
-                newExpenditure.Account = await _context.Accounts
-                    .FirstOrDefaultAsync(a => a.Name == request.NewExpenditure.AccountName
-                    && a.Budget.Name == budgetName);
-
-                // Brakuje tu ustalenia wartości dla FutureTransaction (patrz Domain.Transaction)
-                // W _context musisz znaleźć taki obiekt FutureTransaction,
-                // który będzie miał taką samą kategorię jak tworzone Transaction
-                // w kodzie nie znajdziesz podpowiedzi, pamiętaj o await oraz szukaniu kategorii tylko dla aktualnego budżetu,
-                // Możesz wydzierżawić funkcję szukania kategorii do interfejsu w Interfaces (musiałbyś stworzyć nowy)
-                // potem implementując go w Infrastructure
+                newExpenditure.FutureTransaction = await _context.FutureTransactions.FirstOrDefaultAsync(t => t.Category == request.NewExpenditure.Category && t.BudgetId== budgetId);
 
                 if (newExpenditure.Budget == null
                     || newExpenditure.Account == null)
                     return null;
 
-                // Kategorię tworzymy tylko w spending planie
-                // Kategoria to coś co użytkownik tworzy tylko i wyłącznie w spending planie
-                // potem w momencie gdy dodaje daily actions musi sprecyzować do jakiej kategorii utworzonej wcześniej
-                // chce przypisać nowy wydatek/ zarobek
-                var category = new TransactionCategory
-                {
-                    Value = newExpenditure.Category,
-                    Budget = await _budgetAccessor.GetBudget(),
-                    Type = "expenditure"
-                };
-
-                // Musisz dodać do completed amount odpowiedniego future transaction wartość amount
-
                 await _context.Transactions.AddAsync(newExpenditure);
-                // Wypierdol
-                await _context.TransactionCategories.AddAsync(category);
+
                 var fail = await _context.SaveChangesAsync() < 0;
 
                 if (fail)
