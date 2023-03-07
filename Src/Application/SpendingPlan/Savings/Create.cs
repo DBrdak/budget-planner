@@ -56,8 +56,7 @@ namespace Application.SpendingPlan.Savings
 
                 var budgetId = await _budgetAccessor.GetBudgetId();
 
-                newFutureSaving.Budget = await _context.Budgets
-                    .FindAsync(budgetId);
+                newFutureSaving.BudgetId = budgetId;
 
                 newFutureSaving.FromAccount = await _context.Accounts
                     .FirstOrDefaultAsync(a => a.Name == request.NewFutureSaving.FromAccountName
@@ -71,7 +70,7 @@ namespace Application.SpendingPlan.Savings
                     .FirstOrDefaultAsync(g => g.Name == request.NewFutureSaving.GoalName
                     && g.Budget.Id == budgetId);
 
-                if (newFutureSaving.Budget == null
+                if (newFutureSaving.BudgetId == Guid.Empty
                     || newFutureSaving.ToAccount == null
                     || newFutureSaving.FromAccount == null)
                     return null;

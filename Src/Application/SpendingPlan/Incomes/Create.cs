@@ -58,21 +58,20 @@ namespace Application.SpendingPlan.Incomes
 
                 var budgetId = await _budgetAccessor.GetBudgetId();
 
-                newFutureIncome.Budget = await _context.Budgets
-                    .FindAsync(budgetId);
+                newFutureIncome.BudgetId = budgetId;
 
                 newFutureIncome.Account = await _context.Accounts
                     .FirstOrDefaultAsync(a => a.Name == request.NewFutureIncome.AccountName
                     && a.Budget.Id == budgetId);
 
-                if (newFutureIncome.Budget == null
+                if (newFutureIncome.BudgetId == Guid.Empty
                     || newFutureIncome.Account == null)
                     return null;
 
                 var category = new TransactionCategory
                 {
                     Value = newFutureIncome.Category,
-                    Budget = await _budgetAccessor.GetBudget(),
+                    BudgetId = budgetId,
                     Type = "income"
                 };
 
