@@ -69,10 +69,13 @@ namespace Persistence
                         break;
 
                     case EntityState.Deleted:
-                        futureSaving = entry.Entity.FutureSaving;
-                        goal = entry.Entity.Goal;
-                        futureSaving.CompletedAmount -= entry.Entity.Amount;
-                        goal.CurrentAmount -= entry.Entity.Amount;
+                        var futureSavingId = entry.OriginalValues.Clone().GetValue<Guid>("FutureSavingId");
+                        var goalId = entry.OriginalValues.Clone().GetValue<Guid>("GoalId");
+                        futureSaving = entry.Context.Find<FutureSaving>(futureSavingId);
+                        goal = entry.Context.Find<Goal>(goalId);
+                        var amount = entry.OriginalValues.GetValue<double>("Amount");
+                        futureSaving.CompletedAmount -= amount;
+                        goal.CurrentAmount -= amount;
                         break;
                 }
             }
