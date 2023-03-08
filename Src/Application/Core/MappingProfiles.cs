@@ -56,6 +56,9 @@ namespace Application.Core
 
             //Set
 
+            CreateMap<ExpenditureDto, Transaction>()
+                .ForMember(d => d.Amount, o => o.MapFrom(s => -s.Amount));
+
             CreateMap<FutureExpenditureDto, FutureTransaction>()
                 .ForMember(d => d.Amount, o => o.MapFrom(s => -s.Amount));
 

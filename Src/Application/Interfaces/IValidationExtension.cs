@@ -10,6 +10,8 @@ namespace Application.Interfaces
     {
         public Task<bool> UniqueCategory(string categoryName, string categoryType);
 
+        public Task<bool> CategoryExists(string categoryName, string categoryType);
+
         public Task<bool> AccountExists(string accountName);
 
         public Task<bool> AccountTypeOf(string accountName, string accountType);

@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.Interfaces;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,31 @@ namespace Application.DailyActions.DailyExpenditures
 {
     public class ExpenditureValidator : AbstractValidator<ExpenditureDto>
     {
-        // Musimy zwalidować:
-        // Amount -> większe niż zero
-        // Title -> wymagany
-        // Date -> mniejszy lub równy niż aktualny czas
-        // Category -> tu musisz w ValidationExtension stworzyć metodę
-        // która sprawdza czy podana kategoria występuje w tabeli FutureTransactions
-        // AccountName -> tu musisz wykorzystać metodę z ValidationExtension, AccountExists()
-        // Do każdej property musimy dać jakiś message dla clienta
+        private readonly IValidationExtension _validationExtension;
+
+        public ExpenditureValidator(IValidationExtension validationExtension)
+        {
+            _validationExtension = validationExtension;
+
+            RuleFor(x => x.Title)
+                .NotEmpty()
+                    .WithMessage("Title is required")
+                .MaximumLength(16)
+                    .WithMessage("Title maximum length is 16");
+            RuleFor(x => x.Amount)
+                .NotEmpty()
+                    .WithMessage("Amount is required")
+                .GreaterThan(0)
+                    .WithMessage("Amount must be greater than 0");
+            RuleFor(x => x.Date)
+                .Must(x => x <= DateTime.UtcNow)
+                    .WithMessage("Specify past or current date");
+            RuleFor(x => x.AccountName)
+                .Must(x => _validationExtension.AccountExists(x).Result)
+                    .WithMessage(x => $"Account named {x.AccountName} doesn't exists");
+            RuleFor(x => x.Category)
+                .Must(x => _validationExtension.CategoryExists(x, "expenditure").Result)
+                    .WithMessage(x => $"Category named {x.Category} does't exists");
+        }
     }
 }

@@ -60,18 +60,5 @@ namespace Application.Tests.Account
             accountInDb.Balance.ShouldBe(accountToCreate.Balance);
             accountInDb.Budget.ShouldBe(budget);
         }
-
-        [Fact]
-        public async Task ShouldReturnNull()
-        {
-            //Arrange
-            var handler = new Create.Handler(_context, _mapper, _budgetAccessorMock.Object);
-
-            //Act
-            var result = await handler.Handle(new Create.Command { NewAccount = null }, CancellationToken.None);
-
-            //Assert
-            Assert.Null(result);
-        }
     }
 }

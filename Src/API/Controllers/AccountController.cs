@@ -8,7 +8,7 @@ namespace API.Controllers
     public class AccountController : BaseController
     {
         [HttpGet]
-        [Description("Gets all accounts with ")]
+        [Description("Gets all accounts from current budget")]
         public async Task<IActionResult> GetAccounts()
         {
             return HandleResult(await Mediator.Send(new List.Query()));
