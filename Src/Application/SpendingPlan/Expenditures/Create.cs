@@ -60,7 +60,7 @@ namespace Application.SpendingPlan.Expenditures
 
                 newFutureExpenditure.Account = await _context.Accounts
                     .FirstOrDefaultAsync(a => a.Name == request.NewFutureExpenditure.AccountName
-                    && a.Budget.Id == budgetId);
+                        && a.Budget.Id == budgetId);
 
                 if (newFutureExpenditure.BudgetId == Guid.Empty
                     || newFutureExpenditure.Account == null)

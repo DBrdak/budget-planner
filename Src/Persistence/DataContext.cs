@@ -1,6 +1,7 @@
 ﻿using Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.VisualBasic;
 using Persistence.Configurations;
 using System;
@@ -36,5 +37,47 @@ namespace Persistence
         public DbSet<Saving> Savings { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TransactionCategory> TransactionCategories { get; set; }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            foreach (var entry in ChangeTracker.Entries<Transaction>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        var futureTransaction = entry.Entity.FutureTransaction;
+                        futureTransaction.CompletedAmount += entry.Entity.Amount;
+                        break;
+
+                    case EntityState.Deleted:
+                        var futureTransactionId = entry.OriginalValues.Clone().GetValue<Guid>("FutureTransactionId");
+                        futureTransaction = entry.Context.Find<FutureTransaction>(futureTransactionId);
+                        futureTransaction.CompletedAmount -= entry.OriginalValues.GetValue<double>("Amount");
+                        break;
+                }
+            }
+
+            foreach (var entry in ChangeTracker.Entries<Saving>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        var futureSaving = entry.Entity.FutureSaving;
+                        var goal = entry.Entity.Goal;
+                        futureSaving.CompletedAmount += entry.Entity.Amount;
+                        goal.CurrentAmount += entry.Entity.Amount;
+                        break;
+
+                    case EntityState.Deleted:
+                        futureSaving = entry.Entity.FutureSaving;
+                        goal = entry.Entity.Goal;
+                        futureSaving.CompletedAmount -= entry.Entity.Amount;
+                        goal.CurrentAmount -= entry.Entity.Amount;
+                        break;
+                }
+            }
+
+            return base.SaveChangesAsync(cancellationToken);
+        }
     }
 }

@@ -31,7 +31,7 @@ namespace Application.Accounts
             {
                 _validationExtension = validationExtension;
 
-                RuleFor(x => x.NewAccount).NotEmpty()
+                RuleFor(x => x.NewAccount).NotNull()
                     .SetValidator(new AccountValidator(_validationExtension));
             }
         }

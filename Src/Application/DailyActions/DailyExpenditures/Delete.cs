@@ -3,6 +3,7 @@ using Application.Interfaces;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Persistence;
 using System;
 using System.Collections.Generic;
@@ -38,19 +39,13 @@ namespace Application.DailyActions.DailyExpenditures
             {
                 var expenditure = await _context.Transactions.FindAsync(request.ExpenditureId);
 
-                if (expenditure == null)
+                var budgetId = await _budgetAccessor.GetBudgetId();
+
+                if (expenditure == null
+                    || budgetId == Guid.Empty)
                     return null;
 
-                // Nie usuwamy kategorii
-
-                var category = await _context.TransactionCategories
-                    .FirstOrDefaultAsync(tc => tc.Value == expenditure.Category
-                    && tc.BudgetId == _budgetAccessor.GetBudget().Result.Id);
-
-                // Musisz też odjąć od completed amount (w odpowiednim future transaction) amount z expenditure
-
                 _context.Transactions.Remove(expenditure);
-                _context.TransactionCategories.Remove(category);
 
                 var fail = await _context.SaveChangesAsync() < 0;
 

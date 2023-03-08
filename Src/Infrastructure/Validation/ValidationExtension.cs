@@ -37,6 +37,8 @@ namespace Infrastructure.Validation
                 .AnyAsync(tc => tc.Value == categoryName);
         }
 
+        public async Task<bool> CategoryExists(string categoryName, string categoryType) => !await UniqueCategory(categoryName, categoryType);
+
         public async Task<bool> AccountExists(string accountName)
         {
             var budgetId = await _budgetAccessor.GetBudgetId();

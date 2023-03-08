@@ -11,11 +11,7 @@ namespace Domain
         public Guid Id { get; set; }
         public double Amount { get; set; }
 
-        public double CompletedAmount
-        {
-            get => CompletedSavings.Select(cs => cs.Amount).Sum();
-            set => _ = 0;
-        }
+        public double CompletedAmount { get; set; }
 
         public DateTime Date { get; set; }
 
@@ -30,5 +26,7 @@ namespace Domain
 
         public Guid BudgetId { get; set; }
         public Budget Budget { get; set; }
+
+        public void SetCompletedAmount() => CompletedAmount = CompletedSavings.Select(ct => ct.Amount).Sum();
     }
 }

@@ -24,7 +24,17 @@ namespace Application.DailyActions.DailyExpenditures
             public ExpenditureDto NewExpenditure { get; set; }
         }
 
-        //Place for validator
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            private readonly IValidationExtension _validationExtension;
+
+            public CommandValidator(IValidationExtension validationExtension)
+            {
+                _validationExtension = validationExtension;
+
+                RuleFor(x => x.NewExpenditure).SetValidator(new ExpenditureValidator(_validationExtension));
+            }
+        }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
@@ -39,22 +49,23 @@ namespace Application.DailyActions.DailyExpenditures
                 _budgetAccessor = budgetAccessor;
             }
 
-            // Podpowiedzi odnoszą się też do create income
-
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                Transaction newExpenditure = new Transaction();
+                var newExpenditure = _mapper.Map<Transaction>(request.NewExpenditure);
 
                 var budgetId = await _budgetAccessor.GetBudgetId();
 
-                newExpenditure.FutureTransaction = await _context.FutureTransactions.FirstOrDefaultAsync(t => t.Category == request.NewExpenditure.Category && t.BudgetId== budgetId);
+                newExpenditure.BudgetId = budgetId;
 
-                if (newExpenditure.Budget == null
-                    || newExpenditure.Account == null)
-                    return null;
+                newExpenditure.Account = await _context.Accounts
+                    .FirstOrDefaultAsync(a => a.Name == request.NewExpenditure.AccountName
+                        && a.BudgetId == budgetId);
+
+                newExpenditure.FutureTransaction = await _context.FutureTransactions
+                    .FirstOrDefaultAsync(ft => ft.Category == request.NewExpenditure.Category
+                        && ft.BudgetId == budgetId);
 
                 await _context.Transactions.AddAsync(newExpenditure);
-
                 var fail = await _context.SaveChangesAsync() < 0;
 
                 if (fail)
