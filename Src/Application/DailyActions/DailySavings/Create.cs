@@ -25,17 +25,6 @@ namespace Application.DailyActions.DailySavings
             public SavingDto NewSaving { get; set; }
         }
 
-        public class CommandValidator : AbstractValidator<Command>
-        {
-            private readonly IValidationExtension _validationExtension;
-
-            public CommandValidator(IValidationExtension validationExtension)
-            {
-                _validationExtension = validationExtension;
-
-                RuleFor(x => x.NewSaving).SetValidator(new SavingValidator(_validationExtension));
-            }
-        }
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
