@@ -29,9 +29,8 @@ namespace Application.DailyActions.DailyIncomes
                 .Must(x => _validationExtension.AccountExists(x).Result)
                     .WithMessage(x => $"Account named {x.AccountName} doesn't exists");
             RuleFor(x => x.Category)
-                .Must(x => _validationExtension.CategoryExists(x, "expenditure").Result)
+                .Must(x => _validationExtension.CategoryExists(x, "income").Result)
                     .WithMessage(x => $"Category named {x.Category} does't exists");
         }
-
     }
 }
