@@ -1,14 +1,8 @@
 ﻿using Application.Core;
 using Application.Interfaces;
-using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.DailyActions.DailyIncomes
 {
@@ -36,15 +30,13 @@ namespace Application.DailyActions.DailyIncomes
             {
                 var income = await _context.Transactions.FindAsync(request.IncomeId);
 
-                if (income == null)
+                var budgetId = await _budgetAccessor.GetBudgetId();
+
+                if (income == null
+                    || budgetId == Guid.Empty)
                     return null;
 
-                var category = await _context.TransactionCategories
-                    .FirstOrDefaultAsync(tc => tc.Value == income.Category
-                    && tc.BudgetId == _budgetAccessor.GetBudget().Result.Id);
-
                 _context.Transactions.Remove(income);
-                _context.TransactionCategories.Remove(category);
 
                 var fail = await _context.SaveChangesAsync() < 0;
 

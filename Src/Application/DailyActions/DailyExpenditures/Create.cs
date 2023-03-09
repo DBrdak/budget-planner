@@ -4,16 +4,9 @@ using Application.DTO;
 using Domain;
 using MediatR;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
-using System.Net.Http;
 
 namespace Application.DailyActions.DailyExpenditures
 {
@@ -63,7 +56,7 @@ namespace Application.DailyActions.DailyExpenditures
 
                 newExpenditure.FutureTransaction = await _context.FutureTransactions
                     .FirstOrDefaultAsync(ft => ft.Category == request.NewExpenditure.Category
-                        && ft.BudgetId == budgetId);
+                        && ft.BudgetId == budgetId && ft.Amount < 0);
 
                 await _context.Transactions.AddAsync(newExpenditure);
                 var fail = await _context.SaveChangesAsync() < 0;

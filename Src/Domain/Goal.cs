@@ -21,7 +21,5 @@ namespace Domain
         public Budget Budget { get; set; }
 
         public IEnumerable<Saving> Savings { get; set; } = new List<Saving>();
-
-        public void SetCompletedAmount() => CurrentAmount = Savings.Select(ct => ct.Amount).Sum();
     }
 }
