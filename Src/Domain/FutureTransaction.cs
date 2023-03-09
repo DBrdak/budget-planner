@@ -24,11 +24,5 @@ namespace Domain
 
         public Guid BudgetId { get; set; }
         public Budget Budget { get; set; }
-
-        public void SetCompletedAmount()
-        {
-            var s = CompletedTransactions.Select(ct => ct.Amount).Sum();
-            CompletedAmount = s;
-        }
     }
 }

@@ -46,13 +46,23 @@ namespace Persistence
                 {
                     case EntityState.Added:
                         var futureTransaction = entry.Entity.FutureTransaction;
-                        futureTransaction.CompletedAmount += entry.Entity.Amount;
+                        var account = entry.Entity.Account;
+                        var amount = entry.Entity.Amount;
+
+                        futureTransaction.CompletedAmount += amount;
+                        account.Balance += amount;
                         break;
 
                     case EntityState.Deleted:
                         var futureTransactionId = entry.OriginalValues.Clone().GetValue<Guid>("FutureTransactionId");
+                        var accountId = entry.OriginalValues.Clone().GetValue<Guid>("AccountId");
+                        amount = entry.OriginalValues.GetValue<double>("Amount");
+
                         futureTransaction = entry.Context.Find<FutureTransaction>(futureTransactionId);
-                        futureTransaction.CompletedAmount -= entry.OriginalValues.GetValue<double>("Amount");
+                        account = entry.Context.Find<Account>(accountId);
+
+                        futureTransaction.CompletedAmount -= amount;
+                        account.Balance -= amount;
                         break;
                 }
             }
@@ -64,18 +74,32 @@ namespace Persistence
                     case EntityState.Added:
                         var futureSaving = entry.Entity.FutureSaving;
                         var goal = entry.Entity.Goal;
-                        futureSaving.CompletedAmount += entry.Entity.Amount;
-                        goal.CurrentAmount += entry.Entity.Amount;
+                        var sourceAccount = entry.Entity.FromAccount;
+                        var destinationAccount = entry.Entity.ToAccount;
+                        var amount = entry.Entity.Amount;
+
+                        futureSaving.CompletedAmount += amount;
+                        goal.CurrentAmount += amount;
+                        sourceAccount.Balance -= amount;
+                        destinationAccount.Balance += amount;
                         break;
 
                     case EntityState.Deleted:
                         var futureSavingId = entry.OriginalValues.Clone().GetValue<Guid>("FutureSavingId");
                         var goalId = entry.OriginalValues.Clone().GetValue<Guid>("GoalId");
+                        var sourceAccountId = entry.OriginalValues.Clone().GetValue<Guid>("FromAccountId");
+                        var destinationAccountId = entry.OriginalValues.Clone().GetValue<Guid>("ToAccountId");
+
                         futureSaving = entry.Context.Find<FutureSaving>(futureSavingId);
                         goal = entry.Context.Find<Goal>(goalId);
-                        var amount = entry.OriginalValues.GetValue<double>("Amount");
+                        sourceAccount = entry.Context.Find<Account>(sourceAccountId);
+                        destinationAccount = entry.Context.Find<Account>(destinationAccountId);
+
+                        amount = entry.OriginalValues.GetValue<double>("Amount");
                         futureSaving.CompletedAmount -= amount;
                         goal.CurrentAmount -= amount;
+                        sourceAccount.Balance += amount;
+                        destinationAccount.Balance -= amount;
                         break;
                 }
             }
