@@ -56,7 +56,7 @@ namespace Application.DailyActions.DailyExpenditures
 
                 newExpenditure.FutureTransaction = await _context.FutureTransactions
                     .FirstOrDefaultAsync(ft => ft.Category == request.NewExpenditure.Category
-                        && ft.BudgetId == budgetId);
+                        && ft.BudgetId == budgetId && ft.Amount < 0);
 
                 await _context.Transactions.AddAsync(newExpenditure);
                 var fail = await _context.SaveChangesAsync() < 0;
