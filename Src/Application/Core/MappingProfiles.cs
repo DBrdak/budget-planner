@@ -75,6 +75,8 @@ namespace Application.Core
                 .ForMember(d => d.SavingsOut, o => o.Ignore());
 
             CreateMap<ProfileDto, User>();
+
+            CreateMap<SavingDto, Saving>();
         }
     }
 }
