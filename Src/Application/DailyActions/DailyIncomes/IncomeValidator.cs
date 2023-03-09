@@ -2,13 +2,13 @@
 using Application.Interfaces;
 using FluentValidation;
 
-namespace Application.DailyActions.DailyExpenditures
+namespace Application.DailyActions.DailyIncomes
 {
-    public class ExpenditureValidator : AbstractValidator<ExpenditureDto>
+    public class IncomeValidator : AbstractValidator<IncomeDto>
     {
         private readonly IValidationExtension _validationExtension;
 
-        public ExpenditureValidator(IValidationExtension validationExtension)
+        public IncomeValidator(IValidationExtension validationExtension)
         {
             _validationExtension = validationExtension;
 
@@ -32,5 +32,6 @@ namespace Application.DailyActions.DailyExpenditures
                 .Must(x => _validationExtension.CategoryExists(x, "expenditure").Result)
                     .WithMessage(x => $"Category named {x.Category} does't exists");
         }
+
     }
 }
