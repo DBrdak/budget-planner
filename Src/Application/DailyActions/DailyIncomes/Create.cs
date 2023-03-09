@@ -30,6 +30,7 @@ namespace Application.DailyActions.DailyIncomes
                 RuleFor(x => x.NewIncome).SetValidator(new IncomeValidator(_validationExtension));
             }
         }
+
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
@@ -55,11 +56,11 @@ namespace Application.DailyActions.DailyIncomes
 
                 newIncome.Account = await _context.Accounts
                     .FirstOrDefaultAsync(a => a.Name == request.NewIncome.AccountName
-                        && a.BudgetId== budgetId);
+                        && a.BudgetId == budgetId);
 
                 newIncome.FutureTransaction = await _context.FutureTransactions
                     .FirstOrDefaultAsync(ft => ft.Category == request.NewIncome.Category
-                        && ft.BudgetId == budgetId);
+                        && ft.BudgetId == budgetId && ft.Amount > 0);
 
                 await _context.Transactions.AddAsync(newIncome);
                 var fail = await _context.SaveChangesAsync() < 0;
