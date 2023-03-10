@@ -7,7 +7,7 @@ using Persistence;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Application.DailyActions.DailyExpenditures;
+using Application.DailyActions.DailyIncomes;
 using FluentValidation;
 
 namespace Application.DailyActions.DailyIncomes
