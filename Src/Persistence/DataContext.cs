@@ -49,7 +49,8 @@ namespace Persistence
                         var account = entry.Entity.Account;
                         var amount = entry.Entity.Amount;
 
-                        futureTransaction.CompletedAmount += amount;
+                        if (futureTransaction is not null)
+                            futureTransaction.CompletedAmount += amount;
                         account.Balance += amount;
                         break;
 
@@ -61,7 +62,8 @@ namespace Persistence
                         futureTransaction = entry.Context.Find<FutureTransaction>(futureTransactionId);
                         account = entry.Context.Find<Account>(accountId);
 
-                        futureTransaction.CompletedAmount -= amount;
+                        if (futureTransaction is not null)
+                            futureTransaction.CompletedAmount -= amount;
                         account.Balance -= amount;
                         break;
                 }
@@ -78,8 +80,10 @@ namespace Persistence
                         var destinationAccount = entry.Entity.ToAccount;
                         var amount = entry.Entity.Amount;
 
-                        futureSaving.CompletedAmount += amount;
-                        goal.CurrentAmount += amount;
+                        if (futureSaving is not null)
+                            futureSaving.CompletedAmount += amount;
+                        if (goal is not null)
+                            goal.CurrentAmount += amount;
                         sourceAccount.Balance -= amount;
                         destinationAccount.Balance += amount;
                         break;
@@ -96,8 +100,10 @@ namespace Persistence
                         destinationAccount = entry.Context.Find<Account>(destinationAccountId);
 
                         amount = entry.OriginalValues.GetValue<double>("Amount");
-                        futureSaving.CompletedAmount -= amount;
-                        goal.CurrentAmount -= amount;
+                        if (futureSaving is not null)
+                            futureSaving.CompletedAmount -= amount;
+                        if (goal is not null)
+                            goal.CurrentAmount -= amount;
                         sourceAccount.Balance += amount;
                         destinationAccount.Balance -= amount;
                         break;

@@ -59,6 +59,8 @@ namespace Application.Core
             CreateMap<ExpenditureDto, Transaction>()
                 .ForMember(d => d.Amount, o => o.MapFrom(s => -s.Amount));
 
+            CreateMap<IncomeDto, Transaction>();
+
             CreateMap<FutureExpenditureDto, FutureTransaction>()
                 .ForMember(d => d.Amount, o => o.MapFrom(s => -s.Amount));
 
@@ -75,6 +77,8 @@ namespace Application.Core
                 .ForMember(d => d.SavingsOut, o => o.Ignore());
 
             CreateMap<ProfileDto, User>();
+
+            CreateMap<SavingDto, Saving>();
         }
     }
 }

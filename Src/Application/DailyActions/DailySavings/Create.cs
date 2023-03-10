@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using System.Net.Http;
+using Application.DailyActions.DailyIncomes;
 
 namespace Application.DailyActions.DailySavings
 {
@@ -24,7 +25,18 @@ namespace Application.DailyActions.DailySavings
             public SavingDto NewSaving { get; set; }
         }
 
-        //Place for validator function
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            private readonly IValidationExtension _validationExtension;
+
+            public CommandValidator(IValidationExtension validationExtension)
+            {
+                _validationExtension = validationExtension;
+
+                RuleFor(x => x.NewSaving).SetValidator(new SavingValidator(_validationExtension));
+            }
+        }
+
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
@@ -42,48 +54,34 @@ namespace Application.DailyActions.DailySavings
 
             async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
             {
-                // Tu też możemy zrezygnować z mappera na rzecz tradycyjnego tworzenia obiektu
                 var newSaving = _mapper.Map<Saving>(request.NewSaving);
 
-                // Obczaj nową funkcje w BudgetAccessor, większa wydajność
-                var budgetName = await _budgetAccessor.GetBudgetName();
+                var budgetId = await _budgetAccessor.GetBudgetId();
 
-                // Jak wykorzystasz inną funkcję to masz Guid, więc możesz zmienić FirstOrDefault,
-                // na coś "czystszego" (chodzi o konkretną metodę wbudowaną)
-                newSaving.Budget = await _context.Budgets
-                    .FirstOrDefaultAsync(b => b.Name == budgetName);
-
-                newSaving.FromAccount = await _context.Accounts
-                    .FirstOrDefaultAsync(a => a.Name == request.NewSaving.FromAccountName
-                    && a.Budget.Name == budgetName);
-
-                newSaving.ToAccount = await _context.Accounts
-                    .FirstOrDefaultAsync(a => a.Name == request.NewSaving.ToAccountName
-                    && a.Budget.Name == budgetName);
+                newSaving.Budget = await _context.Budgets.FindAsync(budgetId);
 
                 newSaving.Goal = await _context.Goals
                     .FirstOrDefaultAsync(g => g.Name == request.NewSaving.GoalName
-                    && g.Budget.Name == budgetName);
+                        && g.BudgetId == budgetId);
 
-                // Nie masz wartości dla wszystkich property obiektu newSaving,
-                // spójrz w Domain.Saving i zobacz czego brakuje
+                newSaving.FromAccount = await _context.Accounts
+                    .FirstOrDefaultAsync(a => a.Name == request.NewSaving.FromAccountName
+                        && a.BudgetId == budgetId);
 
-                // Spojler
-                {
-                    // Musisz znaleźć FutureSaving, nie ogarnąłem że może być ciężko bez info od clienta
-                    // Więc wydaje mi się że najlepiej będzie wyszukać FutureSaving wg FromAccount i ToAccount,
-                    // Natomiast jeżeli istnieje więcej niż jeden FutureSaving który ma dopasowane FromAccount i ToAccount
-                    // to musisz dodać wyszukiwanie wg goal (bądź na odwrót, najpierw goal, potem from i to)
-                    // Jeżeli użytkownik określił dwa takie same FutureSavings, no to jego problem, wtedy bierzemy ten
-                    // Który nie jest w 100% spełniony (sprawdzasz czy Completed Amount >= Amount)
-                }
+                newSaving.ToAccount = await _context.Accounts
+                    .FirstOrDefaultAsync(a => a.Name == request.NewSaving.ToAccountName
+                        && a.BudgetId == budgetId);
+
+                newSaving.FutureSaving = await _context.FutureSavings
+                    .FirstOrDefaultAsync(ft => ft.Budget == newSaving.Budget
+                        && ft.FromAccount == newSaving.FromAccount
+                        && ft.ToAccount == newSaving.ToAccount
+                        && ft.Goal == newSaving.Goal);
 
                 if (newSaving.Budget == null
                     || newSaving.ToAccount == null
                     || newSaving.FromAccount == null)
                     return null;
-
-                // Dodatkowo trzeba zwiększyć completed amount w odpowiednim future saving i goal
 
                 await _context.Savings.AddAsync(newSaving);
                 var fail = await _context.SaveChangesAsync() < 0;

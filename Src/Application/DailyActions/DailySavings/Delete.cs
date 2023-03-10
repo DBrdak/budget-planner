@@ -33,18 +33,7 @@ namespace Application.DailyActions.DailySavings
                 var saving = await _context.Savings.FindAsync(request.SavingId);
 
                 if (saving == null)
-                    return null;
-
-                // Tu ważne:
-                // Mamy dwie opcje:
-                // 1. Completed amount robić po stronie zapytania, wtedy spowalniamy proces ale zyskujemy czystość
-                // oraz zajebiście wygodny kod
-                // (oczywiście są sposoby na zrobienie tego w wydajny sposób,
-                // ale mogłoby być ciężko na ten moment, możemy to dać jako cel w razie rozwijania API)
-                // 2. Completed amount robić po stronie logiki, a przechowywać w bazie danych, zyskujemy dużo wyższą wydajność
-                // ale tracimy czystość i elastyczność kodu
-
-                // Osobiście preferuję 2. więc musiałbyś wtedy zrobić myk z odjęciem completed amount w odpowiednim Future Saving i Goal
+                    return null;              
 
                 _context.Savings.Remove(saving);
 
