@@ -25,7 +25,6 @@ namespace Application.DailyActions.DailySavings
             public SavingDto NewSaving { get; set; }
         }
 
-        /*
         public class CommandValidator : AbstractValidator<Command>
         {
             private readonly IValidationExtension _validationExtension;
@@ -37,7 +36,7 @@ namespace Application.DailyActions.DailySavings
                 RuleFor(x => x.NewSaving).SetValidator(new SavingValidator(_validationExtension));
             }
         }
-        */
+
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
@@ -66,15 +65,15 @@ namespace Application.DailyActions.DailySavings
                         && g.BudgetId == budgetId);
 
                 newSaving.FromAccount = await _context.Accounts
-                    .FirstOrDefaultAsync(a => a.Name == request.NewSaving.ToAccountName
-                        && a.BudgetId == budgetId);
-
-                newSaving.ToAccount = await _context.Accounts
                     .FirstOrDefaultAsync(a => a.Name == request.NewSaving.FromAccountName
                         && a.BudgetId == budgetId);
 
+                newSaving.ToAccount = await _context.Accounts
+                    .FirstOrDefaultAsync(a => a.Name == request.NewSaving.ToAccountName
+                        && a.BudgetId == budgetId);
+
                 newSaving.FutureSaving = await _context.FutureSavings
-                    .FirstOrDefaultAsync(ft => ft.Budget == newSaving.Budget 
+                    .FirstOrDefaultAsync(ft => ft.Budget == newSaving.Budget
                         && ft.FromAccount == newSaving.FromAccount
                         && ft.ToAccount == newSaving.ToAccount
                         && ft.Goal == newSaving.Goal);
