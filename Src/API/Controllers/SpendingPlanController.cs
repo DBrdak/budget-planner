@@ -1,8 +1,4 @@
 ﻿using Application.DTO;
-using Application.SpendingPlan.Expenditures;
-using Application.SpendingPlan.Incomes;
-using Application.SpendingPlan.Savings;
-using Domain;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 

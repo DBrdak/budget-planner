@@ -1,19 +1,12 @@
 ﻿using Application.Core;
-using Application.Interfaces;
 using Application.DTO;
-using Domain;
-using MediatR;
-using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Application.Interfaces;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+using Domain;
 using FluentValidation;
-using System.Net.Http;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
 
 namespace Application.SpendingPlan.Incomes
 {

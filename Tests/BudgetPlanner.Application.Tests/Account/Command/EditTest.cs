@@ -1,14 +1,8 @@
 ﻿using Application.Accounts;
 using Application.DTO;
 using Application.Tests.Common;
-using Domain;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Tests.Account
 {

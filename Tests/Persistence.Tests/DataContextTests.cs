@@ -2,7 +2,6 @@ using Domain;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Tests.Common;
 using Shouldly;
-using Xunit;
 
 namespace Persistence.Tests
 {

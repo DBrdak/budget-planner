@@ -2,19 +2,9 @@
 using Application.DTO;
 using Application.Interfaces;
 using Application.Tests.Common;
-using AutoMapper;
-using Domain;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestPlatform.Common.Utilities;
 using Moq;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Tests.Account
 {

@@ -5,10 +5,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Infrastructure.Security;
 using Infrastructure.Validation;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
 using Persistence;
 using System.Reflection;
 

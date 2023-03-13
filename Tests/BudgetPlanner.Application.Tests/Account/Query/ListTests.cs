@@ -4,17 +4,10 @@ using Application.DTO;
 using Application.Interfaces;
 using Application.Tests.Common;
 using AutoMapper;
-using Domain;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Persistence;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Tests.Account.Query
 {

@@ -1,15 +1,5 @@
-﻿using AutoMapper.Internal;
-using Domain;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Domain;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Persistence.Tests.Common
 {

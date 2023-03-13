@@ -1,14 +1,13 @@
 ﻿using Application.Core;
-using Application.Interfaces;
 using Application.DTO;
-using Domain;
-using MediatR;
-using Persistence;
+using Application.Interfaces;
 using AutoMapper;
+using Domain;
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Application.DailyActions.DailyIncomes;
-using FluentValidation;
+using Persistence;
 
 namespace Application.DailyActions.DailyIncomes
 {
