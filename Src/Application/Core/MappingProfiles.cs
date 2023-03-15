@@ -60,8 +60,7 @@ namespace Application.Core
 
             CreateMap<FutureSavingDto, FutureSaving>();
 
-            CreateMap<GoalDto, Goal>()
-                .ForMember(d => d.CurrentAmount, o => o.Ignore());
+            CreateMap<GoalDto, Goal>();
 
             CreateMap<AccountDto, Account>()
                 .ForMember(d => d.Transactions, o => o.Ignore())

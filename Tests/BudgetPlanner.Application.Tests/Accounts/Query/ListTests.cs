@@ -12,19 +12,8 @@ using Shouldly;
 namespace Application.Tests.Account.Query
 {
     [Collection("QueryCollection")]
-    public class ListTests
+    public class ListTests : QueryTestFixture
     {
-        private readonly DataContext _context;
-        private readonly IMapper _mapper;
-        private readonly Mock<IBudgetAccessor> _budgetAccessorMock;
-
-        public ListTests(QueryTestFixture fixture)
-        {
-            _context = fixture.context;
-            _mapper = fixture.mapper;
-            _budgetAccessorMock = new Mock<IBudgetAccessor>();
-        }
-
         [Fact]
         public async Task ShouldReturnAccountsList()
         {

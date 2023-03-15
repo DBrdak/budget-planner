@@ -37,7 +37,7 @@ namespace Application.Goals
                 _mapper = mapper;
             }
 
-            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var oldGoal = await _context.Goals.FindAsync(request.NewGoal.Id);
 

@@ -29,7 +29,7 @@ namespace Application.Goals
                 _context = dataContext;
             }
 
-            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var goal = await _context.Goals.FindAsync(request.GoalId);
 

@@ -8,20 +8,6 @@ namespace Persistence.Tests
 {
     public class DataContextTests
     {
-        // Musimy sprawdziæ czy w wyniku seedowania (patrz -> Common.SeedTestData.cs) wszystko dodaje siê tak jakbyœmy chcieli
-        [Fact]
-        public async Task ShouldAddToDatabaseWithRelations()
-        {
-            //Arrange
-            var context = DataContextFactory.Create();
-
-            //Act
-
-            //Assert
-        }
-
-        // Potrzebujemy testu dla nadpisanej metody SaveChangesAsync
-
         [Theory]
         [InlineData(nameof(Budget))]
         [InlineData(nameof(Account))]
@@ -195,6 +181,75 @@ namespace Persistence.Tests
                     result.ShouldBeTrue();
                     break;
             }
+        }
+
+        [Fact]
+        public async Task ShouldUseOverridenSaveChangesAsync()
+        {
+            // Arrange
+            var context = DataContextFactory.Create();
+
+            var budget = await context.Budgets.FirstOrDefaultAsync();
+            var checkingAccount = await context.Accounts.FirstOrDefaultAsync(x => x.AccountType == "Checking");
+            var savingAccount = await context.Accounts.FirstOrDefaultAsync(x => x.AccountType == "Saving");
+            var futureSaving = await context.FutureSavings.FirstOrDefaultAsync();
+            var futureExpenditure = await context.FutureTransactions.FirstOrDefaultAsync(x => x.Amount < 0);
+            var futureIncome = await context.FutureTransactions.FirstOrDefaultAsync(x => x.Amount > 0);
+            var goal = await context.Goals.FirstOrDefaultAsync();
+
+            var baseCheckBalance = checkingAccount.Balance;
+            var baseSavingkBalance = savingAccount.Balance;
+            var baseCurrentAmount = goal.CurrentAmount;
+            var baseSavingCompletedAmount = futureSaving.CompletedAmount;
+            var baseExpenseCompletedAmount = futureExpenditure.CompletedAmount;
+            var baseIncomeCompletedAmount = futureIncome.CompletedAmount;
+
+            var newExpenditure = new Transaction()
+            {
+                Account = checkingAccount,
+                Amount = 150,
+                Budget = budget,
+                Category = futureExpenditure.Category,
+                Title = "test expenditure",
+                Date = DateTime.UtcNow.AddHours(-6),
+                FutureTransaction = futureExpenditure
+            };
+
+            var newIncome = new Transaction()
+            {
+                Account = checkingAccount,
+                Amount = 55,
+                Budget = budget,
+                Category = futureIncome.Category,
+                Title = "test income",
+                Date = DateTime.UtcNow.AddHours(-23),
+                FutureTransaction = futureIncome
+            };
+
+            var newSaving = new Saving()
+            {
+                Budget = budget,
+                FutureSaving = futureSaving,
+                Amount = 12,
+                Date = DateTime.UtcNow.AddDays(-3),
+                FromAccount = checkingAccount,
+                ToAccount = savingAccount,
+                Goal = goal
+            };
+
+            //Act
+            await context.Savings.AddAsync(newSaving);
+            await context.Transactions.AddAsync(newIncome);
+            await context.Transactions.AddAsync(newExpenditure);
+            await context.SaveChangesAsync();
+
+            //Assert
+            checkingAccount.Balance.ShouldBe(baseCheckBalance + newExpenditure.Amount + newIncome.Amount - newSaving.Amount);
+            savingAccount.Balance.ShouldBe(baseSavingkBalance + newSaving.Amount);
+            futureSaving.CompletedAmount.ShouldBe(baseSavingCompletedAmount + newSaving.Amount);
+            futureExpenditure.CompletedAmount.ShouldBe(baseExpenseCompletedAmount + newExpenditure.Amount);
+            futureIncome.CompletedAmount.ShouldBe(baseIncomeCompletedAmount + newIncome.Amount);
+            goal.CurrentAmount.ShouldBe(baseCurrentAmount + newSaving.Amount);
         }
     }
 }
