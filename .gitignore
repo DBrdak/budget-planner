@@ -6,6 +6,8 @@
 appsettings.json
 
 *.db
+.idea/
+*.sql
 
 # User-specific files
 *.rsuser

@@ -20,7 +20,7 @@ namespace Application.Tests.Account.Query
             //Arrange
             var budget = await _context.Budgets.FirstAsync();
 
-            var budgetAccessor = _budgetAccessorMock.Setup(x => x.GetBudgetId().Result).Returns(budget.Id);
+            _budgetAccessorMock.Setup(x => x.GetBudgetId()).ReturnsAsync(budget.Id);
 
             var handler = new List.Handler(_context, _budgetAccessorMock.Object, _mapper);
 

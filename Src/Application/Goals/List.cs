@@ -28,7 +28,7 @@ namespace Application.Goals
                 _mapper = mapper;
             }
 
-            async Task<Result<List<GoalDto>>> IRequestHandler<Query, Result<List<GoalDto>>>.Handle(Query request, CancellationToken cancellation)
+            public async Task<Result<List<GoalDto>>> Handle(Query request, CancellationToken cancellation)
             {
                 var budgetId = await _budgetAccessor.GetBudgetId();
 
