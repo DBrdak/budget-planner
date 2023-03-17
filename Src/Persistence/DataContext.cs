@@ -30,6 +30,32 @@ namespace Persistence
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
+            var numberOfChanges = ChangeTracker.Entries<FutureTransaction>().Count();
+
+            for (int i = 0; i < numberOfChanges; i++)
+            {
+                var entry = ChangeTracker.Entries<FutureTransaction>().ElementAtOrDefault(i);
+
+                switch (entry.State)
+                {
+                    case EntityState.Deleted:
+                        var category = TransactionCategories.FirstOrDefault
+                            (x => x.BudgetId == entry.Entity.BudgetId && x.Value == entry.Entity.Category);
+                        TransactionCategories.Remove(category);
+                        break;
+
+                    case EntityState.Added:
+                        category = new TransactionCategory
+                        {
+                            BudgetId = entry.Entity.BudgetId,
+                            Value = entry.Entity.Category,
+                            Type = entry.Entity.Amount > 0 ? "income" : "expenditure",
+                        };
+                        ChangeTracker.Context.Attach(category);
+                        break;
+                }
+            }
+
             foreach (var entry in ChangeTracker.Entries<Transaction>())
             {
                 switch (entry.State)

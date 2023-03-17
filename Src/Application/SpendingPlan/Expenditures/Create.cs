@@ -59,15 +59,7 @@ namespace Application.SpendingPlan.Expenditures
                     || newFutureExpenditure.Account == null)
                     return null;
 
-                var category = new TransactionCategory
-                {
-                    Value = newFutureExpenditure.Category,
-                    BudgetId = budgetId,
-                    Type = "expenditure"
-                };
-
                 await _context.FutureTransactions.AddAsync(newFutureExpenditure);
-                await _context.TransactionCategories.AddAsync(category);
                 var fail = await _context.SaveChangesAsync() < 0;
 
                 if (fail)

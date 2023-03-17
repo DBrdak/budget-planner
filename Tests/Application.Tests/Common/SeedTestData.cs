@@ -1,8 +1,7 @@
 ﻿using Domain;
 using Persistence;
-using Persistence.Tests.Common;
 
-namespace Persistence.Tests.Common
+namespace Application.Tests.Common
 {
     public static class SeedTestData
     {

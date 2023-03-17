@@ -26,9 +26,9 @@ namespace Application.Profiles
                 _userAccessor = userAccessor;
             }
 
-            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername());
+                var user = await _userManager.FindByNameAsync(_userAccessor.GetUsername());
 
                 if (user == null)
                     return null;

@@ -12,7 +12,7 @@ namespace Persistence.Tests.Common
 
             var context = new DataContext(options);
 
-            SeedTestData.Seed(context);
+            context.Seed();
 
             return context;
         }

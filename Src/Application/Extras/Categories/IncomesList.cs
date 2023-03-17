@@ -28,7 +28,7 @@ namespace Application.Extras.Categories
                 _mapper = mapper;
             }
 
-            async Task<Result<List<TransactionCategoryDto>>> IRequestHandler<Query, Result<List<TransactionCategoryDto>>>.Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<TransactionCategoryDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var budgetId = await _budgetAccessor.GetBudgetId();
 

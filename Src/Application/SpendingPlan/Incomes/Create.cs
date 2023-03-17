@@ -47,8 +47,6 @@ namespace Application.SpendingPlan.Incomes
             {
                 var newFutureIncome = _mapper.Map<FutureTransaction>(request.NewFutureIncome);
 
-                var budgetName = _budgetAccessor.GetBudgetName();
-
                 var budgetId = await _budgetAccessor.GetBudgetId();
 
                 newFutureIncome.BudgetId = budgetId;
@@ -61,15 +59,7 @@ namespace Application.SpendingPlan.Incomes
                     || newFutureIncome.Account == null)
                     return null;
 
-                var category = new TransactionCategory
-                {
-                    Value = newFutureIncome.Category,
-                    BudgetId = budgetId,
-                    Type = "income"
-                };
-
                 await _context.FutureTransactions.AddAsync(newFutureIncome);
-                await _context.TransactionCategories.AddAsync(category);
 
                 var fail = await _context.SaveChangesAsync() < 0;
 

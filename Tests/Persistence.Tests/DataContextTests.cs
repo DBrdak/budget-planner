@@ -75,7 +75,7 @@ namespace Persistence.Tests
                     context.Remove(futureSaving);
                     await context.SaveChangesAsync();
 
-                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Account>(context);
+                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<FutureSaving>(context);
 
                     //Assert
                     result.ShouldBeTrue();
@@ -95,7 +95,7 @@ namespace Persistence.Tests
                     context.Remove(futureTransaction);
                     await context.SaveChangesAsync();
 
-                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Account>(context);
+                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<FutureTransaction>(context, futureTransaction.Category);
 
                     //Assert
                     result.ShouldBeTrue();
@@ -115,7 +115,7 @@ namespace Persistence.Tests
                     context.Remove(saving);
                     await context.SaveChangesAsync();
 
-                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Account>(context);
+                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Saving>(context);
 
                     //Assert
                     result.ShouldBeTrue();
@@ -155,7 +155,7 @@ namespace Persistence.Tests
                     context.Remove(goal);
                     await context.SaveChangesAsync();
 
-                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Transaction>(context);
+                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Goal>(context);
 
                     //Assert
                     result.ShouldBeTrue();
@@ -175,7 +175,7 @@ namespace Persistence.Tests
                     context.Remove(category);
                     await context.SaveChangesAsync();
 
-                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Transaction>(context);
+                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<TransactionCategory>(context);
 
                     //Assert
                     result.ShouldBeTrue();
@@ -196,6 +196,7 @@ namespace Persistence.Tests
             var futureExpenditure = await context.FutureTransactions.FirstOrDefaultAsync(x => x.Amount < 0);
             var futureIncome = await context.FutureTransactions.FirstOrDefaultAsync(x => x.Amount > 0);
             var goal = await context.Goals.FirstOrDefaultAsync();
+            var categories = await context.TransactionCategories.ToListAsync();
 
             var baseCheckBalance = checkingAccount.Balance;
             var baseSavingkBalance = savingAccount.Balance;
@@ -250,6 +251,7 @@ namespace Persistence.Tests
             futureExpenditure.CompletedAmount.ShouldBe(baseExpenseCompletedAmount + newExpenditure.Amount);
             futureIncome.CompletedAmount.ShouldBe(baseIncomeCompletedAmount + newIncome.Amount);
             goal.CurrentAmount.ShouldBe(baseCurrentAmount + newSaving.Amount);
+            categories.Count.ShouldBe(4);
         }
     }
 }

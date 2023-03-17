@@ -1,5 +1,6 @@
 ﻿using Domain;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Tests.Common
 {
@@ -45,9 +46,11 @@ namespace Persistence.Tests.Common
         }
 
         public static bool IfAllEntitiesHasBeenDeleted<T>
-            (this IDictionary<Guid, Type> relatedEntities, DataContext context)
+            (this IDictionary<Guid, Type> relatedEntities, DataContext context, string categoryName = "")
         {
             bool expectedResult;
+            var category = context.TransactionCategories.FirstOrDefault(x => x.Value == categoryName);
+            expectedResult = category is null;
 
             switch (typeof(T))
             {
@@ -90,35 +93,35 @@ namespace Persistence.Tests.Common
                 case Type type when type == typeof(FutureTransaction):
                     foreach (var entity in relatedEntities)
                     {
-                        expectedResult = context.Find(entity.Value, entity.Key.ToString()) is not null;
+                        expectedResult = context.Find(entity.Value, entity.Key) is not null;
                     }
                     break;
 
                 case Type type when type == typeof(Saving):
                     foreach (var entity in relatedEntities)
                     {
-                        expectedResult = context.Find(entity.Value, entity.Key.ToString()) is not null;
+                        expectedResult = context.Find(entity.Value, entity.Key) is not null;
                     }
                     break;
 
                 case Type type when type == typeof(FutureSaving):
                     foreach (var entity in relatedEntities)
                     {
-                        expectedResult = context.Find(entity.Value, entity.Key.ToString()) is not null;
+                        expectedResult = context.Find(entity.Value, entity.Key) is not null;
                     }
                     break;
 
                 case Type type when type == typeof(Goal):
                     foreach (var entity in relatedEntities)
                     {
-                        expectedResult = context.Find(entity.Value, entity.Key.ToString()) is not null;
+                        expectedResult = context.Find(entity.Value, entity.Key) is not null;
                     }
                     break;
 
                 case Type type when type == typeof(TransactionCategory):
                     foreach (var entity in relatedEntities)
                     {
-                        expectedResult = context.Find(entity.Value, entity.Key.ToString()) is not null;
+                        expectedResult = context.Find(entity.Value, entity.Key) is not null;
                     }
                     break;
             }

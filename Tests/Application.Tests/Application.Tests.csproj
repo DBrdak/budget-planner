@@ -33,10 +33,7 @@
 
   <ItemGroup>
     <Folder Include="DailyActions\" />
-    <Folder Include="Extras\" />
     <Folder Include="Goals\" />
-    <Folder Include="Profiles" />
-    <Folder Include="Profiles\" />
     <Folder Include="SpendingPlan\" />
   </ItemGroup>
 
