@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Extras.Categories;
-using Application.Tests.Common;
+using Application.Tests.Common.TestBase;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Shouldly;

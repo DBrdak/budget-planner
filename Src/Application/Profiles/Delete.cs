@@ -28,19 +28,25 @@ namespace Application.Profiles
                 _userManager = userManager;
             }
 
-            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users
-                    .FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername());
+                    .FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername())
+                    .ConfigureAwait(false);
 
                 if (user == null)
                     return null;
 
-                var authResult = await _userManager.CheckPasswordAsync(user, request.Password);
+                var authResult = await _userManager
+                    .CheckPasswordAsync(user, request.Password)
+                    .ConfigureAwait(true);
+
+                if(!authResult)
+                    return Result<Unit>.Failure("Wrong password");
 
                 _context.Remove(user);
 
-                var fail = await _context.SaveChangesAsync() < 0;
+                var fail = await _context.SaveChangesAsync().ConfigureAwait(false) < 0;
 
                 if (fail)
                     return Result<Unit>.Failure("Problem while removing user form database");

@@ -1,5 +1,7 @@
 ﻿using Application.DTO;
+using Application.Interfaces;
 using AutoMapper;
+using AutoMapper.Internal;
 using Domain;
 
 namespace Application.Core
@@ -8,6 +10,7 @@ namespace Application.Core
     {
         public MappingProfiles()
         {
+
             //Get
 
             CreateMap<Transaction, ExpenditureDto>()
@@ -42,7 +45,8 @@ namespace Application.Core
                 .ForMember(d => d.Expenditures, o => o.MapFrom(s => s.Transactions.Where(t => t.Amount < 0)))
                 .ForMember(d => d.Incomes, o => o.MapFrom(s => s.Transactions.Where(t => t.Amount > 0)));
 
-            CreateMap<User, ProfileDto>();
+            CreateMap<User, ProfileDto>()
+                .ForMember(d => d.BudgetName, o => o.MapFrom((s, d, dm, c) => c.Items["BudgetName"]));
 
             CreateMap<TransactionCategory, TransactionCategoryDto>();
 
@@ -67,7 +71,9 @@ namespace Application.Core
                 .ForMember(d => d.SavingsIn, o => o.Ignore())
                 .ForMember(d => d.SavingsOut, o => o.Ignore());
 
-            CreateMap<ProfileDto, User>();
+            CreateMap<ProfileDto, User>()
+                .ForMember(d => d.NormalizedUserName, o => o.MapFrom(s => s.Username.ToUpper()))
+                .ForMember(d => d.NormalizedEmail, o => o.MapFrom(s => s.Email.ToUpper()));
 
             CreateMap<SavingDto, Saving>();
         }

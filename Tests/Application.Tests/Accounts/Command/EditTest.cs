@@ -1,6 +1,7 @@
 ﻿using Application.Accounts;
 using Application.DTO;
 using Application.Tests.Common;
+using Application.Tests.Common.TestBase;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
 

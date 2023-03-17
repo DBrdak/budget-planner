@@ -32,13 +32,13 @@ namespace API.Controllers
         public async Task<ActionResult<UserDto>> Login(LoginDto dto)
         {
             var user = await _userManager.Users
-                .FirstOrDefaultAsync(u => u.NormalizedEmail == dto.Email.ToUpper());
+                .FirstOrDefaultAsync(u => u.NormalizedEmail == dto.Email.ToUpper()).ConfigureAwait(false);
 
             if (user == null)
                 return BadRequest();
 
             var success = await _userManager
-                .CheckPasswordAsync(user, dto.Password);
+                .CheckPasswordAsync(user, dto.Password).ConfigureAwait(false);
 
             if (success)
                 return CreateUserObject(user);
@@ -51,9 +51,9 @@ namespace API.Controllers
         [Description("Signing up an user")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto dto)
         {
-            var usernameIsUnique = await _context.Users.AnyAsync(u => u.UserName == dto.Username);
-            var emailIsUnique = await _context.Users.AnyAsync(u => u.Email == dto.Email);
-            var budgetIsUnique = await _context.Budgets.AnyAsync(b => b.Name.ToUpper() == dto.BudgetName.ToUpper());
+            var usernameIsUnique = await _context.Users.AnyAsync(u => u.UserName == dto.Username).ConfigureAwait(false);
+            var emailIsUnique = await _context.Users.AnyAsync(u => u.Email == dto.Email).ConfigureAwait(false);
+            var budgetIsUnique = await _context.Budgets.AnyAsync(b => b.Name.ToUpper() == dto.BudgetName.ToUpper()).ConfigureAwait(false);
 
             if (usernameIsUnique)
             {
@@ -86,7 +86,7 @@ namespace API.Controllers
                 DisplayName = dto.DisplayName
             };
 
-            var result = await _userManager.CreateAsync(user, dto.Password);
+            var result = await _userManager.CreateAsync(user, dto.Password).ConfigureAwait(false);
 
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
@@ -97,8 +97,8 @@ namespace API.Controllers
                 User = user
             };
 
-            await _context.AddAsync(budget);
-            var fail = await _context.SaveChangesAsync() < 0;
+            await _context.AddAsync(budget).ConfigureAwait(false);
+            var fail = await _context.SaveChangesAsync().ConfigureAwait(false) < 0;
 
             if (fail)
                 return BadRequest("Problem while creating budget");
@@ -112,7 +112,8 @@ namespace API.Controllers
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var user = await _userManager.Users
-                .FirstOrDefaultAsync(u => u.Email == User.FindFirstValue(ClaimTypes.Email));
+                .FirstOrDefaultAsync(u => u.Email == User.FindFirstValue(ClaimTypes.Email))
+                .ConfigureAwait(false);
 
             return CreateUserObject(user);
         }
@@ -125,7 +126,7 @@ namespace API.Controllers
                 Token = _tokenService.CreateToken(user),
                 Username = user.UserName,
                 BudgetName = _context.Budgets
-                    .FirstOrDefault(u => u.UserId == user.Id).Name,
+                    .FirstOrDefault(u => u.UserId == user.Id).Name
             };
         }
     }

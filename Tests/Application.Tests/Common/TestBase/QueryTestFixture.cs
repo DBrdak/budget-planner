@@ -1,10 +1,11 @@
 ﻿using Application.Core;
 using Application.Interfaces;
+using Application.Tests.Common.DataContextBase;
 using AutoMapper;
 using Moq;
 using Persistence;
 
-namespace Application.Tests.Common
+namespace Application.Tests.Common.TestBase
 {
     public class QueryTestFixture : IDisposable
     {

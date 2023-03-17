@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Tests.Common
+namespace Application.Tests.Common.DataContextBase
 {
     public class DataContextFactory
     {
@@ -13,7 +13,7 @@ namespace Application.Tests.Common
 
             var context = new DataContext(options);
 
-            SeedTestData.Seed(context);
+            context.Seed();
 
             return context;
         }

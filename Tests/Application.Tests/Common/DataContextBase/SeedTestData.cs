@@ -1,7 +1,7 @@
 ﻿using Domain;
 using Persistence;
 
-namespace Application.Tests.Common
+namespace Application.Tests.Common.DataContextBase
 {
     public static class SeedTestData
     {

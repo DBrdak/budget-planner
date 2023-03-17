@@ -19,7 +19,8 @@ namespace Infrastructure.Security
         public async Task<string> GetBudgetName()
         {
             return (await _context.Budgets
-                .FirstOrDefaultAsync(b => b.User.UserName == _userAccessor.GetUsername())).Name;
+                .FirstOrDefaultAsync(b => b.User.UserName == _userAccessor.GetUsername())
+                .ConfigureAwait(false)).Name;
         }
 
         public async Task<Budget> GetBudget()

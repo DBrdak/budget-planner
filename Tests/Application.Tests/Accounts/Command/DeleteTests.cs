@@ -1,5 +1,6 @@
 ﻿using Application.Accounts;
 using Application.Tests.Common;
+using Application.Tests.Common.TestBase;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
 

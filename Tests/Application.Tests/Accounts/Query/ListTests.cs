@@ -2,7 +2,7 @@
 using Application.Core;
 using Application.DTO;
 using Application.Interfaces;
-using Application.Tests.Common;
+using Application.Tests.Common.TestBase;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Moq;

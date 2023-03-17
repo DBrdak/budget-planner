@@ -2,10 +2,9 @@
 using Application.DTO;
 using Application.Interfaces;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Domain;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Profiles
 {
@@ -17,30 +16,27 @@ namespace Application.Profiles
 
         public class Handler : IRequestHandler<Query, Result<ProfileDto>>
         {
-            private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
             private readonly IMapper _mapper;
+            private readonly UserManager<User> _userManager;
             private readonly IBudgetAccessor _budgetAccessor;
 
-            public Handler(DataContext context, IUserAccessor userAccessor, IMapper mapper, IBudgetAccessor budgetAccessor)
+            public Handler(IUserAccessor userAccessor, IMapper mapper, UserManager<User> userManager, IBudgetAccessor budgetAccessor)
             {
-                _context = context;
                 _userAccessor = userAccessor;
                 _mapper = mapper;
+                _userManager = userManager;
                 _budgetAccessor = budgetAccessor;
             }
 
-            async Task<Result<ProfileDto>> IRequestHandler<Query, Result<ProfileDto>>.Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<ProfileDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var profile = await _context.Users
-                    .AsNoTracking()
-                    .ProjectTo<ProfileDto>(_mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync(u => u.Username == _userAccessor.GetUsername());
+                var profile = _mapper.Map<ProfileDto>(await _userManager
+                    .FindByNameAsync(_userAccessor.GetUsername())
+                    .ConfigureAwait(true), opt => opt.Items["BudgetName"] = _budgetAccessor.GetBudgetName().Result);
 
                 if (profile == null)
                     return null;
-
-                profile.BudgetName = await _budgetAccessor.GetBudgetName();
 
                 return Result<ProfileDto>.Success(profile);
             }
