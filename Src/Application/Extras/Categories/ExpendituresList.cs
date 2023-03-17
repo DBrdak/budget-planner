@@ -3,15 +3,9 @@ using Application.DTO;
 using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Extras.Categories
 {
@@ -34,7 +28,7 @@ namespace Application.Extras.Categories
                 _mapper = mapper;
             }
 
-            async Task<Result<List<TransactionCategoryDto>>> IRequestHandler<Query, Result<List<TransactionCategoryDto>>>.Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<TransactionCategoryDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var budgetId = await _budgetAccessor.GetBudgetId();
 

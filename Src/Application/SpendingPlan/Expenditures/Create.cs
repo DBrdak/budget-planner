@@ -1,19 +1,12 @@
 ﻿using Application.Core;
-using Application.Interfaces;
 using Application.DTO;
-using Domain;
-using MediatR;
-using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Application.Interfaces;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+using Domain;
 using FluentValidation;
-using System.Net.Http;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
 
 namespace Application.SpendingPlan.Expenditures
 {
@@ -66,15 +59,7 @@ namespace Application.SpendingPlan.Expenditures
                     || newFutureExpenditure.Account == null)
                     return null;
 
-                var category = new TransactionCategory
-                {
-                    Value = newFutureExpenditure.Category,
-                    BudgetId = budgetId,
-                    Type = "expenditure"
-                };
-
                 await _context.FutureTransactions.AddAsync(newFutureExpenditure);
-                await _context.TransactionCategories.AddAsync(category);
                 var fail = await _context.SaveChangesAsync() < 0;
 
                 if (fail)

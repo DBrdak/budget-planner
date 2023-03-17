@@ -4,41 +4,23 @@ using Application.DTO;
 using Application.Interfaces;
 using Application.Tests.Common;
 using AutoMapper;
-using Domain;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Persistence;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Tests.Account.Query
 {
     [Collection("QueryCollection")]
-    public class ListTests
+    public class ListTests : QueryTestFixture
     {
-        private readonly DataContext _context;
-        private readonly IMapper _mapper;
-        private readonly Mock<IBudgetAccessor> _budgetAccessorMock;
-
-        public ListTests(QueryTestFixture fixture)
-        {
-            _context = fixture.context;
-            _mapper = fixture.mapper;
-            _budgetAccessorMock = new Mock<IBudgetAccessor>();
-        }
-
         [Fact]
         public async Task ShouldReturnAccountsList()
         {
             //Arrange
             var budget = await _context.Budgets.FirstAsync();
 
-            var budgetAccessor = _budgetAccessorMock.Setup(x => x.GetBudgetId().Result).Returns(budget.Id);
+            _budgetAccessorMock.Setup(x => x.GetBudgetId()).ReturnsAsync(budget.Id);
 
             var handler = new List.Handler(_context, _budgetAccessorMock.Object, _mapper);
 

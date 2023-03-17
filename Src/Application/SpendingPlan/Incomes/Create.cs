@@ -1,19 +1,12 @@
 ﻿using Application.Core;
-using Application.Interfaces;
 using Application.DTO;
-using Domain;
-using MediatR;
-using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Application.Interfaces;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+using Domain;
 using FluentValidation;
-using System.Net.Http;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
 
 namespace Application.SpendingPlan.Incomes
 {
@@ -54,8 +47,6 @@ namespace Application.SpendingPlan.Incomes
             {
                 var newFutureIncome = _mapper.Map<FutureTransaction>(request.NewFutureIncome);
 
-                var budgetName = _budgetAccessor.GetBudgetName();
-
                 var budgetId = await _budgetAccessor.GetBudgetId();
 
                 newFutureIncome.BudgetId = budgetId;
@@ -68,15 +59,7 @@ namespace Application.SpendingPlan.Incomes
                     || newFutureIncome.Account == null)
                     return null;
 
-                var category = new TransactionCategory
-                {
-                    Value = newFutureIncome.Category,
-                    BudgetId = budgetId,
-                    Type = "income"
-                };
-
                 await _context.FutureTransactions.AddAsync(newFutureIncome);
-                await _context.TransactionCategories.AddAsync(category);
 
                 var fail = await _context.SaveChangesAsync() < 0;
 

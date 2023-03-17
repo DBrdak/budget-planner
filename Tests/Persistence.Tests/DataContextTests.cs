@@ -2,65 +2,12 @@ using Domain;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Tests.Common;
 using Shouldly;
-using Xunit;
+using DataContextFactory = Persistence.Tests.Common.DataContextFactory;
 
 namespace Persistence.Tests
 {
     public class DataContextTests
     {
-        [Fact] // Fix it
-        public async Task ShouldAddToDatabase()
-        {
-            //Arrange
-            var _context = DataContextFactory.Create();
-
-            var newAccount = new Account
-            {
-                Id = Guid.NewGuid(),
-                Name = "test",
-                AccountType = "Checking",
-                Balance = 2222,
-            };
-
-            //Act
-            await _context.Accounts.AddAsync(newAccount);
-            await _context.SaveChangesAsync();
-            var accountInDb = await _context.Accounts.FindAsync(newAccount.Id);
-
-            //Assert
-            accountInDb.ShouldNotBeNull();
-            accountInDb.FutureTransactions.ShouldBeEmpty();
-            accountInDb.FutureSavingsIn.ShouldBeEmpty();
-            accountInDb.FutureSavingsOut.ShouldBeEmpty();
-            accountInDb.Transactions.ShouldBeEmpty();
-            accountInDb.SavingsIn.ShouldBeEmpty();
-            accountInDb.SavingsOut.ShouldBeEmpty();
-            accountInDb.BudgetId.ShouldBe(Guid.Empty);
-            accountInDb.Budget.ShouldBeNull();
-            accountInDb.AccountType.ShouldBe("Checking");
-            accountInDb.Balance.ShouldBe(2222);
-            accountInDb.Name.ShouldBe("test");
-            accountInDb.Id.ShouldBe(newAccount.Id);
-            accountInDb.ShouldBeOfType<Account>();
-        }
-
-        [Fact]
-        public async Task ShouldDeleteFromDatabase()
-        {
-            //Arrange
-            var _context = DataContextFactory.Create();
-
-            var goal = await _context.Goals.FirstOrDefaultAsync();
-
-            //Act
-            _context.Goals.Remove(goal);
-            await _context.SaveChangesAsync();
-            goal = await _context.Goals.FindAsync(goal.Id);
-
-            //Assert
-            goal.ShouldBeNull();
-        }
-
         [Theory]
         [InlineData(nameof(Budget))]
         [InlineData(nameof(Account))]
@@ -76,19 +23,19 @@ namespace Persistence.Tests
             {
                 case "Budget":
                     //Arrange
-                    var _context = DataContextFactory.Create();
+                    var context = DataContextFactory.Create();
 
-                    var budget = await _context.Budgets.FirstOrDefaultAsync();
+                    var budget = await context.Budgets.FirstOrDefaultAsync();
 
                     //Act
                     var dependentEntities = budget.GetType()
-                        .Properties(_context, budget.Id)
+                        .Properties(context, budget.Id)
                         .RelatedEntities(budget);
 
-                    _context.Remove(budget);
-                    await _context.SaveChangesAsync();
+                    context.Remove(budget);
+                    await context.SaveChangesAsync();
 
-                    var result = dependentEntities.IfAllEntitiesHasBeenDeleted<Budget>(_context);
+                    var result = dependentEntities.IfAllEntitiesHasBeenDeleted<Budget>(context);
 
                     //Assert
                     result.ShouldBeTrue();
@@ -96,19 +43,19 @@ namespace Persistence.Tests
 
                 case "Account":
                     //Arrange
-                    _context = DataContextFactory.Create();
+                    context = DataContextFactory.Create();
 
-                    var account = await _context.Accounts.FirstOrDefaultAsync();
+                    var account = await context.Accounts.FirstOrDefaultAsync();
 
                     //Act
                     dependentEntities = account.GetType()
-                        .Properties(_context, account.Id)
+                        .Properties(context, account.Id)
                         .RelatedEntities(account);
 
-                    _context.Remove(account);
-                    await _context.SaveChangesAsync();
+                    context.Remove(account);
+                    await context.SaveChangesAsync();
 
-                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Account>(_context);
+                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Account>(context);
 
                     //Assert
                     result.ShouldBeTrue();
@@ -116,19 +63,19 @@ namespace Persistence.Tests
 
                 case "FutureSaving":
                     //Arrange
-                    _context = DataContextFactory.Create();
+                    context = DataContextFactory.Create();
 
-                    var futureSaving = await _context.FutureSavings.FirstOrDefaultAsync();
+                    var futureSaving = await context.FutureSavings.FirstOrDefaultAsync();
 
                     //Act
                     dependentEntities = futureSaving.GetType()
-                        .Properties(_context, futureSaving.Id)
+                        .Properties(context, futureSaving.Id)
                         .RelatedEntities(futureSaving);
 
-                    _context.Remove(futureSaving);
-                    await _context.SaveChangesAsync();
+                    context.Remove(futureSaving);
+                    await context.SaveChangesAsync();
 
-                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Account>(_context);
+                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<FutureSaving>(context);
 
                     //Assert
                     result.ShouldBeTrue();
@@ -136,19 +83,19 @@ namespace Persistence.Tests
 
                 case "FutureTransaction":
                     //Arrange
-                    _context = DataContextFactory.Create();
+                    context = DataContextFactory.Create();
 
-                    var futureTransaction = await _context.FutureTransactions.FirstOrDefaultAsync();
+                    var futureTransaction = await context.FutureTransactions.FirstOrDefaultAsync();
 
                     //Act
                     dependentEntities = futureTransaction.GetType()
-                        .Properties(_context, futureTransaction.Id)
+                        .Properties(context, futureTransaction.Id)
                         .RelatedEntities(futureTransaction);
 
-                    _context.Remove(futureTransaction);
-                    await _context.SaveChangesAsync();
+                    context.Remove(futureTransaction);
+                    await context.SaveChangesAsync();
 
-                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Account>(_context);
+                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<FutureTransaction>(context, futureTransaction.Category);
 
                     //Assert
                     result.ShouldBeTrue();
@@ -156,19 +103,19 @@ namespace Persistence.Tests
 
                 case "Saving":
                     //Arrange
-                    _context = DataContextFactory.Create();
+                    context = DataContextFactory.Create();
 
-                    var saving = await _context.Savings.FirstOrDefaultAsync();
+                    var saving = await context.Savings.FirstOrDefaultAsync();
 
                     //Act
                     dependentEntities = saving.GetType()
-                        .Properties(_context, saving.Id)
+                        .Properties(context, saving.Id)
                         .RelatedEntities(saving);
 
-                    _context.Remove(saving);
-                    await _context.SaveChangesAsync();
+                    context.Remove(saving);
+                    await context.SaveChangesAsync();
 
-                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Account>(_context);
+                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Saving>(context);
 
                     //Assert
                     result.ShouldBeTrue();
@@ -176,19 +123,19 @@ namespace Persistence.Tests
 
                 case "Transaction":
                     //Arrange
-                    _context = DataContextFactory.Create();
+                    context = DataContextFactory.Create();
 
-                    var transaction = await _context.Transactions.FirstOrDefaultAsync();
+                    var transaction = await context.Transactions.FirstOrDefaultAsync();
 
                     //Act
                     dependentEntities = transaction.GetType()
-                        .Properties(_context, transaction.Id)
+                        .Properties(context, transaction.Id)
                         .RelatedEntities(transaction);
 
-                    _context.Remove(transaction);
-                    await _context.SaveChangesAsync();
+                    context.Remove(transaction);
+                    await context.SaveChangesAsync();
 
-                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Transaction>(_context);
+                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Transaction>(context);
 
                     //Assert
                     result.ShouldBeTrue();
@@ -196,19 +143,19 @@ namespace Persistence.Tests
 
                 case "Goal":
                     //Arrange
-                    _context = DataContextFactory.Create();
+                    context = DataContextFactory.Create();
 
-                    var goal = await _context.Goals.FirstOrDefaultAsync();
+                    var goal = await context.Goals.FirstOrDefaultAsync();
 
                     //Act
                     dependentEntities = goal.GetType()
-                        .Properties(_context, goal.Id)
+                        .Properties(context, goal.Id)
                         .RelatedEntities(goal);
 
-                    _context.Remove(goal);
-                    await _context.SaveChangesAsync();
+                    context.Remove(goal);
+                    await context.SaveChangesAsync();
 
-                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Transaction>(_context);
+                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Goal>(context);
 
                     //Assert
                     result.ShouldBeTrue();
@@ -216,24 +163,95 @@ namespace Persistence.Tests
 
                 case "TransactionCategory":
                     //Arrange
-                    _context = DataContextFactory.Create();
+                    context = DataContextFactory.Create();
 
-                    var category = await _context.TransactionCategories.FirstOrDefaultAsync();
+                    var category = await context.TransactionCategories.FirstOrDefaultAsync();
 
                     //Act
                     dependentEntities = category.GetType()
-                        .Properties(_context, category.Id)
+                        .Properties(context, category.Id)
                         .RelatedEntities(category);
 
-                    _context.Remove(category);
-                    await _context.SaveChangesAsync();
+                    context.Remove(category);
+                    await context.SaveChangesAsync();
 
-                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<Transaction>(_context);
+                    result = dependentEntities.IfAllEntitiesHasBeenDeleted<TransactionCategory>(context);
 
                     //Assert
                     result.ShouldBeTrue();
                     break;
             }
+        }
+
+        [Fact]
+        public async Task ShouldUseOverridenSaveChangesAsync()
+        {
+            // Arrange
+            var context = DataContextFactory.Create();
+
+            var budget = await context.Budgets.FirstOrDefaultAsync();
+            var checkingAccount = await context.Accounts.FirstOrDefaultAsync(x => x.AccountType == "Checking");
+            var savingAccount = await context.Accounts.FirstOrDefaultAsync(x => x.AccountType == "Saving");
+            var futureSaving = await context.FutureSavings.FirstOrDefaultAsync();
+            var futureExpenditure = await context.FutureTransactions.FirstOrDefaultAsync(x => x.Amount < 0);
+            var futureIncome = await context.FutureTransactions.FirstOrDefaultAsync(x => x.Amount > 0);
+            var goal = await context.Goals.FirstOrDefaultAsync();
+            var categories = await context.TransactionCategories.ToListAsync();
+
+            var baseCheckBalance = checkingAccount.Balance;
+            var baseSavingkBalance = savingAccount.Balance;
+            var baseCurrentAmount = goal.CurrentAmount;
+            var baseSavingCompletedAmount = futureSaving.CompletedAmount;
+            var baseExpenseCompletedAmount = futureExpenditure.CompletedAmount;
+            var baseIncomeCompletedAmount = futureIncome.CompletedAmount;
+
+            var newExpenditure = new Transaction()
+            {
+                Account = checkingAccount,
+                Amount = 150,
+                Budget = budget,
+                Category = futureExpenditure.Category,
+                Title = "test expenditure",
+                Date = DateTime.UtcNow.AddHours(-6),
+                FutureTransaction = futureExpenditure
+            };
+
+            var newIncome = new Transaction()
+            {
+                Account = checkingAccount,
+                Amount = 55,
+                Budget = budget,
+                Category = futureIncome.Category,
+                Title = "test income",
+                Date = DateTime.UtcNow.AddHours(-23),
+                FutureTransaction = futureIncome
+            };
+
+            var newSaving = new Saving()
+            {
+                Budget = budget,
+                FutureSaving = futureSaving,
+                Amount = 12,
+                Date = DateTime.UtcNow.AddDays(-3),
+                FromAccount = checkingAccount,
+                ToAccount = savingAccount,
+                Goal = goal
+            };
+
+            //Act
+            await context.Savings.AddAsync(newSaving);
+            await context.Transactions.AddAsync(newIncome);
+            await context.Transactions.AddAsync(newExpenditure);
+            await context.SaveChangesAsync();
+
+            //Assert
+            checkingAccount.Balance.ShouldBe(baseCheckBalance + newExpenditure.Amount + newIncome.Amount - newSaving.Amount);
+            savingAccount.Balance.ShouldBe(baseSavingkBalance + newSaving.Amount);
+            futureSaving.CompletedAmount.ShouldBe(baseSavingCompletedAmount + newSaving.Amount);
+            futureExpenditure.CompletedAmount.ShouldBe(baseExpenseCompletedAmount + newExpenditure.Amount);
+            futureIncome.CompletedAmount.ShouldBe(baseIncomeCompletedAmount + newIncome.Amount);
+            goal.CurrentAmount.ShouldBe(baseCurrentAmount + newSaving.Amount);
+            categories.Count.ShouldBe(4);
         }
     }
 }

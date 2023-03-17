@@ -2,15 +2,9 @@
 using Application.DTO;
 using Application.Interfaces;
 using AutoMapper;
-using Domain;
 using FluentValidation;
 using MediatR;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Goals
 {
@@ -43,7 +37,7 @@ namespace Application.Goals
                 _mapper = mapper;
             }
 
-            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var oldGoal = await _context.Goals.FindAsync(request.NewGoal.Id);
 

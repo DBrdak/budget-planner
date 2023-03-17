@@ -1,12 +1,6 @@
 ﻿using Application.Core;
-using FluentValidation;
 using MediatR;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.DailyActions.DailySavings
 {
@@ -33,7 +27,7 @@ namespace Application.DailyActions.DailySavings
                 var saving = await _context.Savings.FindAsync(request.SavingId);
 
                 if (saving == null)
-                    return null;              
+                    return null;
 
                 _context.Savings.Remove(saving);
 

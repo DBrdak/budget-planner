@@ -1,18 +1,16 @@
 ﻿using Application.Core;
+using Application.Interfaces;
 using AutoMapper;
+using Moq;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Tests.Common
 {
     public class QueryTestFixture : IDisposable
     {
-        public IMapper mapper { get; private set; }
-        public DataContext context { get; private set; }
+        protected readonly IMapper _mapper;
+        protected readonly DataContext _context;
+        protected readonly Mock<IBudgetAccessor> _budgetAccessorMock;
 
         public QueryTestFixture()
         {
@@ -21,13 +19,14 @@ namespace Application.Tests.Common
                 cfg.AddProfile<MappingProfiles>();
             });
 
-            mapper = configurationProvider.CreateMapper();
-            context = DataContextFactory.Create();
+            _mapper = configurationProvider.CreateMapper();
+            _context = DataContextFactory.Create();
+            _budgetAccessorMock = new Mock<IBudgetAccessor>();
         }
 
         public void Dispose()
         {
-            DataContextFactory.Destroy(context);
+            DataContextFactory.Destroy(_context);
         }
     }
 

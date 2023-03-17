@@ -1,16 +1,12 @@
-﻿using Application.Tests.Common;
-using Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain;
+using Persistence;
+using Persistence.Tests.Common;
 
 namespace Persistence.Tests.Common
 {
-    public class SeedTestData
+    public static class SeedTestData
     {
-        public static void Seed(DataContext context)
+        public static void Seed(this DataContext context)
         {
             var budget = new Budget
             {
@@ -20,19 +16,19 @@ namespace Persistence.Tests.Common
 
             var accounts = new List<Domain.Account>
             {
-                new Account
+                new Domain.Account
                 {
                     Name = "CheckingTest",
                     AccountType = "Checking",
                     Balance = 1000,
-                    Budget= budget
+                    Budget = budget
                 },
-                new Account
+                new Domain.Account
                 {
                     Name = "SavingTest",
                     AccountType = "Saving",
                     Balance = 500,
-                    Budget= budget
+                    Budget = budget
                 }
             };
 

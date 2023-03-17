@@ -1,5 +1,4 @@
 ﻿using Application.Interfaces;
-using Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 

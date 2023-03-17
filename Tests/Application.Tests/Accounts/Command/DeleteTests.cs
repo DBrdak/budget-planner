@@ -1,13 +1,7 @@
 ﻿using Application.Accounts;
-using Application.DTO;
 using Application.Tests.Common;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Tests.Account
 {
@@ -27,7 +21,7 @@ namespace Application.Tests.Account
             //Assert
             var accountInDb = await _context.Accounts.FindAsync(oldAccount.Id);
 
-            result.IsSuccess.ShouldBe(true);
+            result.IsSuccess.ShouldBeTrue();
             accountInDb.ShouldBeNull();
         }
 
@@ -41,9 +35,9 @@ namespace Application.Tests.Account
             //Act
             var result = await handler.Handle
                 (new Delete.Command { AccountId = Guid.Empty }, CancellationToken.None);
-
-            //Assert
             var accountInDb = await _context.Accounts.FindAsync(oldAccount.Id);
+            
+            //Assert
 
             result.ShouldBeNull();
             accountInDb.ShouldNotBeNull();

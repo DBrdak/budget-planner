@@ -4,11 +4,6 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.SpendingPlan.Expenditures
 {
@@ -47,12 +42,7 @@ namespace Application.SpendingPlan.Expenditures
 
                 var budgetId = await _budgetAccessor.GetBudgetId();
 
-                var category = await _context.TransactionCategories
-                    .FirstOrDefaultAsync(tc => tc.Value == futureExpenditure.Category
-                    && tc.BudgetId == budgetId);
-
                 _context.FutureTransactions.Remove(futureExpenditure);
-                _context.TransactionCategories.Remove(category);
 
                 var fail = await _context.SaveChangesAsync() < 0;
 

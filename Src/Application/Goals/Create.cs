@@ -1,18 +1,12 @@
 ﻿using Application.Core;
-using Application.Interfaces;
 using Application.DTO;
-using Domain;
-using MediatR;
-using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Application.Interfaces;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+using Domain;
 using FluentValidation;
+using MediatR;
+using Microsoft.AspNetCore.Http;
+using Persistence;
 
 namespace Application.Goals
 {
@@ -38,18 +32,16 @@ namespace Application.Goals
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
-            private readonly IHttpContextAccessor _httpContext;
             private readonly IBudgetAccessor _budgetAccessor;
 
-            public Handler(DataContext context, IMapper mapper, IHttpContextAccessor httpContext, IBudgetAccessor budgetAccessor)
+            public Handler(DataContext context, IMapper mapper, IBudgetAccessor budgetAccessor)
             {
                 _context = context;
                 _mapper = mapper;
-                _httpContext = httpContext;
                 _budgetAccessor = budgetAccessor;
             }
 
-            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var newGoal = _mapper.Map<Goal>(request.NewGoal);
 
@@ -57,7 +49,7 @@ namespace Application.Goals
 
                 var budgetId = await _budgetAccessor.GetBudgetId();
 
-                newGoal.BudgetId = budgetId; //await _context.Budgets.FindAsync(budgetId);
+                newGoal.BudgetId = budgetId;
 
                 if (newGoal.BudgetId == Guid.Empty)
                     return null;

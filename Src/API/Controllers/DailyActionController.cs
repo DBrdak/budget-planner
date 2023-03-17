@@ -1,9 +1,5 @@
 ﻿using Application.DTO;
-using Application.DailyActions.DailyExpenditures;
-using Application.DailyActions.DailyIncomes;
-using Application.DailyActions.DailySavings;
 using Microsoft.AspNetCore.Mvc;
-using Domain;
 using System.ComponentModel;
 
 namespace API.Controllers

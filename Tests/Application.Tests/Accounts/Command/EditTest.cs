@@ -1,14 +1,8 @@
 ﻿using Application.Accounts;
 using Application.DTO;
 using Application.Tests.Common;
-using Domain;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Tests.Account
 {
@@ -22,7 +16,7 @@ namespace Application.Tests.Account
             var oldAccount = await _context.Accounts.FirstAsync();
             var handler = new Edit.Handler(_context);
 
-            var accountToUpdate = new AccountDto
+            var account = new AccountDto
             {
                 Id = oldAccount.Id,
                 Name = "Test",
@@ -32,16 +26,16 @@ namespace Application.Tests.Account
 
             //Act
             var result = await handler.Handle
-                (new Edit.Command { NewAccount = accountToUpdate }, CancellationToken.None);
+                (new Edit.Command { NewAccount = account }, CancellationToken.None);
 
             //Assert
-            var accountInDb = await _context.Accounts.FindAsync(accountToUpdate.Id);
+            var accountInDb = await _context.Accounts.FindAsync(account.Id);
 
             result.IsSuccess.ShouldBe(true);
             accountInDb.ShouldNotBeNull();
-            accountInDb.Name.ShouldBe(accountToUpdate.Name);
-            accountInDb.AccountType.ShouldBe(accountToUpdate.AccountType);
-            accountInDb.Balance.ShouldBe(accountToUpdate.Balance);
+            accountInDb.Name.ShouldBe(account.Name);
+            accountInDb.AccountType.ShouldBe(account.AccountType);
+            accountInDb.Balance.ShouldBe(account.Balance);
             accountInDb.Budget.ShouldBe(budget);
         }
 

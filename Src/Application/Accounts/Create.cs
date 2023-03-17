@@ -1,18 +1,11 @@
 ﻿using Application.Core;
-using Application.Interfaces;
 using Application.DTO;
+using Application.Interfaces;
+using AutoMapper;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using FluentValidation;
 
 namespace Application.Accounts
 {

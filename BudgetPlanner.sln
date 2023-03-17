@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Src\Persiste
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Src\Infrastructure\Infrastructure.csproj", "{EFDA331F-2EA4-4AE3-B90E-99E90937FCE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Tests", "Tests\BudgetPlanner.Application.Tests\Application.Tests.csproj", "{FD24802C-6F17-49A5-9EEC-27EB4552D3F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Tests", "Tests\Application.Tests\Application.Tests.csproj", "{FD24802C-6F17-49A5-9EEC-27EB4552D3F0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence.Tests", "Tests\Persistence.Tests\Persistence.Tests.csproj", "{2721D3AD-CA53-4F1F-B8D4-7AF63F4C8865}"
 	ProjectSection(ProjectDependencies) = postProject

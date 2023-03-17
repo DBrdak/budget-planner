@@ -1,7 +1,6 @@
 ﻿using Application.Core;
 using Application.Interfaces;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.DailyActions.DailyIncomes

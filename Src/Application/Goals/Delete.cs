@@ -1,13 +1,7 @@
 ﻿using Application.Core;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Goals
 {
@@ -35,7 +29,7 @@ namespace Application.Goals
                 _context = dataContext;
             }
 
-            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var goal = await _context.Goals.FindAsync(request.GoalId);
 

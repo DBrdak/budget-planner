@@ -31,4 +31,10 @@
     <ProjectReference Include="..\..\Src\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DailyActions\" />
+    <Folder Include="Goals\" />
+    <Folder Include="SpendingPlan\" />
+  </ItemGroup>
+
 </Project>
