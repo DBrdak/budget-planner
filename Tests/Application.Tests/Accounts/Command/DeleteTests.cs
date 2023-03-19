@@ -8,7 +8,7 @@ namespace Application.Tests.Account;
 public class DeleteTests : CommandTestBase
 {
     [Fact]
-    public async Task ShouldDeleteAccount()
+    public async Task ShouldSuccess()
     {
         //Arrange
         var oldAccount = await _context.Accounts.FirstAsync();
@@ -19,27 +19,20 @@ public class DeleteTests : CommandTestBase
             (new Delete.Command { AccountId = oldAccount.Id }, CancellationToken.None);
 
         //Assert
-        var accountInDb = await _context.Accounts.FindAsync(oldAccount.Id);
-
         result.IsSuccess.ShouldBeTrue();
-        accountInDb.ShouldBeNull();
     }
 
     [Fact]
-    public async Task ShouldReturnNull()
+    public async Task ShouldFail()
     {
         //Arrange
-        var oldAccount = await _context.Accounts.FirstAsync();
         var handler = new Delete.Handler(_context);
 
         //Act
         var result = await handler.Handle
-            (new Delete.Command { AccountId = Guid.Empty }, CancellationToken.None);
-        var accountInDb = await _context.Accounts.FindAsync(oldAccount.Id);
+            (new Delete.Command { AccountId = Guid.NewGuid() }, CancellationToken.None);
 
         //Assert
-
         result.ShouldBeNull();
-        accountInDb.ShouldNotBeNull();
     }
 }

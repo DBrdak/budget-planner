@@ -1,9 +1,13 @@
-﻿namespace Domain;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Domain;
 
 public class Account
 {
     public Guid Id { get; set; }
+    [Required]
     public string Name { get; set; }
+    [Required]
     public string AccountType { get; set; }
     public decimal Balance { get; set; }
 

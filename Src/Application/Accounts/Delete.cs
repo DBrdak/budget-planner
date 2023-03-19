@@ -16,7 +16,7 @@ public class Delete
     {
         public CommandValidator()
         {
-            RuleFor(x => x.AccountId).NotEmpty();
+            RuleFor(x => x.AccountId).NotEmpty().NotEqual(Guid.Empty);
         }
     }
 

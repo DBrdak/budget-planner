@@ -1,9 +1,11 @@
-﻿using Application.DTO;
+﻿using System.Diagnostics.CodeAnalysis;
+using Application.DTO;
 using Application.Interfaces;
 using FluentValidation;
 
 namespace Application.DailyActions.DailySavings;
 
+[SuppressMessage("ReSharper", "AsyncConverter.AsyncWait")]
 public class SavingValidator : AbstractValidator<SavingDto>
 {
     private readonly IValidationExtension _validationExtension;
@@ -17,18 +19,23 @@ public class SavingValidator : AbstractValidator<SavingDto>
             .WithMessage("Amount is required")
             .GreaterThan(0)
             .WithMessage("Amount must be greater than 0");
+
         RuleFor(x => x.Date)
             .Must(x => x <= DateTime.UtcNow)
             .WithMessage("Specify past or current date");
+
         RuleFor(x => x.ToAccountName)
             .Must(x => _validationExtension.AccountExists(x).Result)
-            .WithMessage(x => $"Account named {x.ToAccountName} doesn't exists");
-        RuleFor(x => x.ToAccountName)
+            .WithMessage(x => $"Account named {x.ToAccountName} doesn't exists")
             .Must(x => _validationExtension.AccountTypeOf(x, "Saving").Result)
-            .WithMessage(x => $"Account named {x.ToAccountName} doesn't exists");
+            .WithMessage(x => $"Account named {x.ToAccountName} is of type Checking");
+
         RuleFor(x => x.FromAccountName)
             .Must(x => _validationExtension.AccountTypeOf(x, "Checking").Result)
+            .WithMessage(x => $"Account named {x.ToAccountName} is of type Saving")
+            .Must(x => _validationExtension.AccountExists(x).Result)
             .WithMessage(x => $"Account named {x.ToAccountName} doesn't exists");
+
         RuleFor(x => x.GoalName)
             .Must(x => _validationExtension.GoalExists(x).Result || x == null)
             .WithMessage(x => $"Category named {x.GoalName} does't exists");

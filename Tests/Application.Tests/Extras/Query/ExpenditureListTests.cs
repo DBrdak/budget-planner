@@ -7,7 +7,7 @@ namespace Application.Tests.Extras.Query;
 public class ExpenditureListTests : QueryTestFixture
 {
     [Fact]
-    public async Task ShouldReturnListOfExpenditureCategories()
+    public async Task ShouldSuccess()
     {
         // Arrange
         var handler = new ExpendituresList.Handler(_context, _budgetAccessorMock.Object, _mapper);

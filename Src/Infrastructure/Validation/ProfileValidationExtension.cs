@@ -19,27 +19,27 @@ public class ProfileValidationExtension : IProfileValidationExtension
 
     public async Task<bool> UniqueBudgetName(string newBudgetName)
     {
-        var budgetName = await _budgetAccessor.GetBudgetName();
+        var budgetName = await _budgetAccessor.GetBudgetName().ConfigureAwait(false);
 
-        return await _context.Budgets
+        return !await _context.Budgets
             .AsNoTracking()
             .Where(b => b.Name != budgetName)
-            .AnyAsync(b => b.Name == newBudgetName);
+            .AnyAsync(b => b.Name == newBudgetName).ConfigureAwait(false);
     }
 
     public async Task<bool> UniqueEmail(string newEmail)
     {
-        return await _context.Users
+        return !await _context.Users
             .AsNoTracking()
             .Where(u => u.UserName != _userAccessor.GetUsername())
-            .AnyAsync(u => u.Email == newEmail);
+            .AnyAsync(u => u.Email == newEmail).ConfigureAwait(false);
     }
 
     public async Task<bool> UniqueUsername(string newUsername)
     {
-        return await _context.Users
+        return !await _context.Users
             .AsNoTracking()
             .Where(u => u.UserName != _userAccessor.GetUsername())
-            .AnyAsync(u => u.UserName == newUsername);
+            .AnyAsync(u => u.UserName == newUsername).ConfigureAwait(false);
     }
 }

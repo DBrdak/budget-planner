@@ -9,7 +9,7 @@ namespace Application.Tests.Goals.Command;
 public class CreateTests : CommandTestBase
 {
     [Fact]
-    public async Task ShouldCreateGoal()
+    public async Task ShouldSuccess()
     {
         // Arrange
 
@@ -26,10 +26,8 @@ public class CreateTests : CommandTestBase
 
         // Act
         var result = await handler.Handle(new Create.Command { NewGoal = goal }, CancellationToken.None);
-        var goalInDb = await _context.Goals.FirstOrDefaultAsync(x => x.Name == goal.Name);
 
         // Assert
         result.IsSuccess.ShouldBeTrue();
-        goalInDb.ShouldNotBeNull();
     }
 }

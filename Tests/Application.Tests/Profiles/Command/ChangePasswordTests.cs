@@ -11,7 +11,7 @@ namespace Application.Tests.Profiles.Command;
 public class ChangePasswordTests : CommandTestExtendedBase
 {
     [Fact]
-    public async Task ShouldChangePassword()
+    public async Task ShouldSuccess()
     {
         // Assert
         var handler = new UpdatePassword.Handler(_userManagerMock.Object, _userAccessorMock.Object);
@@ -35,5 +35,32 @@ public class ChangePasswordTests : CommandTestExtendedBase
 
         //Assert
         result.IsSuccess.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task ShouldFail()
+    {
+        // Assert
+        var handler = new UpdatePassword.Handler(_userManagerMock.Object, _userAccessorMock.Object);
+
+        var passwordForm = new PasswordFormDto
+        {
+            NewPassword = "Pa$$w0rdTest",
+            OldPassword = ""
+        };
+
+        var identityResult = passwordForm.OldPassword == "Pa$$w0rd"
+            ? IdentityResult.Success
+            : IdentityResult.Failed();
+
+        _userManagerMock.Setup(x => x.ChangePasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()))
+            .ReturnsAsync(identityResult);
+
+        // Act
+        var result = await handler.Handle(new UpdatePassword.Command { PasswordForm = passwordForm },
+            CancellationToken.None);
+
+        //Assert
+        result.IsSuccess.ShouldBeFalse();
     }
 }

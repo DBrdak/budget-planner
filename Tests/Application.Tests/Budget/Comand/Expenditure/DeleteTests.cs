@@ -21,4 +21,18 @@ public class DeleteTests : CommandTestBase
         // Assert
         result.IsSuccess.ShouldBeTrue();
     }
+
+    [Fact]
+    public async Task ShouldFail()
+    {
+        // Arrange
+        var handler = new Delete.Handler(_context);
+
+        // Act
+        var result = await handler.Handle(new Delete.Command { ExpenditureId = Guid.Empty},
+            CancellationToken.None).ConfigureAwait(false);
+
+        // Assert
+        result.ShouldBeNull();
+    }
 }

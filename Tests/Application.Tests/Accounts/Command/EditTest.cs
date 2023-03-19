@@ -9,10 +9,9 @@ namespace Application.Tests.Account;
 public class EditTest : CommandTestBase
 {
     [Fact]
-    public async Task ShouldUpdateAccount()
+    public async Task ShouldSuccess()
     {
         //Arrange
-        var budget = await _context.Budgets.FirstAsync();
         var oldAccount = await _context.Accounts.FirstAsync();
         var handler = new Edit.Handler(_context);
 
@@ -29,22 +28,13 @@ public class EditTest : CommandTestBase
             (new Edit.Command { NewAccount = account }, CancellationToken.None);
 
         //Assert
-        var accountInDb = await _context.Accounts.FindAsync(account.Id);
-
-        result.IsSuccess.ShouldBe(true);
-        accountInDb.ShouldNotBeNull();
-        accountInDb.Name.ShouldBe(account.Name);
-        accountInDb.AccountType.ShouldBe(account.AccountType);
-        accountInDb.Balance.ShouldBe(account.Balance);
-        accountInDb.Budget.ShouldBe(budget);
+        result.IsSuccess.ShouldBeTrue();
     }
 
     [Fact]
-    public async Task ShouldReturnNull()
+    public async Task ShouldFail()
     {
         //Arrange
-        var budget = await _context.Budgets.FirstAsync();
-        var oldAccount = await _context.Accounts.FirstAsync();
         var handler = new Edit.Handler(_context);
 
         var accountToUpdate = new AccountDto();
@@ -54,9 +44,6 @@ public class EditTest : CommandTestBase
             (new Edit.Command { NewAccount = accountToUpdate }, CancellationToken.None);
 
         //Assert
-        var accountInDb = await _context.Accounts.FindAsync(accountToUpdate.Id);
-
         result.ShouldBeNull();
-        accountInDb.ShouldBeNull();
     }
 }

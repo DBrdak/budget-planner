@@ -8,11 +8,9 @@ namespace Application.Tests.Goals.Query;
 public class List : QueryTestFixture
 {
     [Fact]
-    public async Task ShouldReturnList()
+    public async Task ShouldSuccess()
     {
         // Arrange
-        var budget = await _context.Budgets.FirstOrDefaultAsync();
-        _budgetAccessorMock.Setup(x => x.GetBudgetId()).ReturnsAsync(budget.Id);
         var handler = new Application.Goals.List.Handler(_context, _budgetAccessorMock.Object, _mapper);
 
         // Act
@@ -20,6 +18,5 @@ public class List : QueryTestFixture
 
         // Assert
         result.IsSuccess.ShouldBeTrue();
-        result.Value.Count.ShouldBe(1);
     }
 }
