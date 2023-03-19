@@ -2,13 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Persistence.Configurations
+namespace Persistence.Configurations;
+
+public class GoalConfiguration : IEntityTypeConfiguration<Goal>
 {
-    public class GoalConfiguration : IEntityTypeConfiguration<Goal>
+    public void Configure(EntityTypeBuilder<Goal> builder)
     {
-        public void Configure(EntityTypeBuilder<Goal> builder)
-        {
-            builder.Property(g => g.EndDate).HasColumnType("Date");
-        }
+        builder.Property(g => g.EndDate).HasColumnType("Date");
     }
 }

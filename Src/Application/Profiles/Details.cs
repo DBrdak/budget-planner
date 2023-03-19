@@ -2,48 +2,44 @@
 using Application.DTO;
 using Application.Interfaces;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Domain;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
+using Microsoft.AspNetCore.Identity;
 
-namespace Application.Profiles
+namespace Application.Profiles;
+
+public class Details
 {
-    public class Details
+    public class Query : IRequest<Result<ProfileDto>>
     {
-        public class Query : IRequest<Result<ProfileDto>>
+    }
+
+    public class Handler : IRequestHandler<Query, Result<ProfileDto>>
+    {
+        private readonly IBudgetAccessor _budgetAccessor;
+        private readonly IMapper _mapper;
+        private readonly IUserAccessor _userAccessor;
+        private readonly UserManager<User> _userManager;
+
+        public Handler(IUserAccessor userAccessor, IMapper mapper, UserManager<User> userManager,
+            IBudgetAccessor budgetAccessor)
         {
+            _userAccessor = userAccessor;
+            _mapper = mapper;
+            _userManager = userManager;
+            _budgetAccessor = budgetAccessor;
         }
 
-        public class Handler : IRequestHandler<Query, Result<ProfileDto>>
+        public async Task<Result<ProfileDto>> Handle(Query request, CancellationToken cancellationToken)
         {
-            private readonly DataContext _context;
-            private readonly IUserAccessor _userAccessor;
-            private readonly IMapper _mapper;
-            private readonly IBudgetAccessor _budgetAccessor;
+            var profile = _mapper.Map<ProfileDto>(await _userManager
+                .FindByNameAsync(_userAccessor.GetUsername())
+                .ConfigureAwait(true), opt => opt.Items["BudgetName"] = _budgetAccessor.GetBudgetName().Result);
 
-            public Handler(DataContext context, IUserAccessor userAccessor, IMapper mapper, IBudgetAccessor budgetAccessor)
-            {
-                _context = context;
-                _userAccessor = userAccessor;
-                _mapper = mapper;
-                _budgetAccessor = budgetAccessor;
-            }
+            if (profile == null)
+                return null;
 
-            async Task<Result<ProfileDto>> IRequestHandler<Query, Result<ProfileDto>>.Handle(Query request, CancellationToken cancellationToken)
-            {
-                var profile = await _context.Users
-                    .AsNoTracking()
-                    .ProjectTo<ProfileDto>(_mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync(u => u.Username == _userAccessor.GetUsername());
-
-                if (profile == null)
-                    return null;
-
-                profile.BudgetName = await _budgetAccessor.GetBudgetName();
-
-                return Result<ProfileDto>.Success(profile);
-            }
+            return Result<ProfileDto>.Success(profile);
         }
     }
 }

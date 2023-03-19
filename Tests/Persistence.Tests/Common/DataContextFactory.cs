@@ -1,27 +1,26 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Persistence.Tests.Common
+namespace Persistence.Tests.Common;
+
+public class DataContextFactory
 {
-    public class DataContextFactory
+    public static DataContext Create()
     {
-        public static DataContext Create()
-        {
-            var options = new DbContextOptionsBuilder<DataContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
-                .Options;
+        var options = new DbContextOptionsBuilder<DataContext>()
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .Options;
 
-            var context = new DataContext(options);
+        var context = new DataContext(options);
 
-            context.Seed();
+        context.Seed();
 
-            return context;
-        }
+        return context;
+    }
 
-        public static void Destroy(DataContext context)
-        {
-            context.Database.EnsureDeleted();
+    public static void Destroy(DataContext context)
+    {
+        context.Database.EnsureDeleted();
 
-            context.Dispose();
-        }
+        context.Dispose();
     }
 }

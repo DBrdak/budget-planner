@@ -8,66 +8,65 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.SpendingPlan.Incomes
+namespace Application.SpendingPlan.Incomes;
+
+public class Create
 {
-    public class Create
+    public class Command : IRequest<Result<Unit>>
     {
-        public class Command : IRequest<Result<Unit>>
+        public FutureIncomeDto NewFutureIncome { get; set; }
+    }
+
+    public class CommandValidator : AbstractValidator<Command>
+    {
+        private readonly IValidationExtension _validationExtension;
+
+        public CommandValidator(IValidationExtension validationExtension)
         {
-            public FutureIncomeDto NewFutureIncome { get; set; }
+            _validationExtension = validationExtension;
+
+            RuleFor(x => x.NewFutureIncome).SetValidator(
+                new FutureIncomeValidator(_validationExtension));
+        }
+    }
+
+    public class Handler : IRequestHandler<Command, Result<Unit>>
+    {
+        private readonly IBudgetAccessor _budgetAccessor;
+        private readonly DataContext _context;
+        private readonly IMapper _mapper;
+
+        public Handler(DataContext context, IMapper mapper, IBudgetAccessor budgetAccessor)
+        {
+            _context = context;
+            _mapper = mapper;
+            _budgetAccessor = budgetAccessor;
         }
 
-        public class CommandValidator : AbstractValidator<Command>
+        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            private readonly IValidationExtension _validationExtension;
+            var newFutureIncome = _mapper.Map<FutureTransaction>(request.NewFutureIncome);
 
-            public CommandValidator(IValidationExtension validationExtension)
-            {
-                _validationExtension = validationExtension;
+            var budgetId = await _budgetAccessor.GetBudgetId().ConfigureAwait(false);
 
-                RuleFor(x => x.NewFutureIncome).SetValidator(
-                    new FutureIncomeValidator(_validationExtension));
-            }
-        }
+            newFutureIncome.BudgetId = budgetId;
 
-        public class Handler : IRequestHandler<Command, Result<Unit>>
-        {
-            private readonly DataContext _context;
-            private readonly IMapper _mapper;
-            private readonly IBudgetAccessor _budgetAccessor;
+            newFutureIncome.Account = await _context.Accounts
+                .FirstOrDefaultAsync(a => a.Name == request.NewFutureIncome.AccountName
+                                          && a.Budget.Id == budgetId).ConfigureAwait(false);
 
-            public Handler(DataContext context, IMapper mapper, IBudgetAccessor budgetAccessor)
-            {
-                _context = context;
-                _mapper = mapper;
-                _budgetAccessor = budgetAccessor;
-            }
+            if (newFutureIncome.BudgetId == Guid.Empty
+                || newFutureIncome.Account == null)
+                return null;
 
-            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
-            {
-                var newFutureIncome = _mapper.Map<FutureTransaction>(request.NewFutureIncome);
+            await _context.FutureTransactions.AddAsync(newFutureIncome).ConfigureAwait(false);
 
-                var budgetId = await _budgetAccessor.GetBudgetId();
+            var fail = await _context.SaveChangesAsync().ConfigureAwait(false) < 0;
 
-                newFutureIncome.BudgetId = budgetId;
+            if (fail)
+                return Result<Unit>.Failure("Problem while adding new income");
 
-                newFutureIncome.Account = await _context.Accounts
-                    .FirstOrDefaultAsync(a => a.Name == request.NewFutureIncome.AccountName
-                    && a.Budget.Id == budgetId);
-
-                if (newFutureIncome.BudgetId == Guid.Empty
-                    || newFutureIncome.Account == null)
-                    return null;
-
-                await _context.FutureTransactions.AddAsync(newFutureIncome);
-
-                var fail = await _context.SaveChangesAsync() < 0;
-
-                if (fail)
-                    return Result<Unit>.Failure("Problem while adding new income");
-
-                return Result<Unit>.Success(Unit.Value);
-            }
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 }

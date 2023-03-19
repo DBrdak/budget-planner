@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Domain
+namespace Domain;
+
+public class User : IdentityUser
 {
-    public class User : IdentityUser
-    {
-        public string DisplayName { get; set; }
-    }
+    public string DisplayName { get; set; }
 }

@@ -3,44 +3,43 @@ using Application.Tests.Common;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
 
-namespace Application.Tests.Account
+namespace Application.Tests.Account;
+
+public class DeleteTests : CommandTestBase
 {
-    public class DeleteTests : CommandTestBase
+    [Fact]
+    public async Task ShouldDeleteAccount()
     {
-        [Fact]
-        public async Task ShouldDeleteAccount()
-        {
-            //Arrange
-            var oldAccount = await _context.Accounts.FirstAsync();
-            var handler = new Delete.Handler(_context);
+        //Arrange
+        var oldAccount = await _context.Accounts.FirstAsync();
+        var handler = new Delete.Handler(_context);
 
-            //Act
-            var result = await handler.Handle
-                (new Delete.Command { AccountId = oldAccount.Id }, CancellationToken.None);
+        //Act
+        var result = await handler.Handle
+            (new Delete.Command { AccountId = oldAccount.Id }, CancellationToken.None);
 
-            //Assert
-            var accountInDb = await _context.Accounts.FindAsync(oldAccount.Id);
+        //Assert
+        var accountInDb = await _context.Accounts.FindAsync(oldAccount.Id);
 
-            result.IsSuccess.ShouldBeTrue();
-            accountInDb.ShouldBeNull();
-        }
+        result.IsSuccess.ShouldBeTrue();
+        accountInDb.ShouldBeNull();
+    }
 
-        [Fact]
-        public async Task ShouldReturnNull()
-        {
-            //Arrange
-            var oldAccount = await _context.Accounts.FirstAsync();
-            var handler = new Delete.Handler(_context);
+    [Fact]
+    public async Task ShouldReturnNull()
+    {
+        //Arrange
+        var oldAccount = await _context.Accounts.FirstAsync();
+        var handler = new Delete.Handler(_context);
 
-            //Act
-            var result = await handler.Handle
-                (new Delete.Command { AccountId = Guid.Empty }, CancellationToken.None);
-            var accountInDb = await _context.Accounts.FindAsync(oldAccount.Id);
-            
-            //Assert
+        //Act
+        var result = await handler.Handle
+            (new Delete.Command { AccountId = Guid.Empty }, CancellationToken.None);
+        var accountInDb = await _context.Accounts.FindAsync(oldAccount.Id);
 
-            result.ShouldBeNull();
-            accountInDb.ShouldNotBeNull();
-        }
+        //Assert
+
+        result.ShouldBeNull();
+        accountInDb.ShouldNotBeNull();
     }
 }

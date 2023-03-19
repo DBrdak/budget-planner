@@ -1,48 +1,47 @@
-﻿using Application.Core;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
+using Application.Core;
 
-namespace API.Middleware
+namespace API.Middleware;
+
+public class ExceptionMiddleware
 {
-    public class ExceptionMiddleware
+    private readonly IHostEnvironment _env;
+    private readonly ILogger<ExceptionMiddleware> _logger;
+    private readonly RequestDelegate _next;
+
+    public ExceptionMiddleware(RequestDelegate next,
+        ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
     {
-        private readonly RequestDelegate _next;
-        private readonly ILogger<ExceptionMiddleware> _logger;
-        private readonly IHostEnvironment _env;
+        _next = next;
+        _logger = logger;
+        _env = env;
+    }
 
-        public ExceptionMiddleware(RequestDelegate next,
-            ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
         {
-            _next = next;
-            _logger = logger;
-            _env = env;
+            await _next(context);
         }
-
-        public async Task InvokeAsync(HttpContext context)
+        catch (Exception ex)
         {
-            try
+            _logger.LogError(ex, ex.Message);
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+            var response = _env.IsDevelopment()
+                ? new AppException(context.Response.StatusCode, ex.Message, ex.StackTrace)
+                : new AppException(context.Response.StatusCode, ex.Message, "Internal Server Error");
+
+            var options = new JsonSerializerOptions
             {
-                await _next(context);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                context.Response.ContentType = "application/json";
-                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
 
-                var response = _env.IsDevelopment() ?
-                    new AppException(context.Response.StatusCode, ex.Message, ex.StackTrace.ToString())
-                    : new AppException(context.Response.StatusCode, ex.Message, "Internal Server Error");
+            var json = JsonSerializer.Serialize(response, options);
 
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                };
-
-                var json = JsonSerializer.Serialize(response, options);
-
-                await context.Response.WriteAsync(json);
-            }
+            await context.Response.WriteAsync(json);
         }
     }
 }

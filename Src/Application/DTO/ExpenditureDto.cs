@@ -1,6 +1,5 @@
-﻿namespace Application.DTO
+﻿namespace Application.DTO;
+
+public class ExpenditureDto : TransactionDto
 {
-    public class ExpenditureDto : TransactionDto
-    {
-    }
 }

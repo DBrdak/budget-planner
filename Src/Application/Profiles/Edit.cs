@@ -2,69 +2,67 @@
 using Application.DTO;
 using Application.Interfaces;
 using AutoMapper;
+using Domain;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Persistence;
 
-namespace Application.Profiles
+namespace Application.Profiles;
+
+public class Edit
 {
-    public class Edit
+    public class Command : IRequest<Result<Unit>>
     {
-        public class Command : IRequest<Result<Unit>>
+        public ProfileDto NewProfile { get; set; }
+    }
+
+    public class CommandValidator : AbstractValidator<Command>
+    {
+        public CommandValidator(IProfileValidationExtension validationExtension)
         {
-            public ProfileDto NewProfile { get; set; }
+            RuleFor(x => x.NewProfile).SetValidator(new ProfileValidator(validationExtension));
+        }
+    }
+
+    public class Handler : IRequestHandler<Command, Result<Unit>>
+    {
+        private readonly IBudgetAccessor _budgetAccessor;
+        private readonly DataContext _context;
+        private readonly IMapper _mapper;
+        private readonly IUserAccessor _userAccessor;
+        private readonly UserManager<User> _userManager;
+
+        public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor,
+            UserManager<User> userManager, IBudgetAccessor budgetAccessor)
+        {
+            _context = context;
+            _mapper = mapper;
+            _userAccessor = userAccessor;
+            _userManager = userManager;
+            _budgetAccessor = budgetAccessor;
         }
 
-        public class CommandValidator : AbstractValidator<Command>
+        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            private readonly IProfileValidationExtension _validationExtension;
+            var oldProfile = await _userManager
+                .FindByNameAsync(_userAccessor.GetUsername())
+                .ConfigureAwait(false);
 
-            public CommandValidator(IProfileValidationExtension validationExtension)
-            {
-                _validationExtension = validationExtension;
+            if (oldProfile == null)
+                return null;
 
-                RuleFor(x => x.NewProfile).SetValidator(new ProfileValidator(_validationExtension));
-            }
-        }
+            _mapper.Map(request.NewProfile, oldProfile);
 
-        public class Handler : IRequestHandler<Command, Result<Unit>>
-        {
-            private readonly DataContext _context;
-            private readonly IMapper _mapper;
-            private readonly IUserAccessor _userAccessor;
-            private readonly IBudgetAccessor _budgetAccessor;
+            var budgetName = await _budgetAccessor.GetBudget().ConfigureAwait(false);
+            budgetName.Name = request.NewProfile.BudgetName;
 
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IBudgetAccessor budgetAccessor)
-            {
-                _context = context;
-                _mapper = mapper;
-                _userAccessor = userAccessor;
-                _budgetAccessor = budgetAccessor;
-            }
+            var fail = await _context.SaveChangesAsync().ConfigureAwait(false) < 0;
 
-            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
-            {
-                var oldProfile = await _context.Users.FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername());
+            if (fail)
+                return Result<Unit>.Failure("Problem while updating new user data");
 
-                if (oldProfile == null)
-                    return null;
-
-                _mapper.Map(request.NewProfile, oldProfile);
-
-                var budgetName = await _budgetAccessor.GetBudgetName();
-
-                var budget = await _context.Budgets.FirstOrDefaultAsync(b => b.Name == budgetName);
-
-                budget.Name = request.NewProfile.BudgetName;
-
-                var fail = await _context.SaveChangesAsync() < 0;
-
-                if (fail)
-                    return Result<Unit>.Failure("Problem while updating new user data");
-
-                return Result<Unit>.Success(Unit.Value);
-            }
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 }

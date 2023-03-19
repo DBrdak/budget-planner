@@ -15,7 +15,7 @@ public class EditTests : CommandTestBase
         var oldGoal = await _context.Goals.FirstOrDefaultAsync();
         var budget = await _context.Budgets.FirstOrDefaultAsync();
 
-        var goal = new GoalDto()
+        var goal = new GoalDto
         {
             Id = oldGoal.Id,
             Name = "Edit test",
@@ -29,18 +29,17 @@ public class EditTests : CommandTestBase
 
         // Act
         var result = await handler.Handle(new Edit.Command { NewGoal = goal }, CancellationToken.None);
-        var goalInDb = await _context.Goals.FirstOrDefaultAsync();
-        
+
         // Assert
         result.IsSuccess.ShouldBeTrue();
-        goalInDb.ShouldNotBeNull();
-        
-        goalInDb.Id.ShouldBe(goal.Id);
-        goalInDb.Budget.ShouldBe(budget);
-        goalInDb.Description.ShouldBe(goal.Description);
-        goalInDb.Name.ShouldBe(goal.Name);
-        goalInDb.CurrentAmount.ShouldBe(goal.CurrentAmount);
-        goalInDb.RequiredAmount.ShouldBe(goal.RequiredAmount);
-        goalInDb.EndDate.ShouldBe(goal.EndDate);
+        oldGoal.ShouldNotBeNull();
+
+        oldGoal.Id.ShouldBe(goal.Id);
+        oldGoal.Budget.ShouldBe(budget);
+        oldGoal.Description.ShouldBe(goal.Description);
+        oldGoal.Name.ShouldBe(goal.Name);
+        oldGoal.CurrentAmount.ShouldBe(goal.CurrentAmount);
+        oldGoal.RequiredAmount.ShouldBe(goal.RequiredAmount);
+        oldGoal.EndDate.ShouldBe(goal.EndDate);
     }
 }

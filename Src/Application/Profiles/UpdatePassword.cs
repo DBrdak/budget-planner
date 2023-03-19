@@ -4,42 +4,41 @@ using Application.Interfaces;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
-namespace Application.Profiles
+namespace Application.Profiles;
+
+public class UpdatePassword
 {
-    public class UpdatePassword
+    public class Command : IRequest<Result<Unit>>
     {
-        public class Command : IRequest<Result<Unit>>
+        public PasswordFormDto PasswordForm { get; set; }
+    }
+
+    public class Handler : IRequestHandler<Command, Result<Unit>>
+    {
+        private readonly IUserAccessor _userAccessor;
+        private readonly UserManager<User> _userManager;
+
+        public Handler(UserManager<User> userManager, IUserAccessor userAccessor)
         {
-            public PasswordFormDto PasswordForm { get; set; }
+            _userManager = userManager;
+            _userAccessor = userAccessor;
         }
 
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            private readonly UserManager<User> _userManager;
-            private readonly IUserAccessor _userAccessor;
+            var user = await _userManager.FindByNameAsync(_userAccessor.GetUsername());
 
-            public Handler(UserManager<User> userManager, IUserAccessor userAccessor)
-            {
-                _userManager = userManager;
-                _userAccessor = userAccessor;
-            }
+            if (user == null)
+                return null;
 
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
-            {
-                var user = await _userManager.FindByNameAsync(_userAccessor.GetUsername());
+            var result = await _userManager.ChangePasswordAsync(user, request.PasswordForm.OldPassword,
+                request.PasswordForm.NewPassword);
 
-                if (user == null)
-                    return null;
+            if (result.Succeeded == false)
+                return Result<Unit>.Failure("Wrong password");
 
-                var result = await _userManager.ChangePasswordAsync(user, request.PasswordForm.OldPassword, request.PasswordForm.NewPassword);
-
-                if (result.Succeeded == false)
-                    return Result<Unit>.Failure("Wrong password");
-
-                return Result<Unit>.Success(Unit.Value);
-            }
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 }
