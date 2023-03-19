@@ -1,8 +1,11 @@
-﻿namespace Domain;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Domain;
 
 public class Goal
 {
     public Guid Id { get; set; }
+    [Required]
     public string Name { get; set; }
     public string Description { get; set; }
     public DateTime EndDate { get; set; }

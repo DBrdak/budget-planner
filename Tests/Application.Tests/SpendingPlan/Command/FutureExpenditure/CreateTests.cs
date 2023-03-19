@@ -29,4 +29,20 @@ public class CreateTests : CommandTestBase
         // Assert
         result.IsSuccess.ShouldBeTrue();
     }
+
+    [Fact]
+    public async Task ShouldFail()
+    {
+        // Arrange
+        var handler = new Create.Handler(_context, _mapper, _budgetAccessorMock.Object);
+
+        var futureExpenditure = new FutureExpenditureDto();
+
+        // Act
+        var result = await handler.Handle(new Create.Command { NewFutureExpenditure = futureExpenditure },
+            CancellationToken.None);
+
+        // Assert
+        result.ShouldBeNull();
+    }
 }

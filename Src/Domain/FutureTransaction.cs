@@ -1,8 +1,11 @@
-﻿namespace Domain;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Domain;
 
 public class FutureTransaction
 {
     public Guid Id { get; set; }
+    [Required]
     public string Category { get; set; }
 
     public decimal Amount { get; set; }

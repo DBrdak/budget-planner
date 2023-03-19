@@ -15,6 +15,7 @@ public class CreateTests : CommandTestBase
 
         var expenditure = new ExpenditureDto
         {
+            Title = "Test",
             AccountName = "CheckingTest",
             Amount = 123,
             Category = "TestingCategory",

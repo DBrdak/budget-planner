@@ -15,7 +15,7 @@ public class CommandTestBase : IDisposable
 
     public CommandTestBase()
     {
-        var configurationProvider = new MapperConfiguration(cfg => { cfg.AddProfile<MappingProfiles>(); });
+        var configurationProvider = new MapperConfiguration(cfg => { cfg.AddProfile<Core.MappingProfiles>(); });
 
         _mapper = configurationProvider.CreateMapper();
         _context = DataContextFactory.Create();

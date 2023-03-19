@@ -15,6 +15,7 @@ public class CreateTests : CommandTestBase
 
         var income = new IncomeDto
         {
+            Title = "Test",
             AccountName = "CheckingTest",
             Amount = 123,
             Category = "TestingCategory",
@@ -27,4 +28,5 @@ public class CreateTests : CommandTestBase
         // Assert
         result.IsSuccess.ShouldBeTrue();
     }
+
 }

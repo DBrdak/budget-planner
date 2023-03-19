@@ -7,7 +7,7 @@ namespace Application.Tests.Extras.Query;
 public class IncomeListTests : QueryTestFixture
 {
     [Fact]
-    public async Task ShouldReturnListOfIncomeCategories()
+    public async Task ShouldSuccess()
     {
         // Arrange
         var handler = new IncomesList.Handler(_context, _budgetAccessorMock.Object, _mapper);

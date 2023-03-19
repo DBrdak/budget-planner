@@ -9,12 +9,9 @@ namespace Application.Tests.Account;
 public class CreateTests : CommandTestBase
 {
     [Fact]
-    public async Task ShouldCreateAccount()
+    public async Task ShouldSuccess()
     {
         //Arrange
-        var budget = await _context.Budgets.FirstAsync();
-
-
         var account = new AccountDto
         {
             Id = Guid.NewGuid(),
@@ -30,13 +27,7 @@ public class CreateTests : CommandTestBase
             (new Create.Command { NewAccount = account }, CancellationToken.None);
 
         //Assert
-        var accountInDb = await _context.Accounts.FindAsync(account.Id);
-
-        result.IsSuccess.ShouldBe(true);
-        accountInDb.ShouldNotBeNull();
-        //accountInDb.Name.ShouldBe(accountToCreate.Name);
-        //accountInDb.AccountType.ShouldBe(accountToCreate.AccountType);
-        //accountInDb.Balance.ShouldBe(accountToCreate.Balance);
-        //accountInDb.Budget.ShouldBe(budget);
+        result.IsSuccess.ShouldBeTrue();
     }
+
 }

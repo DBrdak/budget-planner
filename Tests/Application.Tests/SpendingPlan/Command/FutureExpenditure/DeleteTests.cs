@@ -1,4 +1,5 @@
-﻿using Application.SpendingPlan.Expenditures;
+﻿using Application.DTO;
+using Application.SpendingPlan.Expenditures;
 using Application.Tests.Common;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
@@ -20,5 +21,19 @@ public class DeleteTests : CommandTestBase
 
         // Assert
         result.IsSuccess.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task ShouldFail()
+    {
+        // Arrange
+        var handler = new Delete.Handler(_context);
+
+        // Act
+        var result = await handler.Handle(new Delete.Command { FutureExpenditureId = Guid.Empty },
+            CancellationToken.None).ConfigureAwait(false);
+
+        // Assert
+        result.ShouldBeNull();
     }
 }

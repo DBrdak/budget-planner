@@ -3,7 +3,7 @@ using Persistence;
 
 namespace Application.Tests.Common.DataContextBase;
 
-public class DataContextFactory
+public static class DataContextFactory
 {
     public static DataContext Create()
     {

@@ -2,7 +2,7 @@
 using Application.Interfaces;
 using FluentValidation;
 
-namespace Application.SpendingPlan;
+namespace Application.SpendingPlan.Incomes;
 
 public class FutureIncomeValidator : AbstractValidator<FutureIncomeDto>
 {

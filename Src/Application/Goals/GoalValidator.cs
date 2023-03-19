@@ -23,6 +23,8 @@ public class GoalValidator : AbstractValidator<GoalDto>
             .WithMessage("Required amount must be greater than 0");
 
         RuleFor(x => x.CurrentAmount).GreaterThanOrEqualTo(0)
-            .WithMessage("Current amount must be equal or greater than 0");
+            .WithMessage("Current amount must be equal or greater than 0")
+            .LessThan(x => x.RequiredAmount)
+            .WithMessage("You cannot add goal that is already completed");
     }
 }
