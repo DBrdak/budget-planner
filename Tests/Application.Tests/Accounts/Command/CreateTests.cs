@@ -1,47 +1,42 @@
 ﻿using Application.Accounts;
 using Application.DTO;
-using Application.Interfaces;
 using Application.Tests.Common;
-using Application.Tests.Common.TestBase;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using Shouldly;
 
-namespace Application.Tests.Account
+namespace Application.Tests.Account;
+
+public class CreateTests : CommandTestBase
 {
-    public class CreateTests : CommandTestBase
+    [Fact]
+    public async Task ShouldCreateAccount()
     {
-        [Fact]
-        public async Task ShouldCreateAccount()
+        //Arrange
+        var budget = await _context.Budgets.FirstAsync();
+
+
+        var account = new AccountDto
         {
-            //Arrange
-            var budget = await _context.Budgets.FirstAsync();
+            Id = Guid.NewGuid(),
+            Name = "Test",
+            AccountType = "Checking",
+            Balance = 1000
+        };
 
-            _budgetAccessorMock.Setup(x => x.GetBudgetId()).ReturnsAsync(budget.Id);
+        var handler = new Create.Handler(_context, _mapper, _budgetAccessorMock.Object);
 
-            var account = new AccountDto
-            {
-                Id = Guid.NewGuid(),
-                Name = "Test",
-                AccountType = "Checking",
-                Balance = 1000,
-            };
+        //Act
+        var result = await handler.Handle
+            (new Create.Command { NewAccount = account }, CancellationToken.None);
 
-            var handler = new Create.Handler(_context, _mapper, _budgetAccessorMock.Object);
+        //Assert
+        var accountInDb = await _context.Accounts.FindAsync(account.Id);
 
-            //Act
-            var result = await handler.Handle
-                (new Create.Command { NewAccount = account }, CancellationToken.None);
-
-            //Assert
-            var accountInDb = await _context.Accounts.FindAsync(account.Id);
-
-            result.IsSuccess.ShouldBe(true);
-            accountInDb.ShouldNotBeNull();
-            //accountInDb.Name.ShouldBe(accountToCreate.Name);
-            //accountInDb.AccountType.ShouldBe(accountToCreate.AccountType);
-            //accountInDb.Balance.ShouldBe(accountToCreate.Balance);
-            //accountInDb.Budget.ShouldBe(budget);
-        }
+        result.IsSuccess.ShouldBe(true);
+        accountInDb.ShouldNotBeNull();
+        //accountInDb.Name.ShouldBe(accountToCreate.Name);
+        //accountInDb.AccountType.ShouldBe(accountToCreate.AccountType);
+        //accountInDb.Balance.ShouldBe(accountToCreate.Balance);
+        //accountInDb.Budget.ShouldBe(budget);
     }
 }

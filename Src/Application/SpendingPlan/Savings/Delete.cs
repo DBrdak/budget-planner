@@ -3,48 +3,47 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 
-namespace Application.SpendingPlan.Savings
+namespace Application.SpendingPlan.Savings;
+
+public class Delete
 {
-    public class Delete
+    public class Command : IRequest<Result<Unit>>
     {
-        public class Command : IRequest<Result<Unit>>
+        public Guid FutureSavingId { get; set; }
+    }
+
+    public class CommandValidator : AbstractValidator<Command>
+    {
+        public CommandValidator()
         {
-            public Guid FutureSavingId { get; set; }
+            RuleFor(x => x.FutureSavingId).NotEmpty();
+        }
+    }
+
+    public class Handler : IRequestHandler<Command, Result<Unit>>
+    {
+        private readonly DataContext _context;
+
+        public Handler(DataContext dataContext)
+        {
+            _context = dataContext;
         }
 
-        public class CommandValidator : AbstractValidator<Command>
+        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            public CommandValidator()
-            {
-                RuleFor(x => x.FutureSavingId).NotEmpty();
-            }
-        }
+            var futureSaving = await _context.FutureSavings.FindAsync(request.FutureSavingId).ConfigureAwait(false);
 
-        public class Handler : IRequestHandler<Command, Result<Unit>>
-        {
-            private readonly DataContext _context;
+            if (futureSaving == null)
+                return null;
 
-            public Handler(DataContext dataContext)
-            {
-                _context = dataContext;
-            }
+            _context.FutureSavings.Remove(futureSaving);
 
-            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
-            {
-                var futureSaving = await _context.FutureSavings.FindAsync(request.FutureSavingId);
+            var fail = await _context.SaveChangesAsync().ConfigureAwait(false) < 0;
 
-                if (futureSaving == null)
-                    return null;
+            if (fail)
+                return Result<Unit>.Failure("Problem while saving changes on database");
 
-                _context.FutureSavings.Remove(futureSaving);
-
-                var fail = await _context.SaveChangesAsync() < 0;
-
-                if (fail)
-                    return Result<Unit>.Failure("Problem while saving changes on database");
-
-                return Result<Unit>.Success(Unit.Value);
-            }
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 }

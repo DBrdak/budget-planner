@@ -1,22 +1,21 @@
-﻿using Application.Interfaces;
+﻿using System.Security.Claims;
+using Application.Interfaces;
 using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 
-namespace Infrastructure.Security
+namespace Infrastructure.Security;
+
+public class UserAccessor : IUserAccessor
 {
-    public class UserAccessor : IUserAccessor
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public UserAccessor(IHttpContextAccessor httpContextAccessor)
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        _httpContextAccessor = httpContextAccessor;
+    }
 
-        public UserAccessor(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
-
-        public string GetUsername()
-        {
-            return _httpContextAccessor.HttpContext.User
-                .FindFirst(ClaimTypes.Name).Value;
-        }
+    public string GetUsername()
+    {
+        return _httpContextAccessor.HttpContext.User
+            .FindFirst(ClaimTypes.Name).Value;
     }
 }

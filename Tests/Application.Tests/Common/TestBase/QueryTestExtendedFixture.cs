@@ -1,31 +1,30 @@
 ﻿using Application.Interfaces;
+using Application.Tests.Common.DataContextBase;
 using Domain;
 using Microsoft.AspNetCore.Identity;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.Tests.Common.DataContextBase;
 
-namespace Application.Tests.Common.TestBase
+namespace Application.Tests.Common.TestBase;
+
+public class QueryTestExtendedFixture : QueryTestFixture
 {
-    public class QueryTestExtendedFixture : QueryTestFixture
+    protected Mock<IUserAccessor> _userAccessorMock;
+    protected Mock<UserManager<User>> _userManagerMock;
+
+    public QueryTestExtendedFixture()
     {
-        protected Mock<IUserAccessor> _userAccessorMock;
-        protected Mock<UserManager<User>> _userManagerMock;
+        _userAccessorMock = new Mock<IUserAccessor>();
+        _userManagerMock = UserCreator.MockUserManager(GetUser());
+        SetupUserAccessorMock();
+    }
 
-        public QueryTestExtendedFixture()
-        {
-            _userAccessorMock = new Mock<IUserAccessor>();
-            _userManagerMock = UserCreator.MockUserManager(GetUser());
-            SetupUserAccessorMock();
-        }
+    private User GetUser()
+    {
+        return _context.Users.FirstOrDefault();
+    }
 
-        private User GetUser() => _context.Users.FirstOrDefault();
-
-        private void SetupUserAccessorMock() =>
-            _userAccessorMock.Setup(x => x.GetUsername()).Returns(GetUser().UserName);
+    private void SetupUserAccessorMock()
+    {
+        _userAccessorMock.Setup(x => x.GetUsername()).Returns(GetUser().UserName);
     }
 }

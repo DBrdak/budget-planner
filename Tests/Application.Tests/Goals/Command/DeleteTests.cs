@@ -1,6 +1,5 @@
 ﻿using Application.Goals;
 using Application.Tests.Common;
-using Application.Tests.Common.TestBase;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
 
@@ -18,7 +17,7 @@ public class DeleteTests : CommandTestBase
         // Act
         var result = await handler.Handle(new Delete.Command { GoalId = goal.Id }, CancellationToken.None);
         var goalInDb = await _context.Goals.FirstOrDefaultAsync();
-        
+
         // Assert
         result.IsSuccess.ShouldBeTrue();
         goalInDb.ShouldBeNull();

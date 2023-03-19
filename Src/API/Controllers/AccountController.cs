@@ -1,38 +1,38 @@
-﻿using Application.Accounts;
+﻿using System.ComponentModel;
+using Application.Accounts;
 using Application.DTO;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
 
-namespace API.Controllers
+namespace API.Controllers;
+
+[Route("[controller]")]
+public class AccountController : BaseController
 {
-    public class AccountController : BaseController
+    [HttpGet]
+    [Description("Gets all accounts from current budget")]
+    public async Task<IActionResult> GetAccounts()
     {
-        [HttpGet]
-        [Description("Gets all accounts from current budget")]
-        public async Task<IActionResult> GetAccounts()
-        {
-            return HandleResult(await Mediator.Send(new List.Query()));
-        }
+        return HandleResult(await Mediator.Send(new List.Query()));
+    }
 
-        [HttpDelete("{accountId}")]
-        [Description("Delete an account")]
-        public async Task<IActionResult> DeleteAccount(Guid accountId)
-        {
-            return HandleResult(await Mediator.Send(new Delete.Command() { AccountId = accountId }));
-        }
+    [HttpDelete("{accountId}")]
+    [Description("Delete an account")]
+    public async Task<IActionResult> DeleteAccount(Guid accountId)
+    {
+        return HandleResult(await Mediator.Send(new Delete.Command { AccountId = accountId }));
+    }
 
-        [HttpPut("{accountId}")]
-        [Description("Update an account")]
-        public async Task<IActionResult> EditAccount(AccountDto newAccount)
-        {
-            return HandleResult(await Mediator.Send(new Edit.Command() { NewAccount = newAccount }));
-        }
+    [HttpPut("{accountId}")]
+    [Description("Update an account")]
+    public async Task<IActionResult> EditAccount(AccountDto newAccount)
+    {
+        return HandleResult(await Mediator.Send(new Edit.Command { NewAccount = newAccount }));
+    }
 
-        [HttpPost]
-        [Description("Create new account")]
-        public async Task<IActionResult> CreateAccount(AccountDto newAccount)
-        {
-            return HandleResult(await Mediator.Send(new Create.Command() { NewAccount = newAccount }));
-        }
+    [HttpPost]
+    [Description("Create new account")]
+    public async Task<IActionResult> CreateAccount(AccountDto newAccount)
+    {
+        return HandleResult(await Mediator.Send(new Create.Command { NewAccount = newAccount }));
     }
 }

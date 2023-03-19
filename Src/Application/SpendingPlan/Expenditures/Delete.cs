@@ -1,56 +1,50 @@
 ﻿using Application.Core;
-using Application.Interfaces;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.SpendingPlan.Expenditures
+namespace Application.SpendingPlan.Expenditures;
+
+public class Delete
 {
-    public class Delete
+    public class Command : IRequest<Result<Unit>>
     {
-        public class Command : IRequest<Result<Unit>>
+        public Guid FutureExpenditureId { get; set; }
+    }
+
+    public class CommandValidator : AbstractValidator<Command>
+    {
+        public CommandValidator()
         {
-            public Guid FutureExpenditureId { get; set; }
+            RuleFor(x => x.FutureExpenditureId).NotEmpty();
+        }
+    }
+
+    public class Handler : IRequestHandler<Command, Result<Unit>>
+    {
+        private readonly DataContext _context;
+
+        public Handler(DataContext context)
+        {
+            _context = context;
         }
 
-        public class CommandValidator : AbstractValidator<Command>
+        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            public CommandValidator()
-            {
-                RuleFor(x => x.FutureExpenditureId).NotEmpty();
-            }
-        }
+            var futureExpenditure = await _context.FutureTransactions
+                .FindAsync(request.FutureExpenditureId).ConfigureAwait(false);
 
-        public class Handler : IRequestHandler<Command, Result<Unit>>
-        {
-            private readonly DataContext _context;
-            private readonly IBudgetAccessor _budgetAccessor;
+            if (futureExpenditure == null)
+                return null;
 
-            public Handler(DataContext context, IBudgetAccessor budgetAccessor)
-            {
-                _context = context;
-                _budgetAccessor = budgetAccessor;
-            }
+            _context.FutureTransactions.Remove(futureExpenditure);
 
-            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
-            {
-                var futureExpenditure = await _context.FutureTransactions.FindAsync(request.FutureExpenditureId);
+            var fail = await _context.SaveChangesAsync().ConfigureAwait(false) < 0;
 
-                if (futureExpenditure == null)
-                    return null;
+            if (fail)
+                return Result<Unit>.Failure("Problem while saving changes on database");
 
-                var budgetId = await _budgetAccessor.GetBudgetId();
-
-                _context.FutureTransactions.Remove(futureExpenditure);
-
-                var fail = await _context.SaveChangesAsync() < 0;
-
-                if (fail)
-                    return Result<Unit>.Failure("Problem while saving changes on database");
-
-                return Result<Unit>.Success(Unit.Value);
-            }
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 }

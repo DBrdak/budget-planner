@@ -1,256 +1,254 @@
 ﻿using Domain;
 using Microsoft.AspNetCore.Identity;
 
-namespace Persistence
+namespace Persistence;
+
+public class Seed
 {
-    public class Seed
+    public static async Task SeedData(DataContext context,
+        UserManager<User> userManager)
     {
-        public static async Task SeedData(DataContext context,
-            UserManager<User> userManager)
+        if (!userManager.Users.Any() && !context.Budgets.Any() && !context.Goals.Any() && !context.Accounts.Any() &&
+            !context.FutureTransactions.Any() && !context.FutureSavings.Any() && !context.Transactions.Any() &&
+            !context.Savings.Any())
         {
-            if (!userManager.Users.Any() && !context.Budgets.Any() && !context.Goals.Any() && !context.Accounts.Any() &&
-                !context.FutureTransactions.Any() && !context.FutureSavings.Any() && !context.Transactions.Any() && !context.Savings.Any())
+            var users = new List<User>
             {
-                var users = new List<User>
+                new()
                 {
-                    new User
-                    {
-                        DisplayName="John",
-                        UserName="john",
-                        Email="john@test.com"
-                    }
-                };
-
-                foreach (var user in users)
-                {
-                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                    DisplayName = "John",
+                    UserName = "john",
+                    Email = "john@test.com"
                 }
+            };
 
-                var budgets = new List<Budget>
+            foreach (var user in users) await userManager.CreateAsync(user, "Pa$$w0rd");
+
+            var budgets = new List<Budget>
+            {
+                new()
                 {
-                    new Budget
+                    Name = "JohnnyBudget",
+                    User = users[0]
+                }
+            };
+
+            var johnAccounts = new List<Account>
+            {
+                new()
+                {
+                    Budget = budgets[0],
+                    Name = "Checking account 01",
+                    AccountType = "Checking",
+                    Balance = 2000
+                },
+                new()
+                {
+                    Budget = budgets[0],
+                    Name = "Checking account 02",
+                    AccountType = "Checking",
+                    Balance = 400
+                },
+                new()
+                {
+                    Budget = budgets[0],
+                    Name = "Saving account",
+                    AccountType = "Saving",
+                    Balance = 6500
+                }
+            };
+
+            var ffdate = DateTime.Today.AddDays(300);
+            var goals = new List<Goal>
+            {
+                new()
+                {
+                    Name = "Vacation",
+                    EndDate = ffdate,
+                    RequiredAmount = 222222.12m,
+                    Budget = budgets[0]
+                },
+                new()
+                {
+                    Name = "New Car",
+                    EndDate = ffdate.AddDays(325),
+                    RequiredAmount = 2112222.12m,
+                    Budget = budgets[0]
+                }
+            };
+
+            var fdate = DateTime.Today.AddDays(20);
+            var date = new DateTime(2022, 12, 1);
+
+            var sav = new List<Saving>
+            {
+                new()
+                {
+                    Budget = budgets[0],
+                    Date = date.AddDays(1),
+                    Amount = 50,
+                    FromAccount = johnAccounts[0],
+                    ToAccount = johnAccounts[2],
+                    Goal = goals[1]
+                },
+                new()
+                {
+                    Budget = budgets[0],
+                    Date = date.AddDays(11),
+                    Amount = 200,
+                    FromAccount = johnAccounts[1],
+                    ToAccount = johnAccounts[2],
+                    Goal = goals[0]
+                }
+            };
+
+            var fSav = new List<FutureSaving>
+            {
+                new()
+                {
+                    FromAccount = johnAccounts[0],
+                    ToAccount = johnAccounts[2],
+                    Amount = 1201.21m,
+                    Goal = goals[0],
+                    Date = fdate,
+                    Budget = budgets[0],
+                    CompletedSavings = new List<Saving>
                     {
-                        Name = "JohnnyBudget",
-                        User = users[0]
+                        sav[1]
                     }
-                };
-
-                var johnAccounts = new List<Account>
+                },
+                new()
                 {
-                    new Account
+                    FromAccount = johnAccounts[1],
+                    ToAccount = johnAccounts[2],
+                    Amount = 172.32m,
+                    Goal = goals[1],
+                    Date = fdate.AddDays(5),
+                    Budget = budgets[0],
+                    CompletedSavings = new List<Saving>
                     {
-                        Budget=budgets[0],
-                        Name="Checking account 01",
-                        AccountType="Checking",
-                        Balance=2000
-                    },
-                    new Account
-                    {
-                        Budget=budgets[0],
-                        Name="Checking account 02",
-                        AccountType="Checking",
-                        Balance=400
-                    },
-                    new Account
-                    {
-                        Budget=budgets[0],
-                        Name="Saving account",
-                        AccountType="Saving",
-                        Balance=6500
-                    },
-                };
-
-                var ffdate = DateTime.Today.AddDays(300);
-                var goals = new List<Goal> {
-                    new Goal
-                    {
-                        Name = "Vacation",
-                        EndDate = ffdate,
-                        RequiredAmount = 222222.12,
-                        Budget = budgets[0]
-                    },
-                    new Goal
-                    {
-                        Name = "New Car",
-                        EndDate = ffdate.AddDays(325),
-                        RequiredAmount = 2112222.12,
-                        Budget = budgets[0]
+                        sav[0]
                     }
-                };
+                }
+            };
 
-                var fdate = DateTime.Today.AddDays(20);
-                var date = new DateTime(2022, 12, 1);
-
-                var sav = new List<Saving>
+            var fTran = new List<FutureTransaction>
+            {
+                new()
                 {
-                    new Saving
-                    {
-                        Budget= budgets[0],
-                        Date= date.AddDays(1),
-                        Amount=50,
-                        FromAccount=johnAccounts[0],
-                        ToAccount=johnAccounts[2],
-                        Goal=goals[1]
-                    },
-                    new Saving
-                    {
-                        Budget= budgets[0],
-                        Date= date.AddDays(11),
-                        Amount=200,
-                        FromAccount=johnAccounts[1],
-                        ToAccount=johnAccounts[2],
-                        Goal=goals[0]
-                    }
-                };
-
-                var fSav = new List<FutureSaving>
+                    Category = "Groceries",
+                    Amount = -100,
+                    Account = johnAccounts[0],
+                    Budget = budgets[0],
+                    Date = fdate
+                },
+                new()
                 {
-                    new FutureSaving
-                    {
-                        FromAccount=johnAccounts[0],
-                        ToAccount=johnAccounts[2],
-                        Amount=1201.21,
-                        Goal = goals[0],
-                        Date = fdate,
-                        Budget=budgets[0],
-                        CompletedSavings = new List<Saving>()
-                        {
-                            sav[1]
-                        }
-                    },
-                    new FutureSaving
-                    {
-                        FromAccount=johnAccounts[1],
-                        ToAccount=johnAccounts[2],
-                        Amount=172.32,
-                        Goal = goals[1],
-                        Date = fdate.AddDays(5),
-                        Budget=budgets[0],
-                        CompletedSavings = new List<Saving>()
-                        {
-                            sav[0]
-                        }
-                    },
-                };
-
-                var fTran = new List<FutureTransaction>
+                    Category = "Transport",
+                    Amount = -8,
+                    Account = johnAccounts[1],
+                    Budget = budgets[0],
+                    Date = fdate.AddDays(14)
+                },
+                new()
                 {
-                    new FutureTransaction
-                    {
-                        Category="Groceries",
-                        Amount=-100,
-                        Account=johnAccounts[0],
-                        Budget=budgets[0],
-                        Date=fdate
-                    },
-                    new FutureTransaction
-                    {
-                        Category="Transport",
-                        Amount=-8,
-                        Account=johnAccounts[1],
-                        Budget=budgets[0],
-                        Date=fdate.AddDays(14)
-                    },
-                    new FutureTransaction
-                    {
-                        Category="Job",
-                        Amount=1500,
-                        Account=johnAccounts[0],
-                        Budget=budgets[0],
-                        Date=fdate.AddDays(20)
-                    },
-                    new FutureTransaction
-                    {
-                        Category="Freelance",
-                        Amount=200,
-                        Account=johnAccounts[1],
-                        Budget=budgets[0],
-                        Date=fdate.AddDays(1)
-                    }
-                };
-
-                var categories = new List<TransactionCategory>
+                    Category = "Job",
+                    Amount = 1500,
+                    Account = johnAccounts[0],
+                    Budget = budgets[0],
+                    Date = fdate.AddDays(20)
+                },
+                new()
                 {
-                    new TransactionCategory
-                    {
-                        Value="Groceries",
-                        Budget=budgets[0],
-                        Type="expenditure"
-                    },
-                    new TransactionCategory
-                    {
-                        Value="Transport",
-                        Budget=budgets[0],
-                        Type="expenditure"
-                    },
-                    new TransactionCategory
-                    {
-                        Value="Job",
-                        Budget=budgets[0],
-                        Type="income"
-                    },
-                    new TransactionCategory
-                    {
-                        Value="Freelance",
-                        Budget=budgets[0],
-                        Type="income"
-                    },
-                };
+                    Category = "Freelance",
+                    Amount = 200,
+                    Account = johnAccounts[1],
+                    Budget = budgets[0],
+                    Date = fdate.AddDays(1)
+                }
+            };
 
-                var tran = new List<Transaction>
+            var categories = new List<TransactionCategory>
+            {
+                new()
                 {
-                    new Transaction
-                    {
-                        Budget= budgets[0],
-                        Date= date.AddDays(13),
-                        Amount=-75,
-                        Title="Biedra",
-                        Category="Groceries",
-                        Account=johnAccounts[0],
-                        FutureTransaction = fTran[0]
-                    },
-                    new Transaction
-                    {
-                        Budget= budgets[0],
-                        Date= date.AddDays(28),
-                        Amount=-50,
-                        Title="Fuel",
-                        Category="Transport",
-                        Account=johnAccounts[1],
-                        FutureTransaction = fTran[1]
-                    },
-                    new Transaction
-                    {
-                        Budget= budgets[0],
-                        Date= date.AddDays(13),
-                        Amount=50,
-                        Title="Prezes",
-                        Category="Job",
-                        Account=johnAccounts[0],
-                        FutureTransaction = fTran[2]
-                    },
-                    new Transaction
-                    {
-                        Budget= budgets[0],
-                        Date= date.AddDays(28),
-                        Amount=50,
-                        Title="Company",
-                        Category="Frelance",
-                        Account=johnAccounts[1],
-                        FutureTransaction = fTran[3]
-                    }
-                };
+                    Value = "Groceries",
+                    Budget = budgets[0],
+                    Type = "expenditure"
+                },
+                new()
+                {
+                    Value = "Transport",
+                    Budget = budgets[0],
+                    Type = "expenditure"
+                },
+                new()
+                {
+                    Value = "Job",
+                    Budget = budgets[0],
+                    Type = "income"
+                },
+                new()
+                {
+                    Value = "Freelance",
+                    Budget = budgets[0],
+                    Type = "income"
+                }
+            };
 
-                await context.TransactionCategories.AddRangeAsync(categories);
-                await context.Budgets.AddRangeAsync(budgets);
-                await context.Accounts.AddRangeAsync(johnAccounts);
-                await context.Goals.AddRangeAsync(goals);
-                await context.Transactions.AddRangeAsync(tran);
-                await context.Savings.AddRangeAsync(sav);
-                await context.FutureTransactions.AddRangeAsync(fTran);
-                await context.FutureSavings.AddRangeAsync(fSav);
-                await context.SaveChangesAsync();
-            }
+            var tran = new List<Transaction>
+            {
+                new()
+                {
+                    Budget = budgets[0],
+                    Date = date.AddDays(13),
+                    Amount = -75,
+                    Title = "Biedra",
+                    Category = "Groceries",
+                    Account = johnAccounts[0],
+                    FutureTransaction = fTran[0]
+                },
+                new()
+                {
+                    Budget = budgets[0],
+                    Date = date.AddDays(28),
+                    Amount = -50,
+                    Title = "Fuel",
+                    Category = "Transport",
+                    Account = johnAccounts[1],
+                    FutureTransaction = fTran[1]
+                },
+                new()
+                {
+                    Budget = budgets[0],
+                    Date = date.AddDays(13),
+                    Amount = 50,
+                    Title = "Prezes",
+                    Category = "Job",
+                    Account = johnAccounts[0],
+                    FutureTransaction = fTran[2]
+                },
+                new()
+                {
+                    Budget = budgets[0],
+                    Date = date.AddDays(28),
+                    Amount = 50,
+                    Title = "Company",
+                    Category = "Frelance",
+                    Account = johnAccounts[1],
+                    FutureTransaction = fTran[3]
+                }
+            };
+
+            await context.TransactionCategories.AddRangeAsync(categories);
+            await context.Budgets.AddRangeAsync(budgets);
+            await context.Accounts.AddRangeAsync(johnAccounts);
+            await context.Goals.AddRangeAsync(goals);
+            await context.Transactions.AddRangeAsync(tran);
+            await context.Savings.AddRangeAsync(sav);
+            await context.FutureTransactions.AddRangeAsync(fTran);
+            await context.FutureSavings.AddRangeAsync(fSav);
+            await context.SaveChangesAsync();
         }
     }
 }
@@ -285,7 +283,7 @@ namespace Persistence
 //            var accountGenerator = new Faker<Account>()
 //                .RuleFor(x => x.AccountType, f => f.PickRandom(new List<string> { "Saving", "Checking" }))
 //                .RuleFor(x => x.Name, f => f.Hacker.Noun())
-//                .RuleFor(x => x.Balance, f => f.Random.Double(-150, 20000))
+//                .RuleFor(x => x.Balance, f => f.Random.decimal(-150, 20000))
 //                .RuleFor(x => x.Budget, f => budget[0]);
 
 //            var accounts = accountGenerator.Generate(5);
@@ -295,8 +293,8 @@ namespace Persistence
 //            var goalGenerator = new Faker<Goal>()
 //                .RuleFor(x => x.Budget, f => budget[0])
 //                .RuleFor(x => x.EndDate, f => f.Date.Future(1, DateTime.Now))
-//                .RuleFor(x => x.RequiredAmount, f => f.Random.Double(1000, 500000))
-//                .RuleFor(x => x.CurrentAmount, f => f.Random.Double(0, 1000))
+//                .RuleFor(x => x.RequiredAmount, f => f.Random.decimal(1000, 500000))
+//                .RuleFor(x => x.CurrentAmount, f => f.Random.decimal(0, 1000))
 //                .RuleFor(x => x.Description, f => f.Lorem.Sentence(15))
 //                .RuleFor(x => x.Name, f => f.Hacker.Noun());
 
@@ -309,7 +307,7 @@ namespace Persistence
 //                .RuleFor(x => x.Account, f => f.PickRandom(accounts.Where(a => a.AccountType == "Checking")))
 //                .RuleFor(x => x.Date, f => f.Date.Future(0, DateTime.UtcNow.AddDays(-30)))
 //                .RuleFor(x => x.Category, f => f.Hacker.Noun())
-//                .RuleFor(x => x.Amount, f => f.Random.Double(-2000, 5000));
+//                .RuleFor(x => x.Amount, f => f.Random.decimal(-2000, 5000));
 
 //            var futureTransactions = futureTransactionGenerator.Generate(150);
 
@@ -334,5 +332,5 @@ namespace Persistence
 //                .RuleFor(x => x.Budget, f => budget[0])
 //                .RuleFor(x => x.Date, f => f.Date.Past(0, DateTime.Now))
 //                .RuleFor(x => x.Category, f => f.PickRandom(categories.Select(c => c.Value)))
-//                .RuleFor(x => x.Amount, f => f.Random.Double(-200, 5000));
+//                .RuleFor(x => x.Amount, f => f.Random.decimal(-200, 5000));
 //        }

@@ -48,10 +48,7 @@ public class Program
             var userManager = services.GetRequiredService<UserManager<User>>();
             await context.Database.MigrateAsync();
 
-            if (app.Environment.IsDevelopment())
-            {
-                await Seed.SeedData(context, userManager);
-            }
+            if (app.Environment.IsDevelopment()) await Seed.SeedData(context, userManager);
         }
         catch (Exception ex)
         {

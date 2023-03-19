@@ -2,39 +2,36 @@
 using Application.Interfaces;
 using Application.Tests.Common.DataContextBase;
 using AutoMapper;
-using Domain;
 using Moq;
 using Persistence;
 
-namespace Application.Tests.Common
+namespace Application.Tests.Common;
+
+public class CommandTestBase : IDisposable
 {
-    public class CommandTestBase : IDisposable
+    protected readonly Mock<IBudgetAccessor> _budgetAccessorMock;
+    protected readonly DataContext _context;
+    protected readonly IMapper _mapper;
+
+    public CommandTestBase()
     {
-        protected readonly IMapper _mapper;
-        protected readonly Mock<IBudgetAccessor> _budgetAccessorMock;
-        protected readonly DataContext _context;
+        var configurationProvider = new MapperConfiguration(cfg => { cfg.AddProfile<MappingProfiles>(); });
 
-        public CommandTestBase()
-        {
-            var configurationProvider = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<MappingProfiles>();
-            });
+        _mapper = configurationProvider.CreateMapper();
+        _context = DataContextFactory.Create();
+        _budgetAccessorMock = new Mock<IBudgetAccessor>();
+        SetupBudgetAccessorMock();
+    }
 
-            _mapper = configurationProvider.CreateMapper();
-            _context = DataContextFactory.Create();
-            _budgetAccessorMock = new Mock<IBudgetAccessor>();
-            SetupBudgetAccessorMock();
-        }
+    public void Dispose()
+    {
+        DataContextFactory.Destroy(_context);
+    }
 
-        private Budget GetBudget() => _context.Budgets.FirstOrDefault();
-
-        private void SetupBudgetAccessorMock() =>
-            _budgetAccessorMock.Setup(x => x.GetBudget()).ReturnsAsync(GetBudget());
-
-        public void Dispose()
-        {
-            DataContextFactory.Destroy(_context);
-        }
+    private void SetupBudgetAccessorMock()
+    {
+        var budget = _context.Budgets.FirstOrDefault();
+        _budgetAccessorMock.Setup(x => x.GetBudget()).ReturnsAsync(budget);
+        _budgetAccessorMock.Setup(x => x.GetBudgetId()).ReturnsAsync(budget.Id);
     }
 }

@@ -8,65 +8,64 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.SpendingPlan.Expenditures
+namespace Application.SpendingPlan.Expenditures;
+
+public class Create
 {
-    public class Create
+    public class Command : IRequest<Result<Unit>>
     {
-        public class Command : IRequest<Result<Unit>>
+        public FutureExpenditureDto NewFutureExpenditure { get; set; }
+    }
+
+    public class CommandValidator : AbstractValidator<Command>
+    {
+        private readonly IValidationExtension _validationExtension;
+
+        public CommandValidator(IValidationExtension validationExtension)
         {
-            public FutureExpenditureDto NewFutureExpenditure { get; set; }
+            _validationExtension = validationExtension;
+
+            RuleFor(x => x.NewFutureExpenditure).SetValidator(
+                new FutureExpenditureValidator(_validationExtension));
+        }
+    }
+
+    public class Handler : IRequestHandler<Command, Result<Unit>>
+    {
+        private readonly IBudgetAccessor _budgetAccessor;
+        private readonly DataContext _context;
+        private readonly IMapper _mapper;
+
+        public Handler(DataContext context, IMapper mapper, IBudgetAccessor budgetAccessor)
+        {
+            _context = context;
+            _mapper = mapper;
+            _budgetAccessor = budgetAccessor;
         }
 
-        public class CommandValidator : AbstractValidator<Command>
+        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            private readonly IValidationExtension _validationExtension;
+            var newFutureExpenditure = _mapper.Map<FutureTransaction>(request.NewFutureExpenditure);
 
-            public CommandValidator(IValidationExtension validationExtension)
-            {
-                _validationExtension = validationExtension;
+            var budgetId = await _budgetAccessor.GetBudgetId().ConfigureAwait(false);
 
-                RuleFor(x => x.NewFutureExpenditure).SetValidator(
-                    new FutureExpenditureValidator(_validationExtension));
-            }
-        }
+            newFutureExpenditure.BudgetId = budgetId;
 
-        public class Handler : IRequestHandler<Command, Result<Unit>>
-        {
-            private readonly DataContext _context;
-            private readonly IMapper _mapper;
-            private readonly IBudgetAccessor _budgetAccessor;
+            newFutureExpenditure.Account = await _context.Accounts
+                .FirstOrDefaultAsync(a => a.Name == request.NewFutureExpenditure.AccountName
+                                          && a.Budget.Id == budgetId).ConfigureAwait(false);
 
-            public Handler(DataContext context, IMapper mapper, IBudgetAccessor budgetAccessor)
-            {
-                _context = context;
-                _mapper = mapper;
-                _budgetAccessor = budgetAccessor;
-            }
+            if (newFutureExpenditure.BudgetId == Guid.Empty
+                || newFutureExpenditure.Account == null)
+                return null;
 
-            async Task<Result<Unit>> IRequestHandler<Command, Result<Unit>>.Handle(Command request, CancellationToken cancellationToken)
-            {
-                var newFutureExpenditure = _mapper.Map<FutureTransaction>(request.NewFutureExpenditure);
+            await _context.FutureTransactions.AddAsync(newFutureExpenditure).ConfigureAwait(false);
+            var fail = await _context.SaveChangesAsync().ConfigureAwait(false) < 0;
 
-                var budgetId = await _budgetAccessor.GetBudgetId();
+            if (fail)
+                return Result<Unit>.Failure("Problem while adding new expenditure");
 
-                newFutureExpenditure.BudgetId = budgetId;
-
-                newFutureExpenditure.Account = await _context.Accounts
-                    .FirstOrDefaultAsync(a => a.Name == request.NewFutureExpenditure.AccountName
-                        && a.Budget.Id == budgetId);
-
-                if (newFutureExpenditure.BudgetId == Guid.Empty
-                    || newFutureExpenditure.Account == null)
-                    return null;
-
-                await _context.FutureTransactions.AddAsync(newFutureExpenditure);
-                var fail = await _context.SaveChangesAsync() < 0;
-
-                if (fail)
-                    return Result<Unit>.Failure("Problem while adding new expenditure");
-
-                return Result<Unit>.Success(Unit.Value);
-            }
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 }

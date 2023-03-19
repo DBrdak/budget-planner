@@ -1,19 +1,18 @@
-﻿namespace Domain
+﻿namespace Domain;
+
+public class Budget
 {
-    public class Budget
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
+    public Guid Id { get; set; }
+    public string Name { get; set; }
 
-        public string UserId { get; set; }
-        public User User { get; set; }
+    public string UserId { get; set; }
+    public User User { get; set; }
 
-        public IEnumerable<Account> Accounts { get; set; }
-        public IEnumerable<Saving> Savings { get; set; }
-        public IEnumerable<Transaction> Transactions { get; set; }
-        public IEnumerable<FutureSaving> FutureSavings { get; set; }
-        public IEnumerable<FutureTransaction> FutureTransactions { get; set; }
-        public IEnumerable<Goal> Goals { get; set; }
-        public IEnumerable<TransactionCategory> TransactionCategories { get; set; }
-    }
+    public IEnumerable<Account> Accounts { get; set; }
+    public IEnumerable<Saving> Savings { get; set; }
+    public IEnumerable<Transaction> Transactions { get; set; }
+    public IEnumerable<FutureSaving> FutureSavings { get; set; }
+    public IEnumerable<FutureTransaction> FutureTransactions { get; set; }
+    public IEnumerable<Goal> Goals { get; set; }
+    public IEnumerable<TransactionCategory> TransactionCategories { get; set; }
 }

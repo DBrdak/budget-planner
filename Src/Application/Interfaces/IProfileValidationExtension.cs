@@ -1,11 +1,10 @@
-﻿namespace Application.Interfaces
+﻿namespace Application.Interfaces;
+
+public interface IProfileValidationExtension
 {
-    public interface IProfileValidationExtension
-    {
-        public Task<bool> UniqueUsername(string newUsername);
+    public Task<bool> UniqueUsername(string newUsername);
 
-        public Task<bool> UniqueEmail(string newEmail);
+    public Task<bool> UniqueEmail(string newEmail);
 
-        public Task<bool> UniqueBudgetName(string newBudgetName);
-    }
+    public Task<bool> UniqueBudgetName(string newBudgetName);
 }

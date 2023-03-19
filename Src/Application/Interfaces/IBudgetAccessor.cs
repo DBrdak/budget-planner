@@ -1,13 +1,12 @@
 ﻿using Domain;
 
-namespace Application.Interfaces
+namespace Application.Interfaces;
+
+public interface IBudgetAccessor
 {
-    public interface IBudgetAccessor
-    {
-        Task<string> GetBudgetName();
+    Task<string> GetBudgetName();
 
-        Task<Guid> GetBudgetId();
+    Task<Guid> GetBudgetId();
 
-        Task<Budget> GetBudget();
-    }
+    Task<Budget> GetBudget();
 }

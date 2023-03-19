@@ -2,45 +2,44 @@
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Infrastructure.Validation
+namespace Infrastructure.Validation;
+
+public class ProfileValidationExtension : IProfileValidationExtension
 {
-    public class ProfileValidationExtension : IProfileValidationExtension
+    private readonly IBudgetAccessor _budgetAccessor;
+    private readonly DataContext _context;
+    private readonly IUserAccessor _userAccessor;
+
+    public ProfileValidationExtension(DataContext context, IUserAccessor userAccessor, IBudgetAccessor budgetAccessor)
     {
-        private readonly DataContext _context;
-        private readonly IUserAccessor _userAccessor;
-        private readonly IBudgetAccessor _budgetAccessor;
+        _context = context;
+        _userAccessor = userAccessor;
+        _budgetAccessor = budgetAccessor;
+    }
 
-        public ProfileValidationExtension(DataContext context, IUserAccessor userAccessor, IBudgetAccessor budgetAccessor)
-        {
-            _context = context;
-            _userAccessor = userAccessor;
-            _budgetAccessor = budgetAccessor;
-        }
+    public async Task<bool> UniqueBudgetName(string newBudgetName)
+    {
+        var budgetName = await _budgetAccessor.GetBudgetName();
 
-        public async Task<bool> UniqueBudgetName(string newBudgetName)
-        {
-            var budgetName = await _budgetAccessor.GetBudgetName();
-
-            return await _context.Budgets
-                .AsNoTracking()
-                .Where(b => b.Name != budgetName)
-                .AnyAsync(b => b.Name == newBudgetName);
-        }
-
-        public async Task<bool> UniqueEmail(string newEmail)
-        {
-            return await _context.Users
+        return await _context.Budgets
             .AsNoTracking()
-                .Where(u => u.UserName != _userAccessor.GetUsername())
-                .AnyAsync(u => u.Email == newEmail);
-        }
+            .Where(b => b.Name != budgetName)
+            .AnyAsync(b => b.Name == newBudgetName);
+    }
 
-        public async Task<bool> UniqueUsername(string newUsername)
-        {
-            return await _context.Users
+    public async Task<bool> UniqueEmail(string newEmail)
+    {
+        return await _context.Users
             .AsNoTracking()
-                .Where(u => u.UserName != _userAccessor.GetUsername())
-                .AnyAsync(u => u.UserName == newUsername);
-        }
+            .Where(u => u.UserName != _userAccessor.GetUsername())
+            .AnyAsync(u => u.Email == newEmail);
+    }
+
+    public async Task<bool> UniqueUsername(string newUsername)
+    {
+        return await _context.Users
+            .AsNoTracking()
+            .Where(u => u.UserName != _userAccessor.GetUsername())
+            .AnyAsync(u => u.UserName == newUsername);
     }
 }

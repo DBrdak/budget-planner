@@ -1,81 +1,79 @@
 ﻿using Application.DTO;
-using Application.Interfaces;
 using AutoMapper;
-using AutoMapper.Internal;
 using Domain;
 
-namespace Application.Core
+namespace Application.Core;
+
+public class MappingProfiles : Profile
 {
-    public class MappingProfiles : Profile
+    public MappingProfiles()
     {
-        public MappingProfiles()
-        {
+        //Get
 
-            //Get
+        CreateMap<Transaction, ExpenditureDto>()
+            .ForMember(d => d.AccountName, o => o.MapFrom(s => s.Account.Name))
+            .ForAllMembers(d => d.Condition(t => t.Amount < 0));
 
-            CreateMap<Transaction, ExpenditureDto>()
-                .ForMember(d => d.AccountName, o => o.MapFrom(s => s.Account.Name))
-                .ForAllMembers(d => d.Condition(t => t.Amount < 0));
+        CreateMap<Transaction, IncomeDto>()
+            .ForMember(d => d.AccountName, o => o.MapFrom(s => s.Account.Name))
+            .ForAllMembers(d => d.Condition(t => t.Amount > 0));
 
-            CreateMap<Transaction, IncomeDto>()
-                .ForMember(d => d.AccountName, o => o.MapFrom(s => s.Account.Name))
-                .ForAllMembers(d => d.Condition(t => t.Amount > 0));
+        CreateMap<Saving, SavingDto>()
+            .ForMember(d => d.FromAccountName, o => o.MapFrom(s => s.FromAccount.Name))
+            .ForMember(d => d.ToAccountName, o => o.MapFrom(s => s.ToAccount.Name))
+            .ForMember(d => d.GoalName, o => o.MapFrom(s => s.Goal.Name));
 
-            CreateMap<Saving, SavingDto>()
-                .ForMember(d => d.FromAccountName, o => o.MapFrom(s => s.FromAccount.Name))
-                .ForMember(d => d.ToAccountName, o => o.MapFrom(s => s.ToAccount.Name))
-                .ForMember(d => d.GoalName, o => o.MapFrom(s => s.Goal.Name));
+        CreateMap<FutureTransaction, FutureExpenditureDto>()
+            .ForMember(d => d.AccountName, o => o.MapFrom(s => s.Account.Name))
+            .ForMember(d => d.CompletedExpenditures,
+                o => o.MapFrom(s => s.CompletedTransactions.Where(ct => ct.Amount < 0)));
 
-            CreateMap<FutureTransaction, FutureExpenditureDto>()
-                .ForMember(d => d.AccountName, o => o.MapFrom(s => s.Account.Name))
-                .ForMember(d => d.CompletedExpenditures, o => o.MapFrom(s => s.CompletedTransactions.Where(ct => ct.Amount < 0)));
+        CreateMap<FutureTransaction, FutureIncomeDto>()
+            .ForMember(d => d.AccountName, o => o.MapFrom(s => s.Account.Name))
+            .ForMember(d => d.CompletedIncomes,
+                o => o.MapFrom(s => s.CompletedTransactions.Where(ct => ct.Amount > 0)));
 
-            CreateMap<FutureTransaction, FutureIncomeDto>()
-                .ForMember(d => d.AccountName, o => o.MapFrom(s => s.Account.Name))
-                .ForMember(d => d.CompletedIncomes, o => o.MapFrom(s => s.CompletedTransactions.Where(ct => ct.Amount > 0)));
+        CreateMap<FutureSaving, FutureSavingDto>()
+            .ForMember(d => d.FromAccountName, o => o.MapFrom(s => s.FromAccount.Name))
+            .ForMember(d => d.ToAccountName, o => o.MapFrom(s => s.ToAccount.Name))
+            .ForMember(d => d.GoalName, o => o.MapFrom(s => s.Goal.Name));
 
-            CreateMap<FutureSaving, FutureSavingDto>()
-                .ForMember(d => d.FromAccountName, o => o.MapFrom(s => s.FromAccount.Name))
-                .ForMember(d => d.ToAccountName, o => o.MapFrom(s => s.ToAccount.Name))
-                .ForMember(d => d.GoalName, o => o.MapFrom(s => s.Goal.Name));
+        CreateMap<Goal, GoalDto>();
 
-            CreateMap<Goal, GoalDto>();
+        CreateMap<Account, AccountDto>()
+            .ForMember(d => d.Expenditures, o => o.MapFrom(s => s.Transactions.Where(t => t.Amount < 0)))
+            .ForMember(d => d.Incomes, o => o.MapFrom(s => s.Transactions.Where(t => t.Amount > 0)));
 
-            CreateMap<Account, AccountDto>()
-                .ForMember(d => d.Expenditures, o => o.MapFrom(s => s.Transactions.Where(t => t.Amount < 0)))
-                .ForMember(d => d.Incomes, o => o.MapFrom(s => s.Transactions.Where(t => t.Amount > 0)));
+        CreateMap<User, ProfileDto>()
+            .ForMember(d => d.BudgetName, o => o.MapFrom((s, d, dm, c) => c.Items["BudgetName"]));
 
-            CreateMap<User, ProfileDto>()
-                .ForMember(d => d.BudgetName, o => o.MapFrom((s, d, dm, c) => c.Items["BudgetName"]));
+        CreateMap<TransactionCategory, TransactionCategoryDto>();
 
-            CreateMap<TransactionCategory, TransactionCategoryDto>();
+        //Set
 
-            //Set
+        CreateMap<ExpenditureDto, Transaction>()
+            .ForMember(d => d.Amount, o => o.MapFrom(s => -s.Amount));
 
-            CreateMap<ExpenditureDto, Transaction>()
-                .ForMember(d => d.Amount, o => o.MapFrom(s => -s.Amount));
+        CreateMap<IncomeDto, Transaction>();
 
-            CreateMap<IncomeDto, Transaction>();
+        CreateMap<FutureExpenditureDto, FutureTransaction>()
+            .ForMember(d => d.Amount, o => o.MapFrom(s => -s.Amount));
 
-            CreateMap<FutureExpenditureDto, FutureTransaction>()
-                .ForMember(d => d.Amount, o => o.MapFrom(s => -s.Amount));
+        CreateMap<FutureIncomeDto, FutureTransaction>();
 
-            CreateMap<FutureIncomeDto, FutureTransaction>();
+        CreateMap<FutureSavingDto, FutureSaving>();
 
-            CreateMap<FutureSavingDto, FutureSaving>();
+        CreateMap<GoalDto, Goal>();
 
-            CreateMap<GoalDto, Goal>();
+        CreateMap<AccountDto, Account>()
+            .ForMember(d => d.Transactions, o => o.Ignore())
+            .ForMember(d => d.SavingsIn, o => o.Ignore())
+            .ForMember(d => d.SavingsOut, o => o.Ignore());
 
-            CreateMap<AccountDto, Account>()
-                .ForMember(d => d.Transactions, o => o.Ignore())
-                .ForMember(d => d.SavingsIn, o => o.Ignore())
-                .ForMember(d => d.SavingsOut, o => o.Ignore());
+        CreateMap<ProfileDto, User>()
+            .ForMember(d => d.NormalizedUserName, o => o.MapFrom(s => s.Username.ToUpper()))
+            .ForMember(d => d.NormalizedEmail, o => o.MapFrom(s => s.Email.ToUpper()));
 
-            CreateMap<ProfileDto, User>()
-                .ForMember(d => d.NormalizedUserName, o => o.MapFrom(s => s.Username.ToUpper()))
-                .ForMember(d => d.NormalizedEmail, o => o.MapFrom(s => s.Email.ToUpper()));
-
-            CreateMap<SavingDto, Saving>();
-        }
+        CreateMap<SavingDto, Saving>();
     }
 }

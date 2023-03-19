@@ -26,8 +26,8 @@ namespace Persistence.Migrations
                     b.Property<string>("AccountType")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("Balance")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("BudgetId")
                         .HasColumnType("TEXT");
@@ -68,14 +68,14 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("Amount")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("BudgetId")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("CompletedAmount")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("CompletedAmount")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("Date");
@@ -111,8 +111,8 @@ namespace Persistence.Migrations
                     b.Property<Guid>("AccountId")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("Amount")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("BudgetId")
                         .HasColumnType("TEXT");
@@ -120,8 +120,8 @@ namespace Persistence.Migrations
                     b.Property<string>("Category")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("CompletedAmount")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("CompletedAmount")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("Date");
@@ -144,8 +144,8 @@ namespace Persistence.Migrations
                     b.Property<Guid>("BudgetId")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("CurrentAmount")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("CurrentAmount")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
@@ -156,8 +156,8 @@ namespace Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("RequiredAmount")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("RequiredAmount")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -172,8 +172,8 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("Amount")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("BudgetId")
                         .HasColumnType("TEXT");
@@ -217,8 +217,8 @@ namespace Persistence.Migrations
                     b.Property<Guid>("AccountId")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("Amount")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("BudgetId")
                         .HasColumnType("TEXT");

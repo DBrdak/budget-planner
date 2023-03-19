@@ -1,9 +1,7 @@
 ﻿using Application.DTO;
 using Application.Goals;
 using Application.Tests.Common;
-using Application.Tests.Common.TestBase;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using Shouldly;
 
 namespace Application.Tests.Goals.Command;
@@ -14,10 +12,8 @@ public class CreateTests : CommandTestBase
     public async Task ShouldCreateGoal()
     {
         // Arrange
-        var budget = await _context.Budgets.FirstOrDefaultAsync();
-        _budgetAccessorMock.Setup(x => x.GetBudgetId()).ReturnsAsync(budget.Id);
-        
-        var goal = new GoalDto()
+
+        var goal = new GoalDto
         {
             CurrentAmount = 500,
             RequiredAmount = 1500,
@@ -31,7 +27,7 @@ public class CreateTests : CommandTestBase
         // Act
         var result = await handler.Handle(new Create.Command { NewGoal = goal }, CancellationToken.None);
         var goalInDb = await _context.Goals.FirstOrDefaultAsync(x => x.Name == goal.Name);
-        
+
         // Assert
         result.IsSuccess.ShouldBeTrue();
         goalInDb.ShouldNotBeNull();

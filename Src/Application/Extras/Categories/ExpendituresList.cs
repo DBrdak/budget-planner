@@ -7,42 +7,42 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Extras.Categories
+namespace Application.Extras.Categories;
+
+public class ExpendituresList
 {
-    public class ExpendituresList
+    public class Query : IRequest<Result<List<TransactionCategoryDto>>>
     {
-        public class Query : IRequest<Result<List<TransactionCategoryDto>>>
+    }
+
+    public class Handler : IRequestHandler<Query, Result<List<TransactionCategoryDto>>>
+    {
+        private readonly IBudgetAccessor _budgetAccessor;
+        private readonly DataContext _context;
+        private readonly IMapper _mapper;
+
+        public Handler(DataContext context, IBudgetAccessor budgetAccessor, IMapper mapper)
         {
+            _context = context;
+            _budgetAccessor = budgetAccessor;
+            _mapper = mapper;
         }
 
-        public class Handler : IRequestHandler<Query, Result<List<TransactionCategoryDto>>>
+        public async Task<Result<List<TransactionCategoryDto>>> Handle(Query request,
+            CancellationToken cancellationToken)
         {
-            private readonly DataContext _context;
-            private readonly IBudgetAccessor _budgetAccessor;
-            private readonly IMapper _mapper;
+            var budgetId = await _budgetAccessor.GetBudgetId().ConfigureAwait(false);
 
-            public Handler(DataContext context, IBudgetAccessor budgetAccessor, IMapper mapper)
-            {
-                _context = context;
-                _budgetAccessor = budgetAccessor;
-                _mapper = mapper;
-            }
+            if (budgetId == Guid.Empty)
+                return null;
 
-            public async Task<Result<List<TransactionCategoryDto>>> Handle(Query request, CancellationToken cancellationToken)
-            {
-                var budgetId = await _budgetAccessor.GetBudgetId();
+            var categories = await _context.TransactionCategories
+                .AsNoTracking()
+                .Where(tc => tc.BudgetId == budgetId && tc.Type == "expenditure")
+                .ProjectTo<TransactionCategoryDto>(_mapper.ConfigurationProvider)
+                .ToListAsync().ConfigureAwait(false);
 
-                if (budgetId == Guid.Empty)
-                    return null;
-
-                var categories = await _context.TransactionCategories
-                    .AsNoTracking()
-                    .Where(tc => tc.BudgetId == budgetId && tc.Type == "expenditure")
-                    .ProjectTo<TransactionCategoryDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync();
-
-                return Result<List<TransactionCategoryDto>>.Success(categories);
-            }
+            return Result<List<TransactionCategoryDto>>.Success(categories);
         }
     }
 }

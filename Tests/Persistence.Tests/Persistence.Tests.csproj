@@ -27,7 +27,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Src\Persistence\Persistence.csproj" />
-		<ProjectReference Include="..\..\Src\Infrastructure\Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>

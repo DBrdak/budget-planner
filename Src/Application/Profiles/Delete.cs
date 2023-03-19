@@ -6,53 +6,52 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Profiles
+namespace Application.Profiles;
+
+public class Delete
 {
-    public class Delete
+    public class Command : IRequest<Result<Unit>>
     {
-        public class Command : IRequest<Result<Unit>>
+        public string Password { get; set; }
+    }
+
+    public class Handler : IRequestHandler<Command, Result<Unit>>
+    {
+        private readonly DataContext _context;
+        private readonly IUserAccessor _userAccessor;
+        private readonly UserManager<User> _userManager;
+
+        public Handler(DataContext context, IUserAccessor userAccessor, UserManager<User> userManager)
         {
-            public string Password { get; set; }
+            _context = context;
+            _userAccessor = userAccessor;
+            _userManager = userManager;
         }
 
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            private readonly DataContext _context;
-            private readonly IUserAccessor _userAccessor;
-            private readonly UserManager<User> _userManager;
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername())
+                .ConfigureAwait(false);
 
-            public Handler(DataContext context, IUserAccessor userAccessor, UserManager<User> userManager)
-            {
-                _context = context;
-                _userAccessor = userAccessor;
-                _userManager = userManager;
-            }
+            if (user == null)
+                return null;
 
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
-            {
-                var user = await _context.Users
-                    .FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername())
-                    .ConfigureAwait(false);
+            var authResult = await _userManager
+                .CheckPasswordAsync(user, request.Password)
+                .ConfigureAwait(true);
 
-                if (user == null)
-                    return null;
+            if (!authResult)
+                return Result<Unit>.Failure("Wrong password");
 
-                var authResult = await _userManager
-                    .CheckPasswordAsync(user, request.Password)
-                    .ConfigureAwait(true);
+            _context.Remove(user);
 
-                if(!authResult)
-                    return Result<Unit>.Failure("Wrong password");
+            var fail = await _context.SaveChangesAsync().ConfigureAwait(false) < 0;
 
-                _context.Remove(user);
+            if (fail)
+                return Result<Unit>.Failure("Problem while removing user form database");
 
-                var fail = await _context.SaveChangesAsync().ConfigureAwait(false) < 0;
-
-                if (fail)
-                    return Result<Unit>.Failure("Problem while removing user form database");
-
-                return Result<Unit>.Success(Unit.Value);
-            }
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 }
