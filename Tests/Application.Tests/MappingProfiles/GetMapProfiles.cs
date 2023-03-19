@@ -9,7 +9,7 @@ using Shouldly;
 
 namespace Application.Tests.MappingProfiles
 {
-    public class SetMapProfiles : MappingTestBase
+    public class GetMapProfiles : MappingTestBase
     {
         [Theory]
         [InlineData(nameof(ExpenditureDto))]
