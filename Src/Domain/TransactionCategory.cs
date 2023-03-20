@@ -2,6 +2,10 @@
 
 namespace Domain;
 
+/// <summary>
+/// Expenditure and income categories that user specifies when adding new FutureTransaction
+/// </summary>
+
 public class TransactionCategory
 {
     public Guid Id { get; set; }

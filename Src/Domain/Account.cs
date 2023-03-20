@@ -2,6 +2,10 @@
 
 namespace Domain;
 
+/// <summary>
+/// Banking account
+/// </summary>
+
 public class Account
 {
     public Guid Id { get; set; }

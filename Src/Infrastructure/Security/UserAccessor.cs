@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.Security;
 
+/// <summary>
+/// Set of methods to retrive various data about current user form database
+/// </summary>
+
 public class UserAccessor : IUserAccessor
 {
     private readonly IHttpContextAccessor _httpContextAccessor;

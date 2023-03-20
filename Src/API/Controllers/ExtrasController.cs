@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+/// <summary>
+/// Set of HTTP requests for getting categories in current budget
+/// </summary>
+
 [Route("[controller]")]
 public class ExtrasController : BaseController
 {

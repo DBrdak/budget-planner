@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+/// <summary>
+/// Set of HTTP requests for adding and deleting specific entities in budget
+/// </summary>
+
 public class BudgetController : BaseController
 {
     [HttpPost("savings")]

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Tests.Common.TestBase;
+using Domain;
 using Shouldly;
 
 namespace Application.Tests.MappingProfiles
@@ -29,29 +30,41 @@ namespace Application.Tests.MappingProfiles
             {
                 case "ExpenditureDto":
                     // Arrange
-                    var sourceT = _context.Transactions.FirstOrDefault(x => x.Amount < 0);
+                    var sourceE = new ExpenditureDto
+                    {
+                        Id = new Guid(),
+                        Title = "testTitle",
+                        Date = DateTime.UtcNow,
+                        Category = "testCategory",
+                        Amount = 123
+                    };
                     // Act
-                    var destinationE = _mapper.Map<ExpenditureDto>(sourceT);
+                    var destinationT = _mapper.Map<Transaction>(sourceE);
                     // Assert
-                    destinationE.Amount.ShouldBe(sourceT.Amount);
-                    destinationE.AccountName.ShouldBe(sourceT.Account.Name);
-                    destinationE.Category.ShouldBe(sourceT.Category);
-                    destinationE.Date.ShouldBe(sourceT.Date);
-                    destinationE.Id.ShouldBe(sourceT.Id);
-                    destinationE.Title.ShouldBe(sourceT.Title);
+                    destinationT.Amount.ShouldBe(-sourceE.Amount);
+                    destinationT.Category.ShouldBe(sourceE.Category);
+                    destinationT.Date.ShouldBe(sourceE.Date);
+                    destinationT.Id.ShouldBe(sourceE.Id);
+                    destinationT.Title.ShouldBe(sourceE.Title);
                     break;
                 case "IncomeDto":
                     // Arrange
-                    sourceT = _context.Transactions.FirstOrDefault(x => x.Amount > 0);
+                    var sourceI = new IncomeDto
+                    {
+                        Id = new Guid(),
+                        Title = "testTitle",
+                        Date = DateTime.UtcNow,
+                        Category = "testCategory",
+                        Amount = 123
+                    };
                     // Act
-                    var destinationI = _mapper.Map<IncomeDto>(sourceT);
+                    destinationT = _mapper.Map<Transaction>(sourceI);
                     // Assert
-                    destinationI.Amount.ShouldBe(sourceT.Amount);
-                    destinationI.AccountName.ShouldBe(sourceT.Account.Name);
-                    destinationI.Category.ShouldBe(sourceT.Category);
-                    destinationI.Date.ShouldBe(sourceT.Date);
-                    destinationI.Id.ShouldBe(sourceT.Id);
-                    destinationI.Title.ShouldBe(sourceT.Title);
+                    destinationT.Amount.ShouldBe(sourceI.Amount);
+                    destinationT.Category.ShouldBe(sourceI.Category);
+                    destinationT.Date.ShouldBe(sourceI.Date);
+                    destinationT.Id.ShouldBe(sourceI.Id);
+                    destinationT.Title.ShouldBe(sourceI.Title);
                     break;
                 case "SavingDto":
                     // Arrange

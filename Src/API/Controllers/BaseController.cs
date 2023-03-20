@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+/// <summary>
+/// Base class for controllers in Budget-Planner API
+/// </summary>
+
 [ApiController]
 [Route("api/{budgetName}")]
 [Authorize(Policy = "IsBudgetOwner")]

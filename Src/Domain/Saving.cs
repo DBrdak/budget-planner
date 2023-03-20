@@ -1,5 +1,9 @@
 ﻿namespace Domain;
 
+/// <summary>
+/// Past savings that user has done
+/// </summary>
+
 public class Saving
 {
     public Guid Id { get; set; }

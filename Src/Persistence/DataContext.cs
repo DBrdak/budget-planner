@@ -5,6 +5,7 @@ using Persistence.Configurations;
 
 namespace Persistence;
 
+
 public class DataContext : IdentityDbContext<User>
 {
     public DataContext(DbContextOptions options) : base(options)
@@ -26,6 +27,7 @@ public class DataContext : IdentityDbContext<User>
 
         base.OnModelCreating(builder);
     }
+    
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {

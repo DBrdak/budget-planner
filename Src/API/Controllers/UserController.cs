@@ -11,6 +11,10 @@ using Persistence;
 
 namespace API.Controllers;
 
+/// <summary>
+/// Set of HTTP requests for user authorization
+/// </summary>
+
 [ApiController]
 [Route("api")]
 public class UserController : ControllerBase

@@ -5,6 +5,10 @@ using Persistence;
 
 namespace Infrastructure.Security;
 
+/// <summary>
+/// Set of methods to retrive various data about current budget form database
+/// </summary>
+
 public class BudgetAccessor : IBudgetAccessor
 {
     private readonly DataContext _context;

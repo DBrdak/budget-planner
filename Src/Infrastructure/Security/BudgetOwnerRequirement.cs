@@ -7,6 +7,10 @@ using Persistence;
 
 namespace Infrastructure.Security;
 
+/// <summary>
+/// Authorization requirement that checks if user has created specific budget
+/// </summary>
+
 public class BudgetOwnerRequirement : IAuthorizationRequirement
 {
 }
@@ -15,13 +19,10 @@ public class BudgetOwnerRequirementHandler : AuthorizationHandler<BudgetOwnerReq
 {
     private readonly IBudgetAccessor _budgetAccessor;
     private readonly DataContext _context;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public BudgetOwnerRequirementHandler(DataContext dbContext,
-        IHttpContextAccessor httpContextAccessor, IBudgetAccessor budgetAccessor)
+    public BudgetOwnerRequirementHandler(DataContext dbContext,IBudgetAccessor budgetAccessor)
     {
         _context = dbContext;
-        _httpContextAccessor = httpContextAccessor;
         _budgetAccessor = budgetAccessor;
     }
 
