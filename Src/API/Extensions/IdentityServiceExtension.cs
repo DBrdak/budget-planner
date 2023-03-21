@@ -10,6 +10,10 @@ using Persistence;
 
 namespace API.Extensions;
 
+/// <summary>
+/// Configures the policy of authorization and authentication for API
+/// </summary>
+
 public static class IdentityServiceExtension
 {
     public static IServiceCollection AddIdentityServices(this IServiceCollection services,

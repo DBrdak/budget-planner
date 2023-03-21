@@ -2,6 +2,10 @@
 
 namespace API.Auth.DTOs;
 
+/// <summary>
+/// Register form retrived when user sign ups,
+/// also validates correctness of input
+/// </summary>
 public class RegisterDto
 {
     [Required] public string Email { get; set; }

@@ -4,6 +4,10 @@ using Application.Core;
 
 namespace API.Middleware;
 
+/// <summary>
+/// Middleware that logs and return error to client when >Internal Server Error occurs
+/// </summary>
+
 public class ExceptionMiddleware
 {
     private readonly IHostEnvironment _env;

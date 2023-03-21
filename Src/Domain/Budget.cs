@@ -2,6 +2,7 @@
 
 namespace Domain;
 
+
 public class Budget
 {
     public Guid Id { get; set; }

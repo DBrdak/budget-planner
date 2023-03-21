@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+/// <summary>
+/// Set of HTTP requests for managing profile of current user
+/// </summary>
+
 [Route("[controller]")]
 public class ProfileController : BaseController
 {

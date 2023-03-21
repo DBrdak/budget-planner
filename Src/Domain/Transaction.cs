@@ -2,6 +2,10 @@
 
 namespace Domain;
 
+/// <summary>
+/// Past incomes and expenditures
+/// </summary>
+
 public class Transaction
 {
     public Guid Id { get; set; }

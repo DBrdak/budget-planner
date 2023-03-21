@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+/// <summary>
+/// Set of HTTP requests for managing spending plan in current budget
+/// </summary>
+
 [Route("[controller]")]
 public class SpendingPlanController : BaseController
 {
