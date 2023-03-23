@@ -4,6 +4,10 @@ using Persistence;
 
 namespace Infrastructure.Validation;
 
+/// <summary>
+/// Set of methods to help validators to validate ProfileDto
+/// </summary>
+
 public class ProfileValidationExtension : IProfileValidationExtension
 {
     private readonly IBudgetAccessor _budgetAccessor;

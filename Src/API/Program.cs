@@ -46,9 +46,9 @@ public class Program
         {
             var context = services.GetRequiredService<DataContext>();
             var userManager = services.GetRequiredService<UserManager<User>>();
-            await context.Database.MigrateAsync();
+            await context.Database.MigrateAsync().ConfigureAwait(false);
 
-            if (app.Environment.IsDevelopment()) await Seed.SeedData(context, userManager);
+            if (app.Environment.IsDevelopment()) await Seed.SeedData(context, userManager).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -56,6 +56,6 @@ public class Program
             logger.LogError(ex.Message, "Error occured during migration");
         }
 
-        await app.RunAsync();
+        await app.RunAsync().ConfigureAwait(false);
     }
 }

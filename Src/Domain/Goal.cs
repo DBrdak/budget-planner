@@ -2,6 +2,10 @@
 
 namespace Domain;
 
+/// <summary>
+/// Goals that user has set
+/// </summary>
+
 public class Goal
 {
     public Guid Id { get; set; }

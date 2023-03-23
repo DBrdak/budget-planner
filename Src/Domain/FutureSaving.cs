@@ -1,5 +1,9 @@
 ﻿namespace Domain;
 
+/// <summary>
+/// Savings that user has planned for future
+/// </summary>
+
 public class FutureSaving
 {
     public Guid Id { get; set; }

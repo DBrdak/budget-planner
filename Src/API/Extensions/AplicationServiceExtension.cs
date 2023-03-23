@@ -11,6 +11,10 @@ using Persistence;
 
 namespace API.Extensions;
 
+/// <summary>
+/// Adding all required services to IServiceCollection of API
+/// </summary>
+
 public static class AplicationServiceExtension
 {
     public static IServiceCollection AddAppCollection(this IServiceCollection services, IConfiguration config)

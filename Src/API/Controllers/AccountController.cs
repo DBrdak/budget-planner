@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+/// <summary>
+/// Set of HTTP requests for managing account list in current budget
+/// </summary>
+
 [Route("[controller]")]
 public class AccountController : BaseController
 {

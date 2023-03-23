@@ -3,7 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Infrastructure.Validation;
-// Export functions to other classes
+
+/// <summary>
+/// Set of methods to help validators
+/// </summary>
 
 public class ValidationExtension : IValidationExtension
 {

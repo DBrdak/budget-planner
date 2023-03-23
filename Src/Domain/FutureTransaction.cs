@@ -2,6 +2,10 @@
 
 namespace Domain;
 
+/// <summary>
+/// Incomes and expenditures that user has planned for future
+/// </summary>
+
 public class FutureTransaction
 {
     public Guid Id { get; set; }
