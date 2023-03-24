@@ -9,7 +9,6 @@ namespace API.Controllers;
 /// Set of HTTP requests for managing profile of current user
 /// </summary>
 
-[Route("[controller]")]
 public class ProfileController : BaseController
 {
     [HttpGet("{username}")]

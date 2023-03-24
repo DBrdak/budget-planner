@@ -10,7 +10,7 @@ namespace API.Controllers;
 /// </summary>
 
 [ApiController]
-[Route("api/{budgetName}")]
+[Route("api/{budgetName}/[controller]")]
 [Authorize(Policy = "IsBudgetOwner")]
 public class BaseController : ControllerBase
 {
@@ -23,7 +23,7 @@ public class BaseController : ControllerBase
         if (result == null)
             return NotFound();
 
-        if (result != null && result.IsSuccess)
+        if (result.IsSuccess)
             return Ok(result.Value);
 
         return BadRequest(result.Error);

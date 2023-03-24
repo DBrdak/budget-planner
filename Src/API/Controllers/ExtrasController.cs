@@ -8,7 +8,6 @@ namespace API.Controllers;
 /// Set of HTTP requests for getting categories in current budget
 /// </summary>
 
-[Route("[controller]")]
 public class ExtrasController : BaseController
 {
     [HttpGet("expenditures/categories")]
