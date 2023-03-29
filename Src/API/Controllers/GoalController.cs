@@ -8,9 +8,7 @@ namespace API.Controllers;
 /// <summary>
 /// Set of HTTP requests for managing goal list in current budget
 /// </summary>
-
-[Route("[controller]")]
-public class GoalsController : BaseController
+public class GoalController : BaseController
 {
     [HttpGet]
     [Description("Gets list of all goals")]

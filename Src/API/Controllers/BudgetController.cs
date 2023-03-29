@@ -9,6 +9,7 @@ namespace API.Controllers;
 /// Set of HTTP requests for adding and deleting specific entities in budget
 /// </summary>
 
+[Route("api/{budgetName}")]
 public class BudgetController : BaseController
 {
     [HttpPost("savings")]

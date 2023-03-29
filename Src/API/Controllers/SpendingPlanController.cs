@@ -9,7 +9,6 @@ namespace API.Controllers;
 /// Set of HTTP requests for managing spending plan in current budget
 /// </summary>
 
-[Route("[controller]")]
 public class SpendingPlanController : BaseController
 {
     [HttpGet("savings")]

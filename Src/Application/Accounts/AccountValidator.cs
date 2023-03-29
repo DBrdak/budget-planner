@@ -18,8 +18,8 @@ public class AccountValidator : AbstractValidator<AccountDto>
             .WithMessage(x => $"Account with name {x.Name} already exists")
             .Must(n => n.All(x => char.IsLetterOrDigit(x) || char.IsWhiteSpace(x)))
             .WithMessage("Only spaces, letters and digits are allowed")
-            .MaximumLength(16)
-            .WithMessage("Account name is too long, maximum length is 16");
+            .MaximumLength(25)
+            .WithMessage("Account name is too long, maximum length is 25");
         RuleFor(x => x.Balance).NotEmpty()
             .WithMessage("Balance is required");
     }
