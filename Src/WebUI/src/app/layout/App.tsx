@@ -1,8 +1,11 @@
 import React from 'react';
+import MainPage from '../../features/main/dashboard/MainPage';
 
 function App() {
   return (
-    null
+    <>
+      <MainPage />
+    </>
   );
 }
 
