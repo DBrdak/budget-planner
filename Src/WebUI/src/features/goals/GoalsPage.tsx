@@ -2,17 +2,36 @@ import React, { useState } from "react";
 import { Container, Grid } from "semantic-ui-react";
 
 const GoalsPage = () => {
-  const [showGoal1Details, setShowGoal1Details] = useState(false);
-  const [showGoal2Details, setShowGoal2Details] = useState(false);
+  const [goals, setGoals] = useState([
+    {
+      id: 1,
+      title: "Goal 1",
+      description: "Description 1",
+      currentAmount: "Current Amount 1",
+      requiredAmount: "Required Amount 1",
+      endDate: "End Date 1",
+      showDetails: false,
+    },
+    {
+      id: 2,
+      title: "Goal 2",
+      description: "Description 2",
+      currentAmount: "Current Amount 2",
+      requiredAmount: "Required Amount 2",
+      endDate: "End Date 2",
+      showDetails: false,
+    },
 
-  const toggleGoal1Details = () => {
-    setShowGoal1Details(!showGoal1Details);
-    setShowGoal2Details(false);
-  };
+  ]);
 
-  const toggleGoal2Details = () => {
-    setShowGoal2Details(!showGoal2Details);
-    setShowGoal1Details(false);
+  const toggleGoalDetails = (goalId: number): void => {
+    const updatedGoals = goals.map((goal) => {
+      if (goal.id === goalId) {
+        return { ...goal, showDetails: !goal.showDetails };
+      }
+      return goal;
+    });
+    setGoals(updatedGoals);
   };
 
   return (
@@ -21,38 +40,26 @@ const GoalsPage = () => {
         Goals
       </div>
       <Grid columns={2} doubling stackable centered style={{ marginTop: "50px" }}>
-        <Grid.Column>
-          <div
-            style={{ fontSize: "20px", textAlign: "center", cursor: "pointer" }}
-            onClick={toggleGoal1Details}
-          >
-            Goal 1 {showGoal1Details ? "(-)" : "(+)"}
-          </div>
-          {showGoal1Details && (
-            <ul style={{ marginTop: "20px", textAlign: "center" }}>
-              <li>Description</li>
-              <li>Current Amount</li>
-              <li>Required Amount</li>
-              <li>End Date</li>
-            </ul>
-          )}
-        </Grid.Column>
-        <Grid.Column>
-          <div
-            style={{ fontSize: "20px", textAlign: "center", cursor: "pointer" }}
-            onClick={toggleGoal2Details}
-          >
-            Goal 2 {showGoal2Details ? "(-)" : "(+)"}
-          </div>
-          {showGoal2Details && (
-            <ul style={{ marginTop: "20px", textAlign: "center" }}>
-              <li>Description</li>
-              <li>Current Amount</li>
-              <li>Required Amount</li>
-              <li>End Date</li>
-            </ul>
-          )}
-        </Grid.Column>
+        {goals.map((goal) => (
+          <Grid.Column key={goal.id}>
+            <div
+              style={{ fontSize: "20px", textAlign: "center", cursor: "pointer" }}
+              onClick={() => toggleGoalDetails(goal.id)}
+            >
+              {goal.title} {goal.showDetails ? "(-)" : "(+)"}
+            </div>
+            {goal.showDetails && (
+              <div style={{ marginTop: "20px", textAlign: "center" }}>
+                <ul style={{ listStyle: "none", padding: 0 }}>
+                  <li>{goal.description}</li>
+                  <li>{goal.currentAmount}</li>
+                  <li>{goal.requiredAmount}</li>
+                  <li>{goal.endDate}</li>
+                </ul>
+              </div>
+            )}
+          </Grid.Column>
+        ))}
       </Grid>
     </Container>
   );
