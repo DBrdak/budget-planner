@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Container, Grid } from "semantic-ui-react";
+import React, { useState } from 'react';
+import { Card, Container, Grid } from 'semantic-ui-react';
 
 const GoalsPage = () => {
   const [goals, setGoals] = useState([
@@ -21,16 +21,12 @@ const GoalsPage = () => {
       endDate: "End Date 2",
       showDetails: false,
     },
-
   ]);
 
-  const toggleGoalDetails = (goalId: number): void => {
-    const updatedGoals = goals.map((goal) => {
-      if (goal.id === goalId) {
-        return { ...goal, showDetails: !goal.showDetails };
-      }
-      return goal;
-    });
+  const toggleGoalDetails = (goalId: number) => {
+    const updatedGoals = goals.map((goal) =>
+      goal.id === goalId ? { ...goal, showDetails: !goal.showDetails } : goal
+    );
     setGoals(updatedGoals);
   };
 
@@ -39,27 +35,42 @@ const GoalsPage = () => {
       <div style={{ fontSize: "50px", textAlign: "center", marginTop: "50px" }}>
         Goals
       </div>
-      <Grid columns={2} doubling stackable centered style={{ marginTop: "50px" }}>
-        {goals.map((goal) => (
-          <Grid.Column key={goal.id}>
-            <div
-              style={{ fontSize: "20px", textAlign: "center", cursor: "pointer" }}
-              onClick={() => toggleGoalDetails(goal.id)}
-            >
-              {goal.title} {goal.showDetails ? "(-)" : "(+)"}
-            </div>
-            {goal.showDetails && (
-              <div style={{ marginTop: "20px", textAlign: "center" }}>
-                <ul style={{ listStyle: "none", padding: 0 }}>
-                  <li>{goal.description}</li>
-                  <li>{goal.currentAmount}</li>
-                  <li>{goal.requiredAmount}</li>
-                  <li>{goal.endDate}</li>
-                </ul>
+      <Grid centered style={{ marginTop: "50px" }}>
+        <Grid.Row columns={2} doubling stackable>
+          {goals.map((goal) => (
+            <Grid.Column key={goal.id} style={{ textAlign: "center" }}>
+              <div style={{ marginBottom: "20px" }}>
+                <Card
+                  style={{
+                    width: "400px",
+                    margin: "0 auto",
+                    border: goal.showDetails ? "2px solid green" : "none",
+                  }}
+                  onMouseEnter={() => toggleGoalDetails(goal.id)}
+                  onMouseLeave={() => toggleGoalDetails(goal.id)}
+                >
+                  <Card.Content>
+                    <Card.Header
+                      style={{ fontSize: "20px", cursor: "pointer" }}
+                    >
+                      {goal.title}
+                    </Card.Header>
+                    <Card.Description
+                      style={{ marginTop: "20px", display: goal.showDetails ? "block" : "none" }}
+                    >
+                      <ul style={{ listStyle: "none", padding: 0 }}>
+                        <li>{goal.currentAmount}</li>
+                        <li>{goal.requiredAmount}</li>
+                        <li>{goal.endDate}</li>
+                        <li>{goal.description}</li>
+                      </ul>
+                    </Card.Description>
+                  </Card.Content>
+                </Card>
               </div>
-            )}
-          </Grid.Column>
-        ))}
+            </Grid.Column>
+          ))}
+        </Grid.Row>
       </Grid>
     </Container>
   );
