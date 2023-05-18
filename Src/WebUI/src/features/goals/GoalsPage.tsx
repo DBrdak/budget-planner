@@ -1,5 +1,7 @@
+import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
-import { Card, Container, Grid } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Button, Card, Container, Grid } from 'semantic-ui-react';
 
 const GoalsPage = () => {
   const [goals, setGoals] = useState([
@@ -36,7 +38,7 @@ const GoalsPage = () => {
         Goals
       </div>
       <Grid centered style={{ marginTop: "50px" }}>
-        <Grid.Row columns={2} doubling stackable>
+        <Grid.Row columns={1} doubling stackable>
           {goals.map((goal) => (
             <Grid.Column key={goal.id} style={{ textAlign: "center" }}>
               <div style={{ marginBottom: "20px" }}>
@@ -76,4 +78,5 @@ const GoalsPage = () => {
   );
 };
 
-export default GoalsPage;
+export default observer (GoalsPage);
+

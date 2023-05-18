@@ -1,16 +1,19 @@
 import React from 'react';
 import { Grid, Card, Icon, Segment, Container, Button, CardHeader, Header, Image } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
+import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
+import '../../../app/layout/styles.css';
 
-const MainPage = () => {
+function MainPage() {
   return (
     <Container fluid style={{marginTop:'12px'}}>
       <Grid centered verticalAlign='middle' style={{ height: '100vh'}}>
         <Grid.Row columns={3} verticalAlign='bottom'>
           <Grid.Column width={4}>
           <Button 
-          fluid color='green' size='massive' 
-          style={{alignItems: 'center', borderRadius: '50px' }}>
+          className='mp-button'
+          fluid color='green' size='massive'>
             <Header inverted>Accounts</Header>
             <div style={{ marginTop: 'auto' }}>
               <Icon name='university' size='big'/>
@@ -19,6 +22,7 @@ const MainPage = () => {
           </Grid.Column>
           <Grid.Column width={4} textAlign='center'>
             <Button 
+            as={Link} to={'/goals'}
             fluid color='green' size='massive' 
             style={{alignItems: 'center', borderRadius: '50px' }}>
               <Header inverted>Goals</Header>
@@ -86,4 +90,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default observer(MainPage);
