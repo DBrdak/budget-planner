@@ -12,7 +12,7 @@ function MainPage() {
         <Grid.Row columns={3} verticalAlign='bottom'>
           <Grid.Column width={4}>
           <Button 
-          className='mp-button'
+          style={{alignItems: 'center', borderRadius: '50px' }}
           fluid color='green' size='massive'>
             <Header inverted>Accounts</Header>
             <div style={{ marginTop: 'auto' }}>
