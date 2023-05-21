@@ -4,8 +4,12 @@ import 'semantic-ui-css/semantic.min.css';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import '../../../app/layout/styles.css';
+import { useStore } from '../../../app/stores/store';
+import IncomeForm from './IncomeForm';
 
 function MainPage() {
+  const {modalStore} = useStore()
+
   return (
     <Container fluid style={{marginTop:'12px'}}>
       <Grid centered verticalAlign='middle' style={{ height: '100vh'}}>
@@ -56,7 +60,8 @@ function MainPage() {
           <Grid.Column width={4} textAlign='center' >
             <Button.Group fluid vertical>
               <Button 
-              color='green' size='mini' 
+              color='green' size='mini' as={Link}
+              onClick={() => modalStore.openModal(<IncomeForm />)}
               style={{alignItems: 'center', borderRadius:'30px', justifyContent:'center', textAlign:'center'}}>
                 Income
                 <div style={{ marginTop: 'auto', marginLeft:'5px'}}>

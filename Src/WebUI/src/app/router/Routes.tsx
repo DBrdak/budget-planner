@@ -1,8 +1,9 @@
 import { RouteObject } from "react-router";
-import { createBrowserRouter } from "react-router-dom"
+import { Navigate, createBrowserRouter } from "react-router-dom"
 import MainPage from "../../features/main/dashboard/MainPage";
 import GoalsPage from "../../features/goals/GoalsPage";
 import App from "../layout/App";
+import HomePage from "../../features/home/HomePage";
 
 export const routes: RouteObject[] = [
     {
@@ -11,6 +12,7 @@ export const routes: RouteObject[] = [
         children: [
             {path: 'main', element: <MainPage/>},
             {path: 'goals', element: <GoalsPage/>},
+            {path: '*', element: <Navigate replace to='/' />}
         ]
     }
 ]
