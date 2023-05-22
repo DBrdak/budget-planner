@@ -26,7 +26,7 @@ function MyDropdown(props: Props) {
   }
 
   return (
-    <Form.Field error={meta.touched && !!meta.error}>
+    <Form.Field error={meta.touched && !!meta.error} >
       {props.label &&
         <Label>{props.label}</Label>}
       <Dropdown selection

@@ -1,13 +1,17 @@
-import { Formik, Form, ErrorMessage } from 'formik'
-import React from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
-import { Button, Container, DropdownItemProps, Header, Label } from 'semantic-ui-react';
+import { Formik, Form } from 'formik'
+import { useNavigate } from 'react-router-dom'
+import { Button, Container, Divider, DropdownItemProps, Header } from 'semantic-ui-react';
 import MyTextInput from '../../../app/common/forms/MyTextInput';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../app/stores/store';
 import MyDropdown from '../../../app/common/forms/MyDropdown';
+import MyDateInput from '../../../app/common/forms/MyDateInput';
 
-function IncomeForm() {
+interface InExFormProps {
+  header: string
+}
+
+function InExForm(props:InExFormProps) {
   const {modalStore} = useStore()
 
   // To będzie do wywalenia ->
@@ -29,18 +33,22 @@ function IncomeForm() {
     <Formik
     initialValues={{title: '', amount: '', 
     category: '', account: '', date: ''}}
-    onSubmit={(values, {setErrors}) => submit(values)}>
+    onSubmit={(values, {setErrors}) => submit(values)} >
       {({handleSubmit, isSubmitting, errors}) => (
         <Form 
         className='ui form' 
         onSubmit={handleSubmit}
         autoComplete='off'>
-          <Header content='New Income' textAlign='center' />
+          <Header as={'h1'} content={props.header} textAlign='center' />
+          <Divider />
           <MyTextInput placeholder='Title' name='title' />
           <MyTextInput placeholder='Amount' name='amount' />
           <MyDropdown placeholder='Category' name='category' options={categories} />
           <MyDropdown placeholder='Account' name='account' options={categories} />
-          <MyTextInput placeholder='Date' name='date' />
+          <MyDateInput 
+          placeholderText='Date'
+          name='date' 
+          dateFormat='d MMMM yyyy' />
           <Container
           style={{ display: 'flex', justifyContent: 'space-between', width: '60%' }}>
             <Button loading={isSubmitting} icon='check' positive type='submit' circular />
@@ -52,4 +60,4 @@ function IncomeForm() {
   )
 }
 
-export default observer(IncomeForm)
+export default observer(InExForm)
