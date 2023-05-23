@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { Outlet, useLocation } from 'react-router-dom';
 import MainPage from '../../features/main/MainPage';
 import ModalContainer from '../common/modals/ModalContainer';
+import './styles.css';
 
 function App() {
   const location = useLocation();

@@ -1,6 +1,6 @@
 import { Formik, Form } from 'formik'
 import { useNavigate } from 'react-router-dom'
-import { Button, Container, DropdownItemProps, Header } from 'semantic-ui-react';
+import { Button, Container, Divider, DropdownItemProps, Header } from 'semantic-ui-react';
 import MyTextInput from '../../../app/common/forms/MyTextInput';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../app/stores/store';
@@ -36,6 +36,7 @@ function SavingForm() {
         onSubmit={handleSubmit}
         autoComplete='off'>
           <Header as={'h1'} content='New Saving' textAlign='center' />
+          <Divider />
           <MyTextInput placeholder='Amount' name='amount' />
           <MyDropdown placeholder='Goal' name='goal' options={categories}  />
           <MyDropdown placeholder='From Account' name='fromAccount' options={categories} />
