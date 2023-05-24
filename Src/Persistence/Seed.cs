@@ -22,7 +22,8 @@ public class Seed
                 }
             };
 
-            foreach (var user in users) await userManager.CreateAsync(user, "Pa$$w0rd");
+            foreach (var user in users)
+                await userManager.CreateAsync(user, "Pa$$w0rd");
 
             var budgets = new List<Budget>
             {
@@ -129,6 +130,58 @@ public class Seed
                     {
                         sav[0]
                     }
+                },
+                new()
+                {
+                    FromAccount = johnAccounts[0],
+                    ToAccount = johnAccounts[2],
+                    Amount = 1201.21m,
+                    Goal = goals[0],
+                    Date = fdate.AddYears(1),
+                    Budget = budgets[0],
+                    CompletedSavings = new List<Saving>
+                    {
+                        sav[1]
+                    }
+                },
+                new()
+                {
+                    FromAccount = johnAccounts[1],
+                    ToAccount = johnAccounts[2],
+                    Amount = 172.32m,
+                    Goal = goals[1],
+                    Date = fdate.AddYears(1).AddDays(2),
+                    Budget = budgets[0],
+                    CompletedSavings = new List<Saving>
+                    {
+                        sav[0]
+                    }
+                },
+                new()
+                {
+                    FromAccount = johnAccounts[0],
+                    ToAccount = johnAccounts[2],
+                    Amount = 1201.21m,
+                    Goal = goals[0],
+                    Date = fdate.AddMonths(3).AddDays(-5),
+                    Budget = budgets[0],
+                    CompletedSavings = new List<Saving>
+                    {
+                        sav[1]
+                    }
+                },
+                new()
+                {
+                    FromAccount = johnAccounts[1],
+                    ToAccount = johnAccounts[2],
+                    Amount = 172.32m,
+                    Goal = goals[1],
+                    Date = fdate.AddMonths(3),
+                    Budget = budgets[0],
+                    CompletedSavings = new List<Saving>
+                    {
+                        sav[0]
+                    }
                 }
             };
 
@@ -165,7 +218,71 @@ public class Seed
                     Account = johnAccounts[1],
                     Budget = budgets[0],
                     Date = fdate.AddDays(1)
-                }
+                },
+                new()
+                {
+                    Category = "Groceries",
+                    Amount = -100,
+                    Account = johnAccounts[0],
+                    Budget = budgets[0],
+                    Date = fdate.AddYears(1).AddDays(-12)
+                },
+                new()
+                {
+                    Category = "Transport",
+                    Amount = -8,
+                    Account = johnAccounts[1],
+                    Budget = budgets[0],
+                    Date = fdate.AddYears(1).AddDays(-3)
+                },
+                new()
+                {
+                    Category = "Job",
+                    Amount = 1500,
+                    Account = johnAccounts[0],
+                    Budget = budgets[0],
+                    Date = fdate.AddYears(1).AddDays(-9)
+                },
+                new()
+                {
+                    Category = "Freelance",
+                    Amount = 200,
+                    Account = johnAccounts[1],
+                    Budget = budgets[0],
+                    Date = fdate.AddYears(1)
+                },
+                new()
+                {
+                    Category = "Groceries",
+                    Amount = -100,
+                    Account = johnAccounts[0],
+                    Budget = budgets[0],
+                    Date = fdate.AddMonths(3)
+                },
+                new()
+                {
+                    Category = "Transport",
+                    Amount = -8,
+                    Account = johnAccounts[1],
+                    Budget = budgets[0],
+                    Date = fdate.AddMonths(3).AddDays(2)
+                },
+                new()
+                {
+                    Category = "Job",
+                    Amount = 1500,
+                    Account = johnAccounts[0],
+                    Budget = budgets[0],
+                    Date = fdate.AddMonths(3).AddDays(-4)
+                },
+                new()
+                {
+                    Category = "Freelance",
+                    Amount = 200,
+                    Account = johnAccounts[1],
+                    Budget = budgets[0],
+                    Date = fdate.AddMonths(3).AddDays(2)
+                },
             };
 
             var categories = new List<TransactionCategory>

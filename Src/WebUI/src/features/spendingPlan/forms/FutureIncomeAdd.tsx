@@ -8,39 +8,29 @@ import MyTextInput from '../../../app/common/forms/MyTextInput'
 import { useStore } from '../../../app/stores/store'
 
 interface Props {
-  header: string,
   date: Date
 }
 
-function IncomeAdd({header, date}: Props) {
-  const {modalStore} = useStore()
+function FutureIncomeAdd({date}: Props) {
+  const {modalStore, spendingPlanStore} = useStore()
+  const {createExpenditure} = spendingPlanStore
 
-  // To będzie do wywalenia ->
-
-  const submit = (values: any) => {
-    modalStore.closeModal()
-  };
-
-  const categories: DropdownItemProps[] = [
-    { text: 'Option 1', value: 'option1' },
-    { text: 'Option 2', value: 'option2' },
-  ]
-  // <-
   return (
     <Formik
-    initialValues={{title: '', amount: '', 
-    category: '', account: '', date: ''}}
-    onSubmit={(values, {setErrors}) => submit(values)} >
+    initialValues={{amount: '', 
+    category: '', accountName: '', date: ''}}
+    onSubmit={(values, {setErrors}) => 
+      null} >
       {({handleSubmit, isSubmitting, errors}) => (
         <Form 
         className='ui form' 
         onSubmit={handleSubmit}
         autoComplete='off'>
-          <Header as={'h1'} content={header} textAlign='center' />
+          <Header as={'h1'} content='New Future Income' textAlign='center' />
           <Divider />
           <MyTextInput placeholder='Amount' name='amount' />
           <MyTextInput placeholder='Category' name='category' />
-          <MyDropdown placeholder='Account' name='account' options={categories} />
+          <MyDropdown placeholder='Account' name='account' options={[{name:'Gold'}]} />
           <Container
           style={{ display: 'flex', justifyContent: 'space-between', width: '60%' }}>
             <Button loading={isSubmitting} icon='check' positive type='submit' circular />
@@ -52,4 +42,4 @@ function IncomeAdd({header, date}: Props) {
   )
 }
 
-export default observer(IncomeAdd)
+export default observer(FutureIncomeAdd)

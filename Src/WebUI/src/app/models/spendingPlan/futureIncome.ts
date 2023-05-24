@@ -19,8 +19,7 @@ export class FutureIncome implements FutureIncome {
 export class FutureIncomeFormValues {
   id?: string = undefined
   category: string = ''
-  realAmount: number = 0
-  budgetedAmount: number = 0
-  date: Date | null = null
+  amount: number = 0
   accountName: string = ''
+  date: Date | null = null
 }

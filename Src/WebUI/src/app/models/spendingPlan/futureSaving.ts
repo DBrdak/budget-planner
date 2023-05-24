@@ -20,8 +20,7 @@ export class FutureSaving implements FutureSaving {
 
 export class FutureSavingFormValues {
   id?: string = undefined
-  realAmount: number = 0
-  budgetedAmount: number = 0
+  amount: number = 0
   date: Date | null = null
   fromAccountName: string = ''
   toAccountName: string = ''

@@ -28,14 +28,12 @@ axios.interceptors.request.use(config => {
   const budgetName = store.commonStore.budgetName
 
   if(budgetName && config.baseURL){
-    //config.baseURL += `/${budgetName}`
-    config.baseURL += `/JohnnyBudget`
+    config.baseURL += `/${budgetName}`
   }
 
   if(token && config.headers){
-    //config.headers.Authorization = `Bearer ${token}`
-    config.headers.Authorization = `Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvaG4iLCJuYW1laWQiOiJiNjdkMTRjMi04N2Y0LTRjNzMtOWI0NC01NzhjZjMyMWRjOGYiLCJlbWFpbCI6ImpvaG5AdGVzdC5jb20iLCJuYmYiOjE2ODQ4OTIyMDMsImV4cCI6MTY4NDk3ODYwMywiaWF0IjoxNjg0ODkyMjAzfQ.-oZSmJI-XgkUX3a_TRBXEhciHazTZdlgUKSpVOIJmppYoo2Vis60yiPcrmyq27rk6b3Mk5tDJRrGEXFr8UZHfg`
-  }
+    config.headers.Authorization = `Bearer ${token}`
+    }
   return config
 })
 
@@ -62,10 +60,10 @@ axios.interceptors.response.use(async response => {
       }
       break;
     case 401:
-      toast.error('unauthorised')
+      toast.error('Unauthorized')
       break;
     case 403:
-      toast.error('forbidden')
+      toast.error('Forbidden')
       break;
     case 404:
       router.navigate('/not-found')

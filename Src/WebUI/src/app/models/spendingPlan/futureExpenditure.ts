@@ -19,8 +19,7 @@ export class FutureExpenditure implements FutureExpenditure {
 export class FutureExpenditureFormValues {
   id?: string = undefined
   category: string = ''
-  realAmount: number = 0
-  budgetedAmount: number = 0
+  amount: number = 0
   date: Date | null = null
   accountName: string = ''
 }
