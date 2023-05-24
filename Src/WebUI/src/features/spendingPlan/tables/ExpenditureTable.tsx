@@ -3,20 +3,17 @@ import React, { useState } from 'react';
 import { Button, Grid, GridColumn, Header, Icon, Progress, Segment, Table } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 import ExpenditureDetails from '../modals/ExpenditureDetails';
-
-interface Expenditure {
-  category: string;
-  account: string;
-  realAmount: number;
-  budgetedAmount: number;
-}
+import FutureInExAdd from '../forms/FutureInExAdd';
+import IncomeDetails from '../modals/IncomeDetails';
+import { FutureExpenditure } from '../../../app/models/spendingPlan/futureExpenditure';
 
 interface ExpenditureTableProps {
-  expenditures: Expenditure[];
+  date: Date
 }
 
-const ExpenditureTable: React.FC<ExpenditureTableProps> = ({ expenditures }) => {
-  const {modalStore} = useStore()
+const ExpenditureTable: React.FC<ExpenditureTableProps> = ({ date }) => {
+  const {modalStore, spendingPlanStore} = useStore()
+  const {expenditures} = spendingPlanStore
   const [tableVisible, setTableVisible] = useState(false)
 
   const handleToggleTable = () => {
@@ -31,8 +28,8 @@ const ExpenditureTable: React.FC<ExpenditureTableProps> = ({ expenditures }) => 
           </GridColumn>        
           <GridColumn textAlign='center' width={8}>
             <Progress color='red' style={{ margin: '0px'}}
-            value={expenditures.reduce((sum, expenditure) => sum + expenditure.realAmount, 0)}
-            total={expenditures.reduce((sum, expenditure) => sum + expenditure.budgetedAmount, 0)}/>
+            value={expenditures.reduce((sum, expenditure) => sum += expenditure.completedAmount >= expenditure.amount ? 1 : 0, 0)}
+            total={expenditures.length}/>
           </GridColumn>        
           <GridColumn textAlign='center' width={4}>
             {tableVisible ? 
@@ -51,8 +48,8 @@ const ExpenditureTable: React.FC<ExpenditureTableProps> = ({ expenditures }) => 
             <Table.HeaderCell>Budgeted Amount</Table.HeaderCell>
             <Table.HeaderCell>Progress</Table.HeaderCell>
             <Table.HeaderCell textAlign='center'>
-            <Icon name='add' color='green' size='big' 
-                  style={{ cursor: 'pointer'}} onClick={() => console.log(expenditures)}/>
+            <Button icon='add' color='green' inverted size='big' circular
+              onClick={() => modalStore.openModal(<FutureInExAdd header = 'New Future Expenditure' date={date}/>)}/>
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -63,17 +60,17 @@ const ExpenditureTable: React.FC<ExpenditureTableProps> = ({ expenditures }) => 
             onClick={() => modalStore.openModal(<ExpenditureDetails expenditure={expenditure} />)}
             style={{cursor: 'pointer'}}>
               <Table.Cell>{expenditure.category}</Table.Cell>
-              <Table.Cell>{expenditure.account}</Table.Cell>
-              <Table.Cell>{expenditure.realAmount}</Table.Cell>
-              <Table.Cell>{expenditure.budgetedAmount}</Table.Cell>
+              <Table.Cell>{expenditure.accountName}</Table.Cell>
+              <Table.Cell>{expenditure.completedAmount}</Table.Cell>
+              <Table.Cell>{expenditure.amount}</Table.Cell>
               <Table.Cell>
-                <Progress value={expenditure.realAmount} 
-                total={expenditure.budgetedAmount} 
+                <Progress value={expenditure.completedAmount} 
+                total={expenditure.amount} 
                 color='red'/>
                 </Table.Cell>
                 <Table.Cell verticalAlign='middle' textAlign='center'>
-                  <Icon name='trash' color='red' size='big' 
-                  style={{ cursor: 'pointer'}} onClick={() => console.log(expenditure)}/>
+                  <Button icon='trash' inverted color='red' size='big' circular
+                  onClick={() => console.log(expenditure)}/>
                 </Table.Cell>
             </Table.Row>
           ))}

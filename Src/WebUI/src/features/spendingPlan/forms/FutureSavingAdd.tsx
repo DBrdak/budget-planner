@@ -1,13 +1,18 @@
-import { Formik, Form } from 'formik'
-import { useNavigate } from 'react-router-dom'
-import { Button, Container, Divider, DropdownItemProps, Header } from 'semantic-ui-react';
-import MyTextInput from '../../../app/common/forms/MyTextInput';
-import { observer } from 'mobx-react-lite';
-import { useStore } from '../../../app/stores/store';
-import MyDropdown from '../../../app/common/forms/MyDropdown';
+import { Formik } from 'formik';
+import { observer } from 'mobx-react-lite'
+import React from 'react'
+import { useNavigate, Form } from 'react-router-dom';
+import { DropdownItemProps, Header, Divider, Container, Button } from 'semantic-ui-react';
 import MyDateInput from '../../../app/common/forms/MyDateInput';
+import MyDropdown from '../../../app/common/forms/MyDropdown';
+import MyTextInput from '../../../app/common/forms/MyTextInput';
+import { useStore } from '../../../app/stores/store';
 
-function SavingForm() {
+interface Props {
+  date: Date
+}
+
+function FutureSavingAdd({date}: Props) {
   const {modalStore} = useStore()
 
   // To będzie do wywalenia ->
@@ -21,7 +26,6 @@ function SavingForm() {
     { text: 'Option 2', value: 'option2' },
   ]
   // <-
-
   return (
     <Formik
     initialValues={{goal: '', amount: '', 
@@ -32,16 +36,12 @@ function SavingForm() {
         className='ui form' 
         onSubmit={handleSubmit}
         autoComplete='off'>
-          <Header as={'h1'} content='New Saving' textAlign='center' />
+          <Header as={'h1'} content='New Future Saving' textAlign='center' />
           <Divider />
           <MyTextInput placeholder='Amount' name='amount' />
           <MyDropdown placeholder='Goal' name='goal' options={categories}  />
           <MyDropdown placeholder='From Account' name='fromAccount' options={categories} />
           <MyDropdown placeholder='To Account' name='toAccount' options={categories} />
-          <MyDateInput 
-          placeholderText='Date'
-          name='date' 
-          dateFormat='d MMMM, yyyy' />
           <Container
           style={{ display: 'flex', justifyContent: 'space-between', width: '60%' }}>
             <Button loading={isSubmitting} icon='check' positive type='submit' circular />
@@ -53,4 +53,4 @@ function SavingForm() {
   )
 }
 
-export default observer(SavingForm)
+export default observer(FutureSavingAdd)

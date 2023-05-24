@@ -2,8 +2,13 @@ import { observer } from 'mobx-react-lite'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Container } from 'semantic-ui-react'
+import { useStore } from '../../app/stores/store'
 
 function HomePage() {
+  const {commonStore} = useStore()
+  commonStore.setToken("eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvaG4iLCJuYW1laWQiOiJiNjdkMTRjMi04N2Y0LTRjNzMtOWI0NC01NzhjZjMyMWRjOGYiLCJlbWFpbCI6ImpvaG5AdGVzdC5jb20iLCJuYmYiOjE2ODQ4OTIzMDEsImV4cCI6MTY4NDk3ODcwMSwiaWF0IjoxNjg0ODkyMzAxfQ.brdjcUSoFi3ZlTmkvadYNjgU_sCyVr9jHKTcaxsBlVgdbAIPXu95aAImbMtR2nW37Pm3sAG8CNDZNTMsIus0FQ")
+  commonStore.setBudgetName('JohnnyBudget')
+
   return (
     <Container 
     style={{ height: '100vh', 

@@ -1,17 +1,18 @@
-import { Formik, Form } from 'formik'
-import { useNavigate } from 'react-router-dom'
-import { Button, Container, Divider, DropdownItemProps, Header } from 'semantic-ui-react';
-import MyTextInput from '../../../app/common/forms/MyTextInput';
-import { observer } from 'mobx-react-lite';
-import { useStore } from '../../../app/stores/store';
-import MyDropdown from '../../../app/common/forms/MyDropdown';
-import MyDateInput from '../../../app/common/forms/MyDateInput';
+import { Formik } from 'formik'
+import { observer } from 'mobx-react-lite'
+import React from 'react'
+import { Form } from 'react-router-dom'
+import { Header, Divider, Container, Button, DropdownItemProps } from 'semantic-ui-react'
+import MyDropdown from '../../../app/common/forms/MyDropdown'
+import MyTextInput from '../../../app/common/forms/MyTextInput'
+import { useStore } from '../../../app/stores/store'
 
-interface InExFormProps {
-  header: string
+interface Props {
+  header: string,
+  date: Date
 }
 
-function InExForm(props:InExFormProps) {
+function IncomeAdd({header, date}: Props) {
   const {modalStore} = useStore()
 
   // To będzie do wywalenia ->
@@ -25,7 +26,6 @@ function InExForm(props:InExFormProps) {
     { text: 'Option 2', value: 'option2' },
   ]
   // <-
-
   return (
     <Formik
     initialValues={{title: '', amount: '', 
@@ -36,16 +36,11 @@ function InExForm(props:InExFormProps) {
         className='ui form' 
         onSubmit={handleSubmit}
         autoComplete='off'>
-          <Header as={'h1'} content={props.header} textAlign='center' />
+          <Header as={'h1'} content={header} textAlign='center' />
           <Divider />
-          <MyTextInput placeholder='Title' name='title' />
           <MyTextInput placeholder='Amount' name='amount' />
-          <MyDropdown placeholder='Category' name='category' options={categories} />
+          <MyTextInput placeholder='Category' name='category' />
           <MyDropdown placeholder='Account' name='account' options={categories} />
-          <MyDateInput 
-          placeholderText='Date'
-          name='date' 
-          dateFormat='d MMMM yyyy' />
           <Container
           style={{ display: 'flex', justifyContent: 'space-between', width: '60%' }}>
             <Button loading={isSubmitting} icon='check' positive type='submit' circular />
@@ -57,4 +52,4 @@ function InExForm(props:InExFormProps) {
   )
 }
 
-export default observer(InExForm)
+export default observer(IncomeAdd)

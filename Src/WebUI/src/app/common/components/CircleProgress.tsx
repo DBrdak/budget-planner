@@ -21,9 +21,10 @@ const CircleProgress: React.FC<CircleProgressProps> = ({
 }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (progress / 100) * circumference;
   const textX = size / 2;
   const textY = size / 2;
+  const convertedProgress = progress < 1 ? Math.round(progress * 100) : 100
+  const offset = circumference - (convertedProgress / 100) * circumference;
 
   return (
     <svg width={size} height={size}>
@@ -56,7 +57,7 @@ const CircleProgress: React.FC<CircleProgressProps> = ({
         fontSize={textSize}
         fontWeight="bold"
       >
-        {progress}%
+        {convertedProgress}%
       </text>
     </svg>
   );

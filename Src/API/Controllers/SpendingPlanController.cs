@@ -11,25 +11,25 @@ namespace API.Controllers;
 
 public class SpendingPlanController : BaseController
 {
-    [HttpGet("savings")]
+    [HttpGet("savings/{date}")]
     [Description("Gets all planned savings")]
-    public async Task<IActionResult> GetFutureSavings()
+    public async Task<IActionResult> GetFutureSavings(DateTime date)
     {
-        return HandleResult(await Mediator.Send(new List.Query()));
+        return HandleResult(await Mediator.Send(new List.Query { Date = date }));
     }
 
-    [HttpGet("incomes")]
+    [HttpGet("incomes/{date}")]
     [Description("Gets all planned incomes")]
-    public async Task<IActionResult> GetFutureIncomes()
+    public async Task<IActionResult> GetFutureIncomes(DateTime date)
     {
-        return HandleResult(await Mediator.Send(new Application.SpendingPlan.Incomes.List.Query()));
+        return HandleResult(await Mediator.Send(new Application.SpendingPlan.Incomes.List.Query { Date = date }));
     }
 
-    [HttpGet("expenditures")]
+    [HttpGet("expenditures/{date}")]
     [Description("Gets all planned expenditures")]
-    public async Task<IActionResult> GetFutureExpenditures()
+    public async Task<IActionResult> GetFutureExpenditures(DateTime date)
     {
-        return HandleResult(await Mediator.Send(new Application.SpendingPlan.Expenditures.List.Query()));
+        return HandleResult(await Mediator.Send(new Application.SpendingPlan.Expenditures.List.Query { Date = date }));
     }
 
     [HttpPost("savings")]
@@ -44,7 +44,7 @@ public class SpendingPlanController : BaseController
     public async Task<IActionResult> CreateFutureIncome(FutureIncomeDto newFutureIncome)
     {
         return HandleResult(await Mediator.Send(new Application.SpendingPlan.Incomes.Create.Command
-            { NewFutureIncome = newFutureIncome }));
+        { NewFutureIncome = newFutureIncome }));
     }
 
     [HttpPost("expenditures")]
@@ -52,7 +52,7 @@ public class SpendingPlanController : BaseController
     public async Task<IActionResult> CreateFutureExpenditure(FutureExpenditureDto newFutureExpenditure)
     {
         return HandleResult(await Mediator.Send(new Application.SpendingPlan.Expenditures.Create.Command
-            { NewFutureExpenditure = newFutureExpenditure }));
+        { NewFutureExpenditure = newFutureExpenditure }));
     }
 
     [HttpDelete("savings/{futureSavingId}")]
@@ -67,7 +67,7 @@ public class SpendingPlanController : BaseController
     public async Task<IActionResult> DeleteFutureIncome(Guid futureIncomeId)
     {
         return HandleResult(await Mediator.Send(new Application.SpendingPlan.Incomes.Delete.Command
-            { FutureIncomeId = futureIncomeId }));
+        { FutureIncomeId = futureIncomeId }));
     }
 
     [HttpDelete("expenditures/{futureExpenditureId}")]
@@ -75,6 +75,6 @@ public class SpendingPlanController : BaseController
     public async Task<IActionResult> DeleteFutureExpenditure(Guid futureExpenditureId)
     {
         return HandleResult(await Mediator.Send(new Application.SpendingPlan.Expenditures.Delete.Command
-            { FutureExpenditureId = futureExpenditureId }));
+        { FutureExpenditureId = futureExpenditureId }));
     }
 }

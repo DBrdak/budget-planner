@@ -2,130 +2,24 @@ import React from 'react'
 import CircleProgress from '../../../app/common/components/CircleProgress'
 import { Container, Divider, Grid, GridColumn, GridRow, Header, Icon, List, Modal, Tab, Table } from 'semantic-ui-react'
 import { tr } from 'date-fns/locale';
+import { FutureSaving } from '../../../app/models/spendingPlan/futureSaving';
 
 interface Props {
-  saving: any
+  saving: FutureSaving
 }
 
 function SavingDetails({saving}: Props) {
-  const transactions = [
-      {
-        id: 1,
-        name: 'Ziólko',
-        amount: 2147
-      },
-      {
-        id: 2,
-        name: 'Kółko',
-        amount: 420
-      },
-      {
-        id: 3,
-        name: 'Bułko',
-        amount: 1488
-      },
-      {
-        id: 4,
-        name: 'Ziólko',
-        amount: 2147
-      },
-      {
-        id: 5,
-        name: 'Kółko',
-        amount: 420
-      },
-      {
-        id: 6,
-        name: 'Bułko',
-        amount: 1488
-      },
-      {
-        id: 7,
-        name: 'Ziólko',
-        amount: 2147
-      },
-      {
-        id: 8,
-        name: 'Kółko',
-        amount: 420
-      },
-      {
-        id: 9,
-        name: 'Bułko',
-        amount: 1488
-      },
-      {
-        id: 10,
-        name: 'Ziólko',
-        amount: 2147
-      },
-      {
-        id: 11,
-        name: 'Kółko',
-        amount: 420
-      },
-      {
-        id: 12,
-        name: 'Bułko',
-        amount: 1488
-      },
-      {
-        id: 13,
-        name: 'Ziólko',
-        amount: 2147
-      },
-      {
-        id: 14,
-        name: 'Kółko',
-        amount: 420
-      },
-      {
-        id: 15,
-        name: 'Bułko',
-        amount: 1488
-      },
-      {
-        id: 16,
-        name: 'Ziólko',
-        amount: 2147
-      },
-      {
-        id: 17,
-        name: 'Kółko',
-        amount: 420
-      },
-      {
-        id: 18,
-        name: 'Bułko',
-        amount: 1488
-      },
-      {
-        id: 19,
-        name: 'Ziólko',
-        amount: 2147
-      },
-      {
-        id: 20,
-        name: 'Kółko',
-        amount: 420
-      },
-      {
-        id: 21,
-        name: 'Bułko',
-        amount: 1488
-      }
-    ];
   return (
     <Container fluid>
       <Header as={'h2'} content='Saving Details' textAlign='center' />
-      <Divider />
+      <Divider style={{marginBottom: '30px'}} />
       <Grid columns={2}>
       <Grid.Row style={{marginBottom: '10px'}}>
           <Grid.Column width={8}>
-            <Header as={'h3'} content='Category:' />
+            <Header as={'h3'} content='Goal:' />
           </Grid.Column>
           <Grid.Column width={8}>
-            <Header as={'h4'} content= {`${saving}`} />
+            <Header as={'h4'} content= {`${saving.goalName}`} />
           </Grid.Column>
         </Grid.Row>        
         <Grid.Row style={{marginBottom: '10px'}}>
@@ -133,7 +27,7 @@ function SavingDetails({saving}: Props) {
             <Header as={'h3'} content='Real Amount:' />
           </Grid.Column>
           <Grid.Column width={8}>
-            <Header as={'h4'} content= {`${saving}`} />
+            <Header as={'h4'} content= {`${saving.completedAmount}`} />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row style={{marginBottom: '10px'}}>
@@ -141,15 +35,23 @@ function SavingDetails({saving}: Props) {
             <Header as={'h3'} content='Budgeted Amount:' />
           </Grid.Column>
           <Grid.Column width={8}>
-            <Header as={'h4'} content= {`${saving}`} />
+            <Header as={'h4'} content= {`${saving.amount}`} />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row style={{marginBottom: '10px'}}>
           <Grid.Column width={8}>
-            <Header as={'h3'} content='Account:' />
+            <Header as={'h3'} content=' From Account:' />
           </Grid.Column>
           <Grid.Column width={8}>
-            <Header as={'h4'} content= {`${saving}`} />
+            <Header as={'h4'} content= {`${saving.fromAccountName}`} />
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row style={{marginBottom: '10px'}}>
+          <Grid.Column width={8}>
+            <Header as={'h3'} content=' To Account:' />
+          </Grid.Column>
+          <Grid.Column width={8}>
+            <Header as={'h4'} content= {`${saving.toAccountName}`} />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row style={{marginBottom: '10px'}}>
@@ -157,7 +59,7 @@ function SavingDetails({saving}: Props) {
             <Header as={'h3'} content='Progress:' />
           </GridColumn>
           <Grid.Column width={8}>
-            <CircleProgress progress={30} />
+            <CircleProgress progress={saving.completedAmount / saving.amount} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -170,9 +72,9 @@ function SavingDetails({saving}: Props) {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {transactions.map((transaction, index) => (
+            {saving.completedSavings.map((transaction, index) => (
               <Table.Row key={index}>
-                <Table.Cell>{transaction.name}</Table.Cell>
+                <Table.Cell>{new Date(transaction.date).toDateString()}</Table.Cell>
                 <Table.Cell>{transaction.amount}</Table.Cell>
               </Table.Row>
             ))}

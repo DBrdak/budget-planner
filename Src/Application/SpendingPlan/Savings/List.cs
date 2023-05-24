@@ -13,6 +13,7 @@ public class List
 {
     public class Query : IRequest<Result<List<FutureSavingDto>>>
     {
+        public DateTime Date { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, Result<List<FutureSavingDto>>>
@@ -37,7 +38,9 @@ public class List
 
             var futureSavings = await _context.FutureSavings
                 .AsNoTracking()
-                .Where(fs => fs.BudgetId == budgetId)
+                .Where(fs => fs.BudgetId == budgetId
+                             && fs.Date.Month == request.Date.Month
+                             && fs.Date.Year == request.Date.Year)
                 .ProjectTo<FutureSavingDto>(_mapper.ConfigurationProvider)
                 .ToListAsync().ConfigureAwait(false);
 

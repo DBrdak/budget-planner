@@ -12,12 +12,9 @@ function ProfileForm() {
   const {modalStore} = useStore()
 
   // To będzie do wywalenia ->
-  const navigate = useNavigate();
 
   const submit = (values: any) => {
     modalStore.closeModal()
-    console.log(values)
-    navigate('/main', { replace: true });
   };
 
   const categories: DropdownItemProps[] = [
@@ -28,7 +25,7 @@ function ProfileForm() {
   return (
     <Formik
     initialValues={{email: '', username: '', 
-    displayName: '', newPassword: '', oldPassword: ''}}
+    displayName: '', budgetName: '', newPassword: '', oldPassword: ''}}
     onSubmit={(values, {setErrors}) => submit(values)}>
       {({handleSubmit, isSubmitting, errors}) => (
         <Form 
@@ -43,6 +40,7 @@ function ProfileForm() {
               <MyTextInput placeholder='Email' name='email' />
               <MyTextInput placeholder='Username' name='username' />
               <MyTextInput placeholder='Display name' name='displayName' />
+              <MyTextInput placeholder='Budget name' name='budgetName' />
               <Button primary positive content='Accept' />
             </Grid.Column>
             <Divider vertical/>       

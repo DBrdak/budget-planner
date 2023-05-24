@@ -4,21 +4,15 @@ import SavingDetails from '../modals/SavingDetails';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../app/stores/store';
 import { Link } from 'react-router-dom';
-
-interface Saving {
-  goal: string;
-  fromAccount: string;
-  toAccount: string;
-  realAmount: number;
-  budgetedAmount: number;
-}
+import FutureSavingAdd from '../forms/FutureSavingAdd';
 
 interface SavingTableProps {
-  savings: Saving[];
+  date: Date
 }
 
-const SavingTable: React.FC<SavingTableProps> = ({ savings }) => {
-  const {modalStore} = useStore()
+const SavingTable: React.FC<SavingTableProps> = ({ date }) => {
+  const {modalStore,spendingPlanStore} = useStore()
+  const {savings} = spendingPlanStore
   const [tableVisible, setTableVisible] = useState(false)
 
   const handleToggleTable = () => {
@@ -30,10 +24,10 @@ const SavingTable: React.FC<SavingTableProps> = ({ savings }) => {
         <Grid style={{width: '100%', margin: '0px', display: 'flex', alignItems: 'center'}}>
           <GridColumn textAlign='center' width={4}>
             <Header as={'h2'} color='blue' content='Savings' style={{margin: '0px'}}/>
-          </GridColumn>        
+          </GridColumn>
           <GridColumn textAlign='center' width={8}>
-            <Progress color='blue' style={{ margin: '0px'}}
-            value={savings.reduce((sum, saving) => sum + saving.realAmount, 0) / savings.reduce((sum, saving) => sum + saving.budgetedAmount, 0)}
+            <Progress color='blue' style={{ margin: '0px'}} 
+            value={savings.reduce((sum, saving) => sum += saving.completedAmount >= saving.amount ? 1 : 0, 0)}
             total={savings.length}/>
           </GridColumn>
           <GridColumn textAlign='center' width={4}>
@@ -54,8 +48,8 @@ const SavingTable: React.FC<SavingTableProps> = ({ savings }) => {
             <Table.HeaderCell>Budgeted Amount</Table.HeaderCell>
             <Table.HeaderCell>Progress</Table.HeaderCell>
             <Table.HeaderCell textAlign='center'>
-            <Icon name='add' color='green' size='big' 
-                  style={{ cursor: 'pointer'}} onClick={() => console.log(savings)}/>
+            <Button icon='add' color='green' inverted size='big' circular
+            onClick={() => modalStore.openModal(<FutureSavingAdd date={date}/>)}/>
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -64,18 +58,18 @@ const SavingTable: React.FC<SavingTableProps> = ({ savings }) => {
           {savings.map((saving, index) => (
             <Table.Row key={index} onClick={() => modalStore.openModal(<SavingDetails saving={saving} />)}
             style={{cursor: 'pointer'}}>
-              <Table.Cell>{saving.goal}</Table.Cell>
-              <Table.Cell>{saving.fromAccount}</Table.Cell>
-              <Table.Cell>{saving.toAccount}</Table.Cell>
-              <Table.Cell>{saving.realAmount}</Table.Cell>
-              <Table.Cell>{saving.budgetedAmount}</Table.Cell>
+              <Table.Cell>{saving.goalName}</Table.Cell>
+              <Table.Cell>{saving.fromAccountName}</Table.Cell>
+              <Table.Cell>{saving.toAccountName}</Table.Cell>
+              <Table.Cell>{saving.completedAmount}</Table.Cell>
+              <Table.Cell>{saving.amount}</Table.Cell>
               <Table.Cell>
-                <Progress value={saving.realAmount} 
-                total={saving.budgetedAmount} color='blue'/>
+                <Progress value={saving.completedAmount} 
+                total={saving.amount} color='blue'/>
               </Table.Cell>
               <Table.Cell verticalAlign='middle' textAlign='center'>
-                <Icon name='trash' color='blue' size='big' 
-                style={{ cursor: 'pointer'}} onClick={() => console.log(saving)}/>
+                <Button icon='trash' inverted color='red' size='big' circular
+                onClick={() => console.log(saving)}/>
               </Table.Cell>
             </Table.Row>
           ))}

@@ -4,20 +4,15 @@ import IncomeDetails from '../modals/IncomeDetails';
 import modalStore from '../../../app/stores/modalStore';
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
-
-interface Income {
-  category: string;
-  account: string;
-  realAmount: number;
-  budgetedAmount: number;
-}
+import FutureInExAdd from '../forms/FutureInExAdd';
 
 interface IncomeTableProps {
-  incomes: Income[];
+  date: Date
 }
 
-const IncomeTable: React.FC<IncomeTableProps> = ({ incomes }) => {
-  const {modalStore} = useStore()
+const IncomeTable: React.FC<IncomeTableProps> = ({ date }) => {
+  const {modalStore, spendingPlanStore} = useStore()
+  const {incomes} = spendingPlanStore
   const [tableVisible, setTableVisible] = useState(false)
 
   const handleToggleTable = () => {
@@ -32,8 +27,8 @@ const IncomeTable: React.FC<IncomeTableProps> = ({ incomes }) => {
           </GridColumn>        
           <GridColumn textAlign='center' width={8}>
             <Progress color='green' style={{ margin: '0px'}}
-            value={incomes.reduce((sum, income) => sum + income.realAmount, 0)}
-            total={incomes.reduce((sum, income) => sum + income.budgetedAmount, 0)}/>
+            value={incomes.reduce((sum, income) => sum += income.completedAmount >= income.amount ? 1 : 0, 0)}
+            total={incomes.length}/>
           </GridColumn>        
           <GridColumn textAlign='center' width={4}>
             {tableVisible ? 
@@ -52,8 +47,8 @@ const IncomeTable: React.FC<IncomeTableProps> = ({ incomes }) => {
             <Table.HeaderCell>Budgeted Amount</Table.HeaderCell>
             <Table.HeaderCell>Progress</Table.HeaderCell>
             <Table.HeaderCell textAlign='center'>
-            <Icon name='add' color='green' size='big' 
-                  style={{ cursor: 'pointer'}} onClick={() => console.log(incomes)}/>
+            <Button icon='add' color='green' inverted size='big' circular
+            onClick={() => modalStore.openModal(<FutureInExAdd header = 'New Future Income' date={date}/>)}/>
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -64,17 +59,16 @@ const IncomeTable: React.FC<IncomeTableProps> = ({ incomes }) => {
             onClick={() => modalStore.openModal(<IncomeDetails income={income} />)}
             style={{cursor: 'pointer'}}>
               <Table.Cell>{income.category}</Table.Cell>
-              <Table.Cell>{income.account}</Table.Cell>
-              <Table.Cell>{income.realAmount}</Table.Cell>
-              <Table.Cell>{income.budgetedAmount}</Table.Cell>
+              <Table.Cell>{income.accountName}</Table.Cell>
+              <Table.Cell>{income.completedAmount}</Table.Cell>
+              <Table.Cell>{income.amount}</Table.Cell>
               <Table.Cell>
-                <Progress value={income.realAmount} 
-                total={income.budgetedAmount} 
+                <Progress value={income.completedAmount} 
+                total={income.amount} 
                 color='green'/>
                 </Table.Cell>
                 <Table.Cell verticalAlign='middle' textAlign='center'>
-                  <Icon name='trash' color='red' size='big' 
-                  style={{ cursor: 'pointer'}} onClick={() => console.log(income)}/>
+                  <Button icon='trash' inverted color='red' size='big' circular/>
                 </Table.Cell>
             </Table.Row>
           ))}

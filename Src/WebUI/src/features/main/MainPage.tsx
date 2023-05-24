@@ -71,7 +71,7 @@ function MainPage() {
         <Grid.Row verticalAlign='top' >
           <Grid.Column width={5} textAlign='center'>
             <Button 
-            as={Link} to={'/spending-plan'}
+            as={Link} to={'/spendingplan'}
             fluid size='massive' color='green'
             style={btnStyle}>
               <div>

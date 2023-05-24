@@ -13,7 +13,7 @@ export const routes: RouteObject[] = [
         children: [
             {path: 'main', element: <MainPage/>},
             {path: 'goals', element: <GoalsPage/>},
-            {path: 'spending-plan', element: <SpendingPlan />},
+            {path: 'spendingplan', element: <SpendingPlan />},
             {path: '*', element: <Navigate replace to='/' />}
         ]
     }

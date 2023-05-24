@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Container, Header, Icon } from 'semantic-ui-react'
 import MonthMenu from './menus/MonthMenu'
 import YearMenu from './menus/YearMenu'
@@ -8,9 +8,19 @@ import ExpenditureTable from './tables/ExpenditureTable'
 import SavingTable from './tables/SavingTable'
 import { Link } from 'react-router-dom'
 import { da } from 'date-fns/locale'
+import { useStore } from '../../app/stores/store'
 
 function SpendingPlan() {
+  const {spendingPlanStore} = useStore();
+  const {loadExpenditures, loadIncomes, loadSavings, expenditureRegistry, incomeRegistry, savingRegistry} = spendingPlanStore;
   const [selectedDate, setSelectedDate] = useState(new Date())
+
+  useEffect(() => {
+    if(expenditureRegistry.size <= 1) loadExpenditures(new Date(2023, 3, 10))
+    if(incomeRegistry.size <= 1) loadIncomes(new Date(2023, 3, 10))
+    if(savingRegistry.size <= 1) loadSavings(new Date(2023, 3, 10))
+  },[loadSavings, loadIncomes, loadExpenditures, 
+    expenditureRegistry.size, incomeRegistry.size, savingRegistry.size ])
 
   const containerStyle = {
     boxSizing: "border-box",
@@ -29,62 +39,12 @@ function SpendingPlan() {
     borderRadius: "0px 0px 0px 0px",
   }
 
-  const incomes = [
-    {
-      category: 'Salary',
-      account: 'Bank Account',
-      realAmount: 2000,
-      budgetedAmount: 5000,
-      completion: 100
-    },
-    {
-      category: 'Freelance',
-      account: 'PayPal',
-      realAmount: 120,
-      budgetedAmount: 2000,
-      completion: 75
-    },
-    {
-      category: 'Investment',
-      account: 'Investment Account',
-      realAmount: 3000,
-      budgetedAmount: 2500,
-      completion: 120
-    }
-  ];
-
-  const savings = [
-    {
-      goal: "Vacation",
-      fromAccount: "Savings",
-      toAccount: "Travel",
-      realAmount: 5000,
-      budgetedAmount: 6000,
-    },
-    {
-      goal: "Home Renovation",
-      fromAccount: "Checking",
-      toAccount: "Home Improvement",
-      realAmount: 10000,
-      budgetedAmount: 12000,
-    },
-    {
-      goal: "Education",
-      fromAccount: "Investments",
-      toAccount: "College Fund",
-      realAmount: 20000,
-      budgetedAmount: 25000,
-    },
-  ];
-
   const handleMonthChange = (monthIndex: number) => {
     selectedDate.setUTCMonth(monthIndex)
-    console.log(selectedDate)
   }
 
   const handleYearChange = (year: number) => {
     selectedDate.setUTCFullYear(year)
-    console.log(selectedDate)
   }
 
   return (
@@ -96,9 +56,9 @@ function SpendingPlan() {
       style={{fontSize: '48px'}} />
       <YearMenu onChange={(year) => handleYearChange(year)}/>
       <MonthMenu date={selectedDate} onChange={(monthIndex) => handleMonthChange(monthIndex)}/>
-      <IncomeTable incomes={incomes} />
-      <ExpenditureTable expenditures={incomes} />
-      <SavingTable savings={savings} />
+      <IncomeTable date={selectedDate} />
+      <ExpenditureTable date={selectedDate} />
+      <SavingTable date={selectedDate} />
     </Container>
   )
 }

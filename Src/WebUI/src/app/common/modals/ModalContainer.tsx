@@ -8,7 +8,7 @@ function ModalContainer() {
   
   return (
     <Modal open={modalStore.modal.open} 
-    onClose={modalStore.closeModal} size='mini'>
+    onClose={modalStore.closeModal} size='tiny'>
       <Modal.Content>
         {modalStore.modal.body}
       </Modal.Content>
