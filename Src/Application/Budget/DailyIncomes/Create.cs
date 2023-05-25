@@ -43,7 +43,7 @@ public class Create
             _budgetAccessor = budgetAccessor;
         }
 
-        public async Task<Result<Unit>> Handle(Command request,CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
             var newIncome = _mapper.Map<Transaction>(request.NewIncome);
 
@@ -57,7 +57,9 @@ public class Create
 
             newIncome.FutureTransaction = await _context.FutureTransactions
                 .FirstOrDefaultAsync(ft => ft.Category == request.NewIncome.Category
-                                           && ft.BudgetId == budgetId && ft.Amount > 0).ConfigureAwait(false);
+                                           && ft.BudgetId == budgetId && ft.Amount > 0
+                                           && ft.Date.Month == newIncome.Date.Month
+                                           && newIncome.Date.Year == ft.Date.Year);
 
             await _context.Transactions.AddAsync(newIncome).ConfigureAwait(false);
             var fail = await _context.SaveChangesAsync().ConfigureAwait(false) < 0;

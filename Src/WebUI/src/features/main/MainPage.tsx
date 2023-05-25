@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import '../../app/layout/styles.css';
 import { useStore } from '../../app/stores/store';
-import IncomeForm from './forms/InExForm';
-import InExForm from './forms/InExForm';
 import SavingForm from './forms/SavingForm';
 import ProfileForm from './forms/ProfileForm';
+import IncomeForm from './forms/IncomeForm';
+import ExpenditureForm from './forms/ExpenditureForm';
 
 function MainPage() {
   const {modalStore} = useStore()
@@ -84,7 +84,7 @@ function MainPage() {
             <Button.Group fluid vertical style={{ height: '350px'}}>
               <Button 
               color='green' size='mini' as={Link}
-              onClick={() => modalStore.openModal(<InExForm header='New Income' />)}
+              onClick={() => modalStore.openModal(<IncomeForm />)}
               style={{alignItems: 'center', borderRadius:'30px', justifyContent:'center'}}>
                 <div>
                   <Header inverted as={'h1'}>Income</Header>
@@ -93,7 +93,7 @@ function MainPage() {
               </Button>
               <Button 
               color='green' size='mini' as={Link}
-              onClick={() => modalStore.openModal(<InExForm header='New Expenditure' />)}
+              onClick={() => modalStore.openModal(<ExpenditureForm />)}
               style={{alignItems: 'center', margin:'12px 0px 12px 0px', borderRadius:'30px', justifyContent:'center' }}>
                 <div>
                   <Header inverted as={'h1'}>Expenditure</Header>

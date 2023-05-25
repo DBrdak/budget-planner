@@ -19,7 +19,8 @@ interface Props {
 function FutureSavingAdd({date}: Props) {
   const {modalStore, spendingPlanStore, extrasStore} = useStore()
   const {createSaving} = spendingPlanStore
-  const {loadCheckingAccounts, loadSavingAccounts, checkingAccounts, savingAccounts, loadingAcc} = extrasStore
+  const {loadCheckingAccounts, loadSavingAccounts, loadGoalNames, goals,
+    checkingAccounts, savingAccounts, loadingAcc, loadingGoal} = extrasStore
 
   const validationSchema = Yup.object({
     fromAccountName: Yup.string().required('Source account name is required'),
@@ -34,7 +35,11 @@ function FutureSavingAdd({date}: Props) {
     if(savingAccounts.length < 1){
         loadSavingAccounts()
       }
-  }, [loadCheckingAccounts, loadSavingAccounts, savingAccounts.length, checkingAccounts.length])
+    if(goals.length < 1) {
+      loadGoalNames()
+    }
+  }, [loadCheckingAccounts, loadSavingAccounts, loadGoalNames,
+    savingAccounts.length, checkingAccounts.length, goals.length])
 
   function handleFormSubmit(saving: FutureSavingFormValues) {
     saving.id = uuid()
@@ -57,6 +62,14 @@ function FutureSavingAdd({date}: Props) {
     }
   })
 
+  const DIgoals = goals.map((g) => {
+    return {
+      key: g.id,
+      value: g.name,
+      text: g.name
+    }
+  })
+
   return (
     <Formik
       validationSchema={validationSchema}
@@ -72,12 +85,12 @@ function FutureSavingAdd({date}: Props) {
           <Header as={'h1'} content='New Future Saving' textAlign='center' />
           <Divider />
           <MyTextInput placeholder='Amount' name='amount' />
-          <MyDropdown placeholder='Goal' name='goalName' options={DIcheckingAccounts}  />
+          <MyDropdown placeholder='Goal' name='goalName' options={DIgoals}  />
           <MyDropdown placeholder='From Account' name='fromAccountName' options={DIcheckingAccounts} />
           <MyDropdown placeholder='To Account' name='toAccountName' options={DIsavingAccounts} />
           <Container
           style={{ display: 'flex', justifyContent: 'center', width: '60%' }}>
-            <Button loading={isSubmitting || loadingAcc} content='Create' positive type='submit' circular/>
+            <Button loading={isSubmitting || loadingAcc || loadingGoal} content='Create' positive type='submit' circular/>
           </Container>
         </Form>
       )}

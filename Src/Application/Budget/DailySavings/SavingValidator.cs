@@ -21,7 +21,7 @@ public class SavingValidator : AbstractValidator<SavingDto>
             .WithMessage("Amount must be greater than 0");
 
         RuleFor(x => x.Date)
-            .Must(x => x <= DateTime.UtcNow)
+            .Must(x => x <= DateTime.UtcNow.AddHours(12))
             .WithMessage("Specify past or current date");
 
         RuleFor(x => x.ToAccountName)

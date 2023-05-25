@@ -26,7 +26,7 @@ function MyDropdown(props: Props) {
   }
 
   return (
-    <Form.Field error={meta.touched && !!meta.error} >
+    <Form.Field error={!field.value && meta.touched && !!meta.error} >
       {props.label &&
         <Label>{props.label}</Label>}
       <Dropdown selection
@@ -34,7 +34,7 @@ function MyDropdown(props: Props) {
         value={field.value || ''}
         onChange={handleChange}
         placeholder={props.placeholder}/>
-      {meta.touched && meta.error ? (
+      {!field.value && meta.touched && meta.error ? (
         <Label basic color='red'>{meta.error}</Label>
       ) : null}
     </Form.Field>

@@ -3,14 +3,17 @@ import { AccountName } from "../models/extras/accountName";
 import { Category } from "../models/extras/category";
 import agent from "../api/agent";
 import { makeAutoObservable } from "mobx";
+import { GoalName } from "../models/extras/goalName";
 
 export default class ExtrasStore {
   checkingAccounts: AccountName[] = []
   savingAccounts: AccountName[] = []
   expenditureCategories: Category[] = []
   incomeCategories: Category[] = []
+  goals: GoalName[] = []
   loadingAcc: boolean = false
   loadingCat: boolean = false
+  loadingGoal: boolean = false
 
   constructor(){
     makeAutoObservable(this)
@@ -21,6 +24,9 @@ export default class ExtrasStore {
   }
   setLoadingCat(a: boolean){
     this.loadingCat = a
+  }
+  setLoadingGoal(a: boolean){
+    this.loadingGoal = a
   }
 
   loadCheckingAccounts = async () => {
@@ -68,6 +74,18 @@ export default class ExtrasStore {
     } catch (error){
       console.log(error);
       this.setLoadingCat(false);
+    }
+  }
+
+  loadGoalNames = async () => {
+    this.setLoadingGoal(true)
+    try {
+      const names = await agent.Extras.getGoalNames()
+      this.goals = names
+    } catch(error) {
+      console.log(error)
+    } finally {
+      this.setLoadingGoal(false)
     }
   }
 }

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using Application.Extras.Accounts;
 using Application.Extras.Categories;
+using Application.Extras.Goals;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -18,7 +19,7 @@ public class ExtrasController : BaseController
         return HandleResult(await Mediator.Send(new ExpendituresList.Query()));
     }
 
-    [HttpGet("categories/incomes")]
+    [HttpGet("categories/income")]
     [Description("Gets list of income categories")]
     public async Task<IActionResult> GetIncomeCategories()
     {
@@ -35,5 +36,11 @@ public class ExtrasController : BaseController
     public async Task<IActionResult> GetSavingAccountsNames()
     {
         return HandleResult(await Mediator.Send(new SavingAccounts.Query()));
+    }
+
+    [HttpGet("goals")]
+    public async Task<IActionResult> GetGoalNames()
+    {
+        return HandleResult(await Mediator.Send(new GoalsName.Query()));
     }
 }

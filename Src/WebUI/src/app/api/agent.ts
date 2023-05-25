@@ -15,6 +15,7 @@ import { Profile, ProfileFormValues } from "../models/profile"
 import { AccountName } from "../models/extras/accountName"
 import { forEachChild } from "typescript"
 import React from "react"
+import { GoalName } from "../models/extras/goalName"
 
 const sleep = (delay: number) =>{
   return new Promise((resolve) => {
@@ -130,7 +131,8 @@ const Extras = {
   getExpenditureCategories: () => requests.get<Category[]>('/extras/categories/expenditure'),
   getIncomeCategories: () => requests.get<Category[]>('/extras/categories/income'),
   getCheckingAccountNames: () => requests.get<AccountName[]>('/extras/accounts/checking'),
-  getSavingAccountNames: () => requests.get<AccountName[]>('/extras/accounts/saving')
+  getSavingAccountNames: () => requests.get<AccountName[]>('/extras/accounts/saving'),
+  getGoalNames: () => requests.get<GoalName[]>('/extras/goals')
 }
 
 const agent = {
