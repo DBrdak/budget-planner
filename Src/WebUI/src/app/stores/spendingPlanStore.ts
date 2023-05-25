@@ -128,6 +128,7 @@ export default class SpendingPlanStore {
       await agent.SpendingPlan.createFutureIncome(income)
       const newIncome = new FutureIncome(income)
       newIncome.completedIncomes = []
+      newIncome.completedAmount = 0
       this.incomeRegistry.set(newIncome.id, newIncome)
       this.setLoading(false)
     } catch(error) {
@@ -156,6 +157,7 @@ export default class SpendingPlanStore {
     try {
       await agent.SpendingPlan.createFutureSaving(saving)
       const newSaving = new FutureSaving(saving)
+      newSaving.completedAmount = 0
       newSaving.completedSavings = []
       this.savingRegistry.set(newSaving.id, newSaving)
       this.setLoading(false)

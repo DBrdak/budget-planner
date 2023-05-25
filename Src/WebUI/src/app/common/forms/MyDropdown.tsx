@@ -7,7 +7,7 @@ interface Props {
   name: string,
   options: DropdownItemProps[],
   label?: string,
-  type?: string,
+  type?: string
 }
 
 function MyDropdown(props: Props) {
@@ -33,7 +33,7 @@ function MyDropdown(props: Props) {
         options={props.options}
         value={field.value || ''}
         onChange={handleChange}
-        placeholder={props.placeholder} />
+        placeholder={props.placeholder}/>
       {meta.touched && meta.error ? (
         <Label basic color='red'>{meta.error}</Label>
       ) : null}

@@ -8,7 +8,7 @@ export interface FutureSaving {
   date: Date | null
   fromAccountName: string
   toAccountName: string
-  goalName: string
+  goalName?: string | null
   completedSavings: Saving[]
 }
 
@@ -24,5 +24,5 @@ export class FutureSavingFormValues {
   date: Date | null = null
   fromAccountName: string = ''
   toAccountName: string = ''
-  goalName: string = ''
+  goalName: string | null = null
 }

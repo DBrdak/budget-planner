@@ -1,8 +1,8 @@
 import { Formik } from 'formik'
 import { observer } from 'mobx-react-lite'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Form } from 'react-router-dom'
-import { Header, Divider, Container, Button, DropdownItemProps } from 'semantic-ui-react'
+import { Header, Divider, Container, Button, DropdownItemProps, DropdownItem } from 'semantic-ui-react'
 import MyDropdown from '../../../app/common/forms/MyDropdown'
 import MyTextInput from '../../../app/common/forms/MyTextInput'
 import { useStore } from '../../../app/stores/store'
@@ -15,8 +15,9 @@ interface Props {
 }
 
 function FutureExpenditureAdd({date}: Props) {
-  const {modalStore, spendingPlanStore} = useStore()
+  const {modalStore, spendingPlanStore, extrasStore} = useStore()
   const {createExpenditure} = spendingPlanStore
+  const {loadCheckingAccounts, checkingAccounts, loadingAcc} = extrasStore
 
   const validationSchema = Yup.object({
     accountName: Yup.string().required('Account name is required'),
@@ -24,12 +25,23 @@ function FutureExpenditureAdd({date}: Props) {
     category: Yup.string().required('Category is required')
   })
 
+  useEffect(() => {
+    if(checkingAccounts.length < 1) loadCheckingAccounts()
+  }, [loadCheckingAccounts, checkingAccounts.length])
+
   function handleFormSubmit(expenditure: FutureExpenditureFormValues) {
     expenditure.id = uuid()
     createExpenditure(expenditure).then(modalStore.closeModal)
   }
 
-  const acc:DropdownItemProps[] = [{ key: '1', text: 'Checking account 02', value: 'Checking account 01' }]
+  const dropdownItems = checkingAccounts.map((acc) => {
+    return {
+      key: acc.id,
+      value: acc.name,
+      text: acc.name
+    }
+  })
+
   //TODO
   //*Fix the dropdown error display
   //*Add account list to dropdown
@@ -42,7 +54,7 @@ function FutureExpenditureAdd({date}: Props) {
     category: '', accountName: '', date: date}}
     onSubmit={(values) => handleFormSubmit(values)} >
       {({handleSubmit, isSubmitting, errors}) => (
-        <Form 
+        <Form
         className='ui form' 
         onSubmit={handleSubmit}
         autoComplete='off'>
@@ -50,10 +62,10 @@ function FutureExpenditureAdd({date}: Props) {
           <Divider />
           <MyTextInput placeholder='Amount' name='amount' />
           <MyTextInput placeholder='Category' name='category' />
-          <MyDropdown placeholder='Account' name='accountName' options={acc} />
+          <MyDropdown placeholder='Account' name='accountName' options={dropdownItems} />
           <Container
           style={{ display: 'flex', justifyContent: 'center', width: '60%' }}>
-            <Button loading={isSubmitting} content='Create' positive type='submit' circular onClick={() => handleSubmit} />
+            <Button loading={isSubmitting || loadingAcc} content='Create' positive type='submit' circular />
           </Container>
         </Form>
       )}

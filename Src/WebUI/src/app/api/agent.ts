@@ -10,8 +10,11 @@ import { ExpenditureFormValues } from "../models/expenditure"
 import { FutureIncome, FutureIncomeFormValues } from "../models/spendingPlan/futureIncome"
 import { FutureExpenditure, FutureExpenditureFormValues } from "../models/spendingPlan/futureExpenditure"
 import { FutureSaving, FutureSavingFormValues } from "../models/spendingPlan/futureSaving"
-import { Category } from "../models/category"
+import { Category } from "../models/extras/category"
 import { Profile, ProfileFormValues } from "../models/profile"
+import { AccountName } from "../models/extras/accountName"
+import { forEachChild } from "typescript"
+import React from "react"
 
 const sleep = (delay: number) =>{
   return new Promise((resolve) => {
@@ -52,11 +55,17 @@ axios.interceptors.response.use(async response => {
         for (const key in data.errors){
           if(data.errors[key]) {
             modalStateErrors.push(data.errors[key]);
+            toast.error(data.errors[key][0])
           }
         }
         throw modalStateErrors.flat();
       }else {
-        toast.error(data);
+        if(data.errors.Date) {
+          toast.error(data.errors.Date[0])
+        }
+        else {
+          toast.error(error.status)
+        }
       }
       break;
     case 401:
@@ -118,8 +127,10 @@ const SpendingPlan = {
 }
 
 const Extras = {
-  getExpenditureCategories: () => requests.get<Category>('extras/expenditures/categories'),
-  getIncomeCategories: () => requests.get<Category>('extras/expenditures/categories')
+  getExpenditureCategories: () => requests.get<Category[]>('/extras/categories/expenditure'),
+  getIncomeCategories: () => requests.get<Category[]>('/extras/categories/income'),
+  getCheckingAccountNames: () => requests.get<AccountName[]>('/extras/accounts/checking'),
+  getSavingAccountNames: () => requests.get<AccountName[]>('/extras/accounts/saving')
 }
 
 const agent = {
