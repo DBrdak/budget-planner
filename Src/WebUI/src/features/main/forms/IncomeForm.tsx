@@ -1,5 +1,5 @@
 import { Formik, Form } from 'formik'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useNavigation } from 'react-router-dom'
 import { Button, Container, Divider, DropdownItemProps, Header } from 'semantic-ui-react';
 import MyTextInput from '../../../app/common/forms/MyTextInput';
 import { observer } from 'mobx-react-lite';
@@ -11,6 +11,7 @@ import {v4 as uuid} from 'uuid';
 import { useEffect } from 'react';
 import { FutureIncomeFormValues } from '../../../app/models/spendingPlan/futureIncome';
 import { IncomeFormValues } from '../../../app/models/income';
+import { router } from '../../../app/router/Routes';
 
 function IncomeForm() {
   const {modalStore, extrasStore, budgetStore} = useStore()
@@ -33,8 +34,7 @@ function IncomeForm() {
 
   function handleFormSubmit(income: IncomeFormValues) {
     income.id = uuid()
-    createIncome(income)
-    modalStore.closeModal()
+    createIncome(income).then(modalStore.closeModal)
   }
 
   const DIcategories = incomeCategories.map((ic) => {

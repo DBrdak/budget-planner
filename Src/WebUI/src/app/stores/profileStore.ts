@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { Profile, ProfileFormValues } from "../models/profile";
 import agent from "../api/agent";
 import { tr } from "date-fns/locale";
@@ -23,11 +23,14 @@ export default class ProfileStore {
     this.setLoading(true)
     try {
       const prof = await agent.Profiles.get(username)
-      this.setProfile(prof)
+      console.log(prof)
+      runInAction(() => {
+        this.setProfile(prof)
+        this.setLoading(false)
+      })
     } catch (error) {
       console.log(error)
-    } finally {
-      this.setLoading(false)
+      runInAction(() => this.setLoading(false))
     }
   }
 

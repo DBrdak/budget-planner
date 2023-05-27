@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Grid, Card, Icon, Segment, Container, Button, CardHeader, Header, Image } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import { Link } from 'react-router-dom';
@@ -11,7 +11,12 @@ import IncomeForm from './forms/IncomeForm';
 import ExpenditureForm from './forms/ExpenditureForm';
 
 function MainPage() {
-  const {modalStore} = useStore()
+  const {modalStore, userStore} = useStore()
+  const {user, getUser} = userStore
+
+  useEffect(() => {
+    if(!user) getUser()
+  }, [user, getUser])
 
   const btnStyle = {
     alignItems: 'center', 
@@ -58,8 +63,9 @@ function MainPage() {
           </Grid.Column>
           <Grid.Column width={5} textAlign='center'>
             <Button as={Link}
-            onClick={() => modalStore.openModal(<ProfileForm />)}
+            onClick={() => modalStore.openModal(<ProfileForm username={user.username} />)}
             fluid color='green' size='massive' 
+            loading={!user}
             style={btnStyle}>
               <div>
                 <Header inverted as={'h1'}>Profile</Header>

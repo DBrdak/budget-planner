@@ -1,7 +1,7 @@
 export interface Profile {
   username: string
-  displayName: string
-  email: string
+  displayName: string | null
+  email: string | null
   budgetName: string
 }
 

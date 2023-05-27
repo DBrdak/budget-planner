@@ -10,6 +10,7 @@ import {v4 as uuid} from 'uuid';
 import * as Yup from 'yup';
 import { useEffect } from 'react';
 import {SavingFormValues} from '../../../app/models/saving'
+import { router } from '../../../app/router/Routes';
 
 function SavingForm() {
   const {modalStore, extrasStore, budgetStore} = useStore()
@@ -39,8 +40,7 @@ function SavingForm() {
 
   function handleFormSubmit(saving: SavingFormValues) {
     saving.id = uuid()
-    createSaving(saving)
-    modalStore.closeModal()
+    createSaving(saving).then(modalStore.closeModal)
   }
 
   const DIcheckingAccounts = checkingAccounts.map((acc) => {

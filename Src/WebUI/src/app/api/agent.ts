@@ -16,12 +16,15 @@ import { AccountName } from "../models/extras/accountName"
 import { forEachChild } from "typescript"
 import React from "react"
 import { GoalName } from "../models/extras/goalName"
+import path from "path"
 
 const sleep = (delay: number) =>{
   return new Promise((resolve) => {
     setTimeout(resolve, delay)
   })
 }
+
+let isBudgetRequired = true
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL
 
@@ -31,7 +34,7 @@ axios.interceptors.request.use(config => {
   const token = store.commonStore.token
   const budgetName = store.commonStore.budgetName
 
-  if(budgetName && config.baseURL){
+  if(budgetName && config.baseURL && isBudgetRequired){
     config.baseURL += `/${budgetName}`
   }
 
@@ -76,7 +79,8 @@ axios.interceptors.response.use(async response => {
       toast.error('Forbidden')
       break;
     case 404:
-      router.navigate('/not-found')
+      //router.navigate('/not-found')
+      toast.error('Not found')
       break;
     case 500:
       store.commonStore.setServerError(data);
@@ -94,45 +98,125 @@ const requests = {
 }
 
 const Users = {
-  current: () => requests.get<User>('user'),
-  login: (user: UserFormValues) => requests.post<User>('/user/login', user),
-  register: (user: UserFormValues) => requests.post<User>('/user/register', user)
+  current: () => {
+    isBudgetRequired = false
+    return requests.get<User>('/user')
+  },
+  login: (user: UserFormValues) => {
+    isBudgetRequired = false
+    return requests.post<User>('/user/login', user)
+  },
+  register: (user: UserFormValues) => {
+    isBudgetRequired = false
+    return requests.post<User>('/user/register', user)
+  }
 }
 
 const Profiles = {
-  get: (username: string) => requests.get<Profile>(`profile/${username}`),
-  delete: (username: string) => requests.delete<void>(`profile/${username}`),
-  update: (username: string, profile: ProfileFormValues) => requests.put(`profile/${username}`, profile),
-  changePassword: (username: string, form: PasswordChangeFormValues) => requests.put(`profile/${username}/password`, form)
+  get: (username: string) => {
+    isBudgetRequired = true
+    return requests.get<Profile>(`/profile/${username}`)
+  },
+  delete: (username: string) => {
+    isBudgetRequired = true
+    return requests.delete<void>(`/profile/${username}`)
+  },
+  update: (username: string, profile: ProfileFormValues) => {
+    isBudgetRequired = true
+    return requests.put(`/profile/${username}`, profile)
+  },
+  changePassword: (username: string, form: PasswordChangeFormValues) => {
+    isBudgetRequired = true
+    return requests.put(`/profile/${username}/password`, form)
+  }
 }
 
 const Budget = {
-  createIncome: (income: IncomeFormValues) => requests.post<void>('', income),
-  createExpenditure: (expenditure: ExpenditureFormValues) => requests.post<void>('', expenditure),
-  createSaving: (saving: SavingFormValues) => requests.post<void>('', saving),
-  deleteIncome: (id: string) => requests.delete<void>(`/${id}`),
-  deleteExpenditure: (id: string) => requests.delete<void>(`/${id}`),
-  deleteSaving: (id: string) => requests.delete<void>(`/${id}`),
+  createIncome: (income: IncomeFormValues) => {
+    isBudgetRequired = true
+    return requests.post<void>('/incomes', income)
+  },
+  createExpenditure: (expenditure: ExpenditureFormValues) => {
+    isBudgetRequired = true
+    return requests.post<void>('/expenditures', expenditure)
+  },
+  createSaving: (saving: SavingFormValues) => {
+    isBudgetRequired = true
+    return requests.post<void>('/savings', saving)
+  },
+  deleteIncome: (id: string) => {
+    isBudgetRequired = true
+    return requests.delete<void>(`/incomes/${id}`)
+  },
+  deleteExpenditure: (id: string) => {
+    isBudgetRequired = true
+    return requests.delete<void>(`/expenditures/${id}`)
+  },
+  deleteSaving: (id: string) => {
+    isBudgetRequired = true
+    return requests.delete<void>(`/savings/${id}`)
+  },
 }
 
 const SpendingPlan = {
-  getFutureIncomes: (date: string) => requests.get<FutureIncome[]>(`/spendingplan/incomes/${date}`),
-  getFutureExpenditures: (date: string) => requests.get<FutureExpenditure[]>(`/spendingplan/expenditures/${date}`),
-  getFutureSavings: (date: string) => requests.get<FutureSaving[]>(`/spendingplan/savings/${date}`),  
-  createFutureIncome: (futureIncome: FutureIncomeFormValues) => requests.post<void>('/spendingplan/incomes', futureIncome),
-  createFutureExpenditure: (futureExpenditure: FutureExpenditureFormValues) => requests.post<void>('/spendingplan/expenditures', futureExpenditure),
-  createFutureSaving: (futureSaving: FutureSavingFormValues) => requests.post<void>('/spendingplan/savings', futureSaving),  
-  deleteFutureIncome: (id: string) => requests.delete<void>(`/spendingplan/incomes/${id}`),
-  deleteFutureExpenditure: (id: string) => requests.delete<void>(`/spendingplan/expenditures/${id}`),
-  deleteFutureSaving: (id: string) => requests.delete<void>(`/spendingplan/savings/${id}`),
+  getFutureIncomes: (date: string) => {
+    isBudgetRequired = true
+    return requests.get<FutureIncome[]>(`/spendingplan/incomes/${date}`)
+  },
+  getFutureExpenditures: (date: string) => {
+    isBudgetRequired = true
+    return requests.get<FutureExpenditure[]>(`/spendingplan/expenditures/${date}`)
+  },
+  getFutureSavings: (date: string) => {
+    isBudgetRequired = true
+    return requests.get<FutureSaving[]>(`/spendingplan/savings/${date}`)
+  },  
+  createFutureIncome: (futureIncome: FutureIncomeFormValues) => {
+    isBudgetRequired = true
+    return requests.post<void>('/spendingplan/incomes', futureIncome)
+  },
+  createFutureExpenditure: (futureExpenditure: FutureExpenditureFormValues) => {
+    isBudgetRequired = true
+    return requests.post<void>('/spendingplan/expenditures', futureExpenditure)
+  },
+  createFutureSaving: (futureSaving: FutureSavingFormValues) => {
+    isBudgetRequired = true
+    return requests.post<void>('/spendingplan/savings', futureSaving)
+  },  
+  deleteFutureIncome: (id: string) => {
+    isBudgetRequired = true
+    return requests.delete<void>(`/spendingplan/incomes/${id}`)
+  },
+  deleteFutureExpenditure: (id: string) => {
+    isBudgetRequired = true
+    return requests.delete<void>(`/spendingplan/expenditures/${id}`)
+  },
+  deleteFutureSaving: (id: string) => {
+    isBudgetRequired = true
+    return requests.delete<void>(`/spendingplan/savings/${id}`)
+  },
 }
 
 const Extras = {
-  getExpenditureCategories: () => requests.get<Category[]>('/extras/categories/expenditure'),
-  getIncomeCategories: () => requests.get<Category[]>('/extras/categories/income'),
-  getCheckingAccountNames: () => requests.get<AccountName[]>('/extras/accounts/checking'),
-  getSavingAccountNames: () => requests.get<AccountName[]>('/extras/accounts/saving'),
-  getGoalNames: () => requests.get<GoalName[]>('/extras/goals')
+  getExpenditureCategories: () => {
+    isBudgetRequired = true
+    return requests.get<Category[]>('/extras/categories/expenditure')
+    },
+  getIncomeCategories: () => {
+    isBudgetRequired = true
+    return requests.get<Category[]>('/extras/categories/income')
+  },
+  getCheckingAccountNames: () => {
+    isBudgetRequired = true
+    return requests.get<AccountName[]>('/extras/accounts/checking')
+  },
+  getSavingAccountNames: () => {
+    isBudgetRequired = true
+    return requests.get<AccountName[]>('/extras/accounts/saving')},
+  getGoalNames: () => {
+    isBudgetRequired = true
+    return requests.get<GoalName[]>('/extras/goals')
+  }
 }
 
 const agent = {

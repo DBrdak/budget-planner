@@ -11,6 +11,7 @@ import {v4 as uuid} from 'uuid';
 import { useEffect } from 'react';
 import { FutureExpenditureFormValues } from '../../../app/models/spendingPlan/futureExpenditure';
 import { ExpenditureFormValues } from '../../../app/models/expenditure';
+import { router } from '../../../app/router/Routes';
 
 function ExpenditureForm() {
   const {modalStore, extrasStore, budgetStore} = useStore()
@@ -76,7 +77,7 @@ function ExpenditureForm() {
           dateFormat='d MMMM yyyy' />
           <Container
           style={{ display: 'flex', justifyContent: 'center', width: '60%' }}>
-            <Button loading={isSubmitting || loadingAcc || loadingCat} content='Create' positive type='submit' circular />
+            <Button loading={loading || loadingAcc || loadingCat} content='Create' positive type='submit' circular />
           </Container>
         </Form>
       )}
