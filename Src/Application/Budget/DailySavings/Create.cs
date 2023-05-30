@@ -65,9 +65,11 @@ public class Create
 
             newSaving.FutureSaving = await _context.FutureSavings
                 .FirstOrDefaultAsync(ft => ft.Budget == newSaving.Budget
+                                           && ft.Date.Month == request.NewSaving.Date.Month
+                                           && ft.Date.Year == request.NewSaving.Date.Year
                                            && ft.FromAccount == newSaving.FromAccount
                                            && ft.ToAccount == newSaving.ToAccount
-                                           && ft.Goal == newSaving.Goal).ConfigureAwait(false);
+                                           && ft.Goal == newSaving.Goal);
 
             if (newSaving.Budget == null
                 || newSaving.ToAccount == null

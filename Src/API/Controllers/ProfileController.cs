@@ -18,8 +18,8 @@ public class ProfileController : BaseController
         return HandleResult(await Mediator.Send(new Details.Query()));
     }
 
-    [HttpDelete("{username}")]
-    [Description("Deletes an entire user data")]
+    [HttpPut]
+    [Description("Deletes entire user data")]
     public async Task<IActionResult> DeleteUser([FromBody] string password)
     {
         return HandleResult(await Mediator.Send(new Delete.Command { Password = password }));

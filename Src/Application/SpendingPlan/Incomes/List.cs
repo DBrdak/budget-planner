@@ -13,6 +13,7 @@ public class List
 {
     public class Query : IRequest<Result<List<FutureIncomeDto>>>
     {
+        public DateTime Date { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, Result<List<FutureIncomeDto>>>
@@ -37,7 +38,9 @@ public class List
 
             var futureTransactions = await _context.FutureTransactions
                 .AsNoTracking()
-                .Where(ft => ft.BudgetId == budgetId && ft.Amount > 0)
+                .Where(ft => ft.BudgetId == budgetId && ft.Amount > 0
+                             && ft.Date.Month == request.Date.Month
+                             && ft.Date.Year == request.Date.Year)
                 .ProjectTo<FutureIncomeDto>(_mapper.ConfigurationProvider)
                 .ToListAsync().ConfigureAwait(false);
 

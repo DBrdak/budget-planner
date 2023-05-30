@@ -57,7 +57,9 @@ public class Create
 
             newExpenditure.FutureTransaction = await _context.FutureTransactions
                 .FirstOrDefaultAsync(ft => ft.Category == request.NewExpenditure.Category
-                                           && ft.BudgetId == budgetId && ft.Amount < 0).ConfigureAwait(false);
+                                           && ft.BudgetId == budgetId && ft.Amount < 0 &&
+                                           ft.Date.Month == newExpenditure.Date.Month
+                                           && newExpenditure.Date.Year == ft.Date.Year);
 
             await _context.Transactions.AddAsync(newExpenditure).ConfigureAwait(false);
             var fail = await _context.SaveChangesAsync().ConfigureAwait(false) < 0;

@@ -18,7 +18,7 @@ public class GoalController : BaseController
     }
 
     [HttpDelete("{goalId}")]
-    [Description("Gets goal in detailed view")]
+    [Description("Deletes goal in detailed view")]
     public async Task<IActionResult> DeleteGoal(Guid goalId)
     {
         return HandleResult(await Mediator.Send(new Delete.Command { GoalId = goalId }));

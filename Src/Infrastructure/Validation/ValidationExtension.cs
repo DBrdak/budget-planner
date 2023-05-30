@@ -64,6 +64,9 @@ public class ValidationExtension : IValidationExtension
 
     public async Task<bool> GoalExists(string goalName)
     {
+        if (string.IsNullOrEmpty(goalName))
+            return true;
+
         var budgetId = await _budgetAccessor.GetBudgetId();
 
         return await _context.Goals

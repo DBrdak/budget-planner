@@ -36,11 +36,11 @@ public class ExpendituresList
             if (budgetId == Guid.Empty)
                 return null;
 
-            var categories = await _context.TransactionCategories
+            var categories = (await _context.TransactionCategories
                 .AsNoTracking()
                 .Where(tc => tc.BudgetId == budgetId && tc.Type == "expenditure")
                 .ProjectTo<TransactionCategoryDto>(_mapper.ConfigurationProvider)
-                .ToListAsync().ConfigureAwait(false);
+                .ToListAsync().ConfigureAwait(false)).DistinctBy(c => c.Value).ToList();
 
             return Result<List<TransactionCategoryDto>>.Success(categories);
         }
