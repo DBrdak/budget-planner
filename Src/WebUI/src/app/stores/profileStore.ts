@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { Profile, ProfileFormValues } from "../models/profile";
 import agent from "../api/agent";
-import { tr } from "date-fns/locale";
+import { PasswordChangeFormValues } from "../models/user";
 
 export default class ProfileStore {
   profile:Profile = null
@@ -22,10 +22,10 @@ export default class ProfileStore {
   loadProfile = async (username: string) => {
     this.setLoading(true)
     try {
+      this.setProfile(null)
       const prof = await agent.Profiles.get(username)
-      console.log(prof)
+      this.setProfile(prof)
       runInAction(() => {
-        this.setProfile(prof)
         this.setLoading(false)
       })
     } catch (error) {
@@ -43,6 +43,28 @@ export default class ProfileStore {
       console.log(error)
     } finally {
       this.setLoading(false)
+    }
+  }
+
+  deleteProfile = async (password: string) => {
+    this.setLoading(true)
+    try {
+      await agent.Profiles.delete(password)
+    } catch(error) {
+      console.log(error)
+    } finally {
+      runInAction(() => this.setLoading(false))
+    }
+  }
+
+  changePassword = async (username: string, passwordForm: PasswordChangeFormValues) => {
+    this.setLoading(true)
+    try {
+      agent.Profiles.changePassword(username, passwordForm)
+    } catch(error) {
+      console.log(error)
+    } finally {
+      runInAction(() => this.setLoading(false))
     }
   }
 

@@ -1,9 +1,11 @@
-import { makeAutoObservable } from "mobx";
-import { Goal } from "../models/goal";
-import { Income } from "../models/income";
+import { makeAutoObservable, runInAction } from "mobx";
+import { Goal, GoalFormValues } from "../models/goal";
+import agent from "../api/agent";
+import { id } from "date-fns/locale";
 
 export default class GoalsStore {
   loading = false
+  goals: Goal[] = []
 
   constructor() {
     makeAutoObservable(this)
@@ -13,7 +15,52 @@ export default class GoalsStore {
     this.loading = a
   }
 
-  //createGoal = async(Goal)
+  getGoals = async () => {
+    this.setLoading(true)
+    try {
+      const response = await agent.Goals.getGoals()
+      this.goals = response
+    } catch (error) {
+      console.log(error)
+    } finally {
+      runInAction( () => this.setLoading(false))
+    }
+  }
+
+  clearGoals = () => {
+    this.goals = []
+  }
+
+  deleteGoal = async (id: string) => {
+    this.setLoading(true)
+    try {
+      await agent.Goals.deleteGoal(id)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      runInAction( () => this.setLoading(false))
+    }
+  }
+
+  updateGoal = async(updatedGoal: GoalFormValues) => {
+    this.setLoading(true)
+    try {
+      await agent.Goals.updateGoal(updatedGoal)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      runInAction( () => this.setLoading(false))
+    }
+  }
   
-  goal: Goal | null = null
+  createGoal = async(newGoal: GoalFormValues) => {
+    this.setLoading(true)
+    try {
+      await agent.Goals.createGoal(newGoal)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      runInAction( () => this.setLoading(false))
+    }
+  }
 }

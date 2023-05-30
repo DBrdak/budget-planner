@@ -6,7 +6,7 @@ import { useStore } from '../../app/stores/store'
 
 function HomePage() {
   const {commonStore} = useStore()
-  commonStore.setToken("eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvaG4iLCJuYW1laWQiOiIwNjdiZDU5Zi1iYjhjLTQ0NjUtOTg2ZS05MDlmNzZjNDA1ZjIiLCJlbWFpbCI6ImpvaG5AdGVzdC5jb20iLCJuYmYiOjE2ODUyMTAyODUsImV4cCI6MTY4NTI5NjY4NSwiaWF0IjoxNjg1MjEwMjg1fQ.Pxopp0IKMkadcgWyL_vpw9-AyBNisBTOPsUNT8yw-rEO_EbrWDZz7ZHQllBSSIQuKYT5G2QtgR0z9k8q15mB6g")
+  commonStore.setToken("eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvaG5ueSIsIm5hbWVpZCI6IjA2N2JkNTlmLWJiOGMtNDQ2NS05ODZlLTkwOWY3NmM0MDVmMiIsImVtYWlsIjoiam9obkB0ZXN0LmNvbSIsIm5iZiI6MTY4NTQ4NjM5NCwiZXhwIjoxNjg1NTcyNzk0LCJpYXQiOjE2ODU0ODYzOTR9.Sw1gZWIr7HBoVo3zK9WZtSFOAO3cuqPdtZZBDYuunSpQRlSO569zLMUiIkwhvH9wF06Q2hZNtafzwe0QcakzZw")
   commonStore.setBudgetName('JohnnyBudget')
 
   return (

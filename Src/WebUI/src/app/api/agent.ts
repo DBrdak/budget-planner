@@ -17,6 +17,7 @@ import { forEachChild } from "typescript"
 import React from "react"
 import { GoalName } from "../models/extras/goalName"
 import path from "path"
+import { Goal, GoalFormValues } from "../models/goal"
 
 const sleep = (delay: number) =>{
   return new Promise((resolve) => {
@@ -117,9 +118,9 @@ const Profiles = {
     isBudgetRequired = true
     return requests.get<Profile>(`/profile/${username}`)
   },
-  delete: (username: string) => {
+  delete: (password: string) => {
     isBudgetRequired = true
-    return requests.delete<void>(`/profile/${username}`)
+    return requests.put<void>(`/profile`, password)
   },
   update: (username: string, profile: ProfileFormValues) => {
     isBudgetRequired = true
@@ -219,12 +220,32 @@ const Extras = {
   }
 }
 
+const Goals = {
+  getGoals: () => {
+    isBudgetRequired = true
+    return requests.get<Goal[]>('/goals')
+  },
+  deleteGoal: (id: string) => {
+    isBudgetRequired = true
+    return requests.delete<void>(`/goals/${id}`)
+  },
+  updateGoal: (updatedGoal: GoalFormValues) => {
+    isBudgetRequired = true
+    return requests.put<void>(`/goals/${updatedGoal.id}`, updatedGoal)
+  },
+  createGoal: (newGoal: GoalFormValues) => {
+    isBudgetRequired = true
+    return requests.post<void>(`/goals`, newGoal)
+  },
+}
+
 const agent = {
   Users,
   Profiles,
   Budget,
   SpendingPlan,
-  Extras
+  Extras,
+  Goals,
 }
 
 export default agent;

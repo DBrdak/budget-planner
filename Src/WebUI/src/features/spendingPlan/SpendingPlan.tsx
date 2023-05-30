@@ -58,9 +58,13 @@ function SpendingPlan() {
     loadAll()
   }
 
+  const handleExit = () => {
+    clearAll()
+  }
+
   return (
     <Container style={containerStyle}>
-      <Link to="/main">
+      <Link to="/main" onClick={() => handleExit()}>
         <Icon name="home" color="grey" size="big" />
       </Link>
       <Header as={'h1'} content='Spending Plan' color='green'
