@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Edit Account</title>
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <h1>Edit Account</h1>
+
+    <form id="edit-account-form">
+      <label for="account-name">Account Name:</label>
+      <input
+        type="text"
+        id="account-name"
+        name="account-name"
+        value="Account 1"
+      />
+
+      <label for="account-type">Account Type:</label>
+      <select id="account-type" name="account-type">
+        <option value="Savings">Savings</option>
+        <option value="Checking">Checking</option>
+        <option value="Credit Card">Credit Card</option>
+      </select>
+
+      <label for="account-balance">Account Balance:</label>
+      <input
+        type="number"
+        id="account-balance"
+        name="account-balance"
+        value="1000"
+      />
+
+      <button type="submit">Save</button>
+      <header>
+        <img src="Logo.png" alt="Logo" />
+      </header>
+    </form>
+
+    <script src="app.js"></script>
+  </body>
+</html>
