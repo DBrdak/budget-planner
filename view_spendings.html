@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>View Spendings</title>
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <h1>Latest Spendings</h1>
+
+    <div id="spendings-container">
+      <table id="spendings-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="spendings-body"></tbody>
+      </table>
+    </div>
+
+    <script src="app.js"></script>
+    <button id="add-spending-btn">Add Spending</button>
+
+    <form id="spending-form">
+      <label for="category">Category:</label>
+      <input type="text" id="category" />
+
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" />
+
+      <button type="submit">Submit</button>
+      <header>
+        <img src="Logo.png" alt="Logo" />
+      </header>
+    </form>
+  </body>
+</html>
