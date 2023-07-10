@@ -1,0 +1,290 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+#accounts-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.account-card {
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.account-card h2 {
+  margin-top: 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn-edit,
+.btn-delete,
+.btn-view {
+  padding: 8px 16px;
+  border-radius: 5px;
+  background-color: #337ab7;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background-color: #00bf63;
+}
+
+.btn-delete {
+  background-color: #00bf63;
+}
+
+.btn-view {
+  background-color: #00bf63;
+}
+
+#add-account {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.btn-add {
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #00bf63;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.frame {
+  width: 183px;
+  height: 152px;
+  display: block;
+  background-image: url(Logo.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  border-radius: 12px 12px 12px 12px;
+}
+
+/* edit */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f7f7f7;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input[type="text"],
+select,
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+button[type="submit"] {
+  background-color: #00bf63;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #00bf63;
+}
+
+input[type="text"]::placeholder,
+input[type="number"]::placeholder {
+  color: #999;
+}
+
+/*view account */
+/* styles.css */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f1f1f1;
+}
+
+h1 {
+  text-align: center;
+}
+
+#spendings-container {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+#spendings-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+#spendings-list li {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #00bf63;
+  border-radius: 5px;
+}
+
+#spendings-list li:last-child {
+  margin-bottom: 0;
+}
+
+#add-spending-btn {
+  display: block;
+  margin: 0 auto;
+  background-color: #00bf63;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+#add-spending-btn:hover {
+  background-color: #00bf63;
+}
+
+#spending-form {
+  margin-top: 10px;
+}
+
+#spending-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#spending-form select,
+#spending-form input[type="number"] {
+  width: 200px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+#spending-form button[type="submit"] {
+  background-color: #00bf63;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+#spending-form button[type="submit"]:hover {
+  background-color: #00bf63;
+}
+
+/*test view */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f1f1f1;
+}
+
+h1 {
+  text-align: center;
+  color: #00bf63;
+}
+
+#spendings-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+#spendings-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+#spendings-table th,
+#spendings-table td {
+  padding: 10px;
+  text-align: left;
+}
+
+#spendings-table th {
+  background-color: #00bf63;
+  color: #fff;
+}
+
+#spendings-table td {
+  border-bottom: 1px solid #ccc;
+}
+
+#add-spending-btn {
+  display: block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #00bf63;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#add-spending-btn:hover {
+  background-color: #009c4e;
+}
+
+header img {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  width: 150px;
+  height: auto;
+}
